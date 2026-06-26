@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Window/splash theme only; the live UI is themed by Compose Material3.
+         Framework Material parent keeps deps FOSS-only (no Material Components lib). -->
+    <style name="Theme.ApnSettingsHelper" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>

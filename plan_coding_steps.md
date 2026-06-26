@@ -139,11 +139,12 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 ## Milestones (tick as you go)
 
 ### M-A — Project scaffold + end-to-end toolchain proof
-- [ ] Gradle KTS project: `settings.gradle.kts`, root + `:app` `build.gradle.kts`, `gradle/libs.versions.toml`, committed `./gradlew` wrapper
-- [ ] `:app` config: applicationId `io.github.ln.apnsettingshelper`, minSdk 26/compileSdk 35/targetSdk 35, Compose enabled, Kotlin compose plugin
-- [ ] `AndroidManifest.xml` (no special perms yet), `MainActivity` (single-activity Compose), Material3 theme, empty NavHost (list→detail)
-- [ ] **Build & run end-to-end:** `./gradlew assembleDebug` → `just emu` → `adb install` → launch; app shows on emulator
-- **Acceptance:** APK builds and launches on `apnhelper`. _(This is the real end-to-end env proof the setup didn't do yet.)_
+- [x] Gradle KTS project: `settings.gradle.kts`, root + `:app` `build.gradle.kts`, `gradle/libs.versions.toml`, committed `./gradlew` wrapper → wrapper pinned to Gradle 8.14.4 (2026-06-27)
+- [x] `:app` config: applicationId `io.github.ln.apnsettingshelper`, minSdk 26/compileSdk 35/targetSdk 35, Compose enabled, Kotlin compose plugin → AGP 8.13.2 + Kotlin 2.1.21 (2026-06-27)
+- [x] `AndroidManifest.xml` (no special perms yet), `MainActivity` (single-activity Compose), Material3 theme, empty NavHost (list→detail) → placeholder list/detail screens; vector adaptive launcher icon; en `strings.xml` (2026-06-27)
+- [x] **Build & run end-to-end:** `./gradlew assembleDebug` → `just emu` → `adb install` → launch; app shows on emulator → built via wrapper, installed on `apnhelper`, `MainActivity` confirmed foreground, list→detail nav verified by screenshot (2026-06-27)
+- **Acceptance:** APK builds and launches on `apnhelper`. _(This is the real end-to-end env proof the setup didn't do yet.)_ → ✅ **MET (2026-06-27)**
+- **Notes (M-A):** AndroidX/Compose deliberately pinned at the **API-35 line** (devShell ships only platform-35/build-tools-35 and v1 locks compileSdk 35; the mid-2026 latest demands compileSdk 36). Build tooling kept current (AGP 8.13.2 + Kotlin 2.1.21, natural pair for Gradle 8.14.4). Android lint's "newer version available" notices on these pins are expected/benign. Added Compose-aware static analysis: `.editorconfig` (ktlint; PascalCase `@Composable` allowed) + `config/detekt/detekt.yml`; updated `just lint`, added `just fmt`. ktlint + detekt + `./gradlew lintDebug` all green (0 errors, 23 benign warnings).
 
 ### M-B — Preset model + bundled data
 - [ ] Domain models (`Preset`, `Carrier`, `Region`, enums) + kotlinx.serialization DTOs

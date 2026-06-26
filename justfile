@@ -12,9 +12,13 @@ test:
 
 # Static analysis / linters (non-fatal individually)
 lint:
-    -ktlint "**/*.kt"
-    -detekt
+    -ktlint "app/src/**/*.kt"
+    -detekt --config config/detekt/detekt.yml --build-upon-default-config --input app/src
     -./gradlew lint
+
+# Auto-fix formatting issues ktlint can correct
+fmt:
+    ktlint --format "app/src/**/*.kt"
 
 # Show installed SDK components
 sdk-list:

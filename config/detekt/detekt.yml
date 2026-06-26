@@ -1,0 +1,14 @@
+# detekt overrides — applied on top of the default config
+# (run with: detekt --config config/detekt/detekt.yml --build-upon-default-config).
+# Only Compose-specific accommodations live here; everything else uses detekt defaults.
+
+naming:
+  FunctionNaming:
+    # @Composable functions are PascalCase by Jetpack Compose convention.
+    ignoreAnnotated: ['Composable']
+
+style:
+  MagicNumber:
+    # Color/dimension literals in declarations (e.g. Color(0xFF...)) are idiomatic.
+    ignorePropertyDeclaration: true
+    ignoreAnnotated: ['Composable']

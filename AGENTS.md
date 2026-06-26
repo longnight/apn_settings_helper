@@ -3,7 +3,7 @@
 > Name: **APN Settings Helper** (casing flexible). Android app · MIT · public, open-source.
 > Note: name is close to the existing "APN Settings" app — package id is unique
 > (`io.github.ln.apnsettingshelper`); differentiate via icon + store listing.
-> Status: **dev env ready (`plan_implement_steps.md`); v1 decisions locked; coding plan in `plan_coding_steps.md`. Coding not started.**
+> Status: **dev env ready (`plan_implement_steps.md`); v1 decisions locked; coding plan in `plan_coding_steps.md`. M-A (scaffold) done & verified on emulator (2026-06-27); next: M-B (preset model + data).**
 
 ## Problem
 Phones not sold for the Japanese market, used in Japan on budget MVNO SIMs (e.g. HIS Mobile),
