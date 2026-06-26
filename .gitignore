@@ -1,0 +1,21 @@
+# Nix / direnv
+.direnv/
+result
+result-*
+
+# Android / Gradle
+.gradle/
+build/
+local.properties
+captures/
+*.apk
+*.aab
+*.keystore
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# macOS
+.DS_Store
