@@ -193,10 +193,21 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 ---
 
 ## How to start (fresh session)
-1. Enter the devShell: `cd` into the repo (direnv) or `nix develop`. Confirm `gradle`, `adb`, `$ANDROID_HOME`.
-2. Begin **M-A**. Prefer manual scaffold (Gradle KTS + version catalog) over `gradle init` for control; or `gradle init` then convert.
-3. Boot the emulator with `just emu` when you need a device; `adb root` works (google_apis image).
-4. Keep ticking boxes here; commit per milestone.
+> **Resume point (2026-06-27): M-A + M-B are DONE, tested, and committed to `main`**
+> (`f668aab` scaffold, `abda11b` preset data — local commits, not pushed).
+> **Resume at the first unchecked box → M-C (persistence: favorites + last-applied).**
+> Read `AGENTS.md` (product) + this file first. App layout already exists under
+> `app/src/main/kotlin/io/github/ln/apnsettingshelper/` (`domain.model`, `data.preset`, `ui.*`, `MainActivity`).
+
+1. **Enter the devShell.**
+   - Interactive terminal: `cd` into the repo (direnv auto-loads) or run `nix develop`.
+   - ⚠️ **Non-interactive / automation shells** (e.g. one-shot tool calls): direnv does **not** auto-activate and `nix` is **not** on PATH. Run each command as:
+     `source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && cd <repo> && nix develop --command bash -c '<cmd>'`
+     (flake eval is cached, ~2 s/call). Confirm `gradle`, `adb`, `$ANDROID_HOME`, JDK 17.
+2. **Build / test** via the committed wrapper: `./gradlew :app:assembleDebug` · `just test` (unit + ktlint + detekt + android lint) · `just fmt` (ktlint autofix). Lint is Compose-aware via `.editorconfig` + `config/detekt/detekt.yml` (single line-length policy = 140).
+3. **Emulator** (`apnhelper` AVD, google_apis arm64 ⇒ `adb root` works): `just emu` (windowed) or headless `emulator -avd apnhelper -no-window -no-audio -no-snapshot -gpu swiftshader_indirect`. Wait for boot with `adb wait-for-device && adb shell 'while [[ "$(getprop sys.boot_completed)" != "1" ]]; do sleep 1; done'`. Install+launch: `adb install -r app/build/outputs/apk/debug/app-debug.apk && adb shell am start -n io.github.ln.apnsettingshelper/.MainActivity`. Stop: `adb emu kill`.
+4. **Version pinning reminder:** AndroidX/Compose are intentionally held at the **API-35 line** (devShell ships platform-35/build-tools-35; v1 locks compileSdk 35). Don't "upgrade to latest" without first bumping to compileSdk 36 in `flake.nix` — newer AndroidX requires it. Android lint's "newer version available" warnings are expected.
+5. Keep ticking boxes here; **commit per milestone** (end commit messages with the Co-Authored-By line).
 
 ## Deferred (post-v1, keep the seam)
 - Opt-in self-healing watcher (auto-detect APN loss + re-apply) — additive behind `ApplyStrategy`.
