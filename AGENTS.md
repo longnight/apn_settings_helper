@@ -1,9 +1,9 @@
 # APN Settings Helper — Project Notes
 
 > Name: **APN Settings Helper** (casing flexible). Android app · MIT · public, open-source.
-> Note: name is close to the existing "APN Settings" app — package id must be unique
-> (e.g. `io.github.<you>.apnsettingshelper`); differentiate via icon + store listing.
-> Status: **design phase — no code yet.**
+> Note: name is close to the existing "APN Settings" app — package id is unique
+> (`io.github.ln.apnsettingshelper`); differentiate via icon + store listing.
+> Status: **dev env ready (`plan_implement_steps.md`); v1 decisions locked; coding plan in `plan_coding_steps.md`. Coding not started.**
 
 ## Problem
 Phones not sold for the Japanese market, used in Japan on budget MVNO SIMs (e.g. HIS Mobile),
@@ -83,10 +83,17 @@ Modern Android blocks third-party apps from writing APN settings:
 ## Tech (proposed, not final)
 - Kotlin + Jetpack Compose · `libsu` for root · DataStore for persistence · Min SDK TBD.
 
+## Decided (v1) — 2026-06-26
+- **applicationId:** `io.github.ln.apnsettingshelper` · **minSdk 26** · compileSdk/targetSdk 35.
+- **Preset coverage breadth:** **broad Japan** (10+ MVNOs) for v1.
+- **Distribution:** **F-Droid + GitHub APK first** (FOSS-only deps; no GMS), keep Play-compatible.
+- **Stack confirmed:** Kotlin + Compose/Material3 + DataStore + kotlinx.serialization + `libsu` (root). Single `:app` module.
+- Full implementation roadmap: **`plan_coding_steps.md`**.
+
 ## Deferred / open
-- **Preset coverage breadth** within Japan: HIS Mobile only / top MVNOs / broad. *(Structure + Japan-first = decided; breadth = open.)*
-- **Distribution**: Google Play / F-Droid / GitHub APK.
-- Min SDK, final tech-stack confirmation.
+- Opt-in self-healing watcher (post-v1; keep `ApplyStrategy` seam).
+- Overlay strategy full implementation (stub in v1).
+- More regions/carriers via community PRs (data-only).
 
 ## License
 MIT~~
