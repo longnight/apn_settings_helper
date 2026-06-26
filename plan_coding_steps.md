@@ -147,11 +147,12 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 - **Notes (M-A):** AndroidX/Compose deliberately pinned at the **API-35 line** (devShell ships only platform-35/build-tools-35 and v1 locks compileSdk 35; the mid-2026 latest demands compileSdk 36). Build tooling kept current (AGP 8.13.2 + Kotlin 2.1.21, natural pair for Gradle 8.14.4). Android lint's "newer version available" notices on these pins are expected/benign. Added Compose-aware static analysis: `.editorconfig` (ktlint; PascalCase `@Composable` allowed) + `config/detekt/detekt.yml`; updated `just lint`, added `just fmt`. ktlint + detekt + `./gradlew lintDebug` all green (0 errors, 23 benign warnings).
 
 ### M-B — Preset model + bundled data
-- [ ] Domain models (`Preset`, `Carrier`, `Region`, enums) + kotlinx.serialization DTOs
-- [ ] `assets/presets.json` — **broad JP**: HIS Mobile, IIJmio, mineo, OCN モバイル ONE, Rakuten Mobile, LINEMO, povo, NUROモバイル, BIGLOBEモバイル, y.u mobile, イオンモバイル, J:COM MOBILE (verify each APN against carrier sources; set `lastVerified`)
-- [ ] `PresetRepository` loads + validates + groups
-- [ ] **Tests (JVM):** JSON parse, schema validation (unique ids, required fields, enum ranges), grouping
-- **Acceptance:** `./gradlew test` green; repository returns grouped presets.
+- [x] Domain models (`Preset`, `Carrier`, `Region`, enums) + kotlinx.serialization DTOs → `domain.model` (pure) + `data.preset` DTOs + mapper; enums `AuthType/ApnProtocol/MvnoType`, `LocalizedText` (2026-06-27)
+- [x] `assets/presets.json` — **broad JP** (12 carriers / 16 presets): HIS Mobile (Docomo+SoftBank), IIJmio, mineo (D/A/S), OCN モバイル ONE, Rakuten Mobile, LINEMO, povo, NUROモバイル, BIGLOBEモバイル, y.u mobile, イオンモバイル (au+Docomo), J:COM MOBILE → **each verified against the carrier's official APN page** (online research); `source`+`lastVerified` per preset (2026-06-27)
+- [x] `PresetRepository` loads + validates + groups → `PresetSerialization` (pure parse/validate/group) + `AssetPresetRepository` (Android assets). Validation: required id/apn/mcc/mnc, mcc/mnc format, unique preset/carrier/region ids, enum range + required-field presence via kotlinx, schemaVersion (2026-06-27)
+- [x] **Tests (JVM):** JSON parse, schema validation (unique ids, required fields, enum ranges), grouping → 13 tests incl. a `BundledPresetsTest` that loads the real `presets.json` from the test classpath and spot-checks verified APNs (2026-06-27)
+- **Acceptance:** `./gradlew test` green; repository returns grouped presets. → ✅ **MET** — `just test` green (13/13 unit tests, ktlint+detekt+`lint` 0 errors) (2026-06-27)
+- **Notes (M-B):** Stale data caught by research — the old HIS example (`vmobile.jp`/`vmobile@uqmobile`) is now `dm.jplat.net`/`his@his`; y.u mobile is `yumobile.jp` (not `ymobile.jp`); NURO is `so-net.jp`. au-line MCC/MNC set to 440/51, Docomo 440/10, SoftBank 440/20, Rakuten 440/11 (editor usually auto-fills; noted per preset). Aligned detekt `MaxLineLength` to `.editorconfig` (140). `Json { ignoreUnknownKeys = true }` so additive schema fields won't break old builds.
 
 ### M-C — Persistence (favorites + last-applied)
 - [ ] `SettingsStore` (DataStore): favorites `Set<String>`, lastApplied `{id, epochMillis}`; Flows + mutators

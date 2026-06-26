@@ -8,6 +8,9 @@ naming:
     ignoreAnnotated: ['Composable']
 
 style:
+  # Single line-length policy across tools: match .editorconfig (ktlint) max_line_length = 140.
+  MaxLineLength:
+    maxLineLength: 140
   MagicNumber:
     # Color/dimension literals in declarations (e.g. Color(0xFF...)) are idiomatic.
     ignorePropertyDeclaration: true

@@ -1,0 +1,403 @@
+{
+  "schemaVersion": 1,
+  "regions": [
+    {
+      "code": "JP",
+      "name": { "en": "Japan", "ja": "日本" },
+      "carriers": [
+        {
+          "id": "his-mobile",
+          "name": { "en": "HIS Mobile", "ja": "HISモバイル" },
+          "presets": [
+            {
+              "id": "his-mobile-docomo",
+              "label": { "en": "HIS Mobile (Docomo line)", "ja": "HISモバイル（ドコモ回線）" },
+              "apn": "dm.jplat.net",
+              "mcc": "440",
+              "mnc": "10",
+              "username": "his@his",
+              "password": "his",
+              "authType": "PAP_OR_CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,mms",
+              "notes": {
+                "en": "NTT Docomo line. If there is no auth-type field, it can be skipped. MCC/MNC are usually auto-filled from the SIM.",
+                "ja": "ドコモ回線。認証タイプの項目がなければ設定不要です。MCC/MNCは通常SIMから自動入力されます。"
+              },
+              "source": "https://his-mobile.com/support/setting",
+              "lastVerified": "2026-06-27"
+            },
+            {
+              "id": "his-mobile-softbank",
+              "label": { "en": "HIS Mobile (SoftBank line)", "ja": "HISモバイル（ソフトバンク回線）" },
+              "apn": "sb.mvno",
+              "mcc": "440",
+              "mnc": "20",
+              "username": "his@his",
+              "password": "his",
+              "authType": "PAP_OR_CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,mms",
+              "notes": {
+                "en": "SoftBank line. Some devices need MVNO type = SPN to connect.",
+                "ja": "ソフトバンク回線。一部端末はMVNOの種類をSPNにすると接続できます。"
+              },
+              "source": "https://his-mobile.com/support/setting",
+              "lastVerified": "2026-06-27"
+            }
+          ]
+        },
+        {
+          "id": "iijmio",
+          "name": { "en": "IIJmio", "ja": "IIJmio" },
+          "presets": [
+            {
+              "id": "iijmio-typed",
+              "label": { "en": "IIJmio (Type D / Docomo)", "ja": "IIJmio（タイプD/ドコモ）" },
+              "apn": "iijmio.jp",
+              "mcc": "440",
+              "mnc": "10",
+              "username": "mio@iij",
+              "password": "iij",
+              "authType": "PAP_OR_CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,mms",
+              "notes": {
+                "en": "Type D (Docomo). Type A (au) uses the same APN / username / password.",
+                "ja": "タイプD（ドコモ）。タイプA（au）も同じAPN/ユーザー名/パスワードです。"
+              },
+              "source": "https://www.iijmio.jp/hdc/guide/setting/",
+              "lastVerified": "2026-06-27"
+            }
+          ]
+        },
+        {
+          "id": "mineo",
+          "name": { "en": "mineo", "ja": "mineo" },
+          "presets": [
+            {
+              "id": "mineo-d",
+              "label": { "en": "mineo (D plan / Docomo)", "ja": "mineo（Dプラン/ドコモ）" },
+              "apn": "mineo-d.jp",
+              "mcc": "440",
+              "mnc": "10",
+              "username": "mineo@k-opti.com",
+              "password": "mineo",
+              "authType": "CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,ia",
+              "notes": {
+                "en": "D plan (NTT Docomo). Add ',dun' to APN type if tethering fails.",
+                "ja": "Dプラン（ドコモ）。テザリング不可の場合はAPNタイプに',dun'を追加。"
+              },
+              "source": "https://support.mineo.jp/setup/guide/android_network.html",
+              "lastVerified": "2026-06-27"
+            },
+            {
+              "id": "mineo-a",
+              "label": { "en": "mineo (A plan / au)", "ja": "mineo（Aプラン/au）" },
+              "apn": "mineo.jp",
+              "mcc": "440",
+              "mnc": "51",
+              "username": "mineo@k-opti.com",
+              "password": "mineo",
+              "authType": "CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,ia",
+              "notes": {
+                "en": "A plan (au). Add ',dun' to APN type if tethering fails.",
+                "ja": "Aプラン（au）。テザリング不可の場合はAPNタイプに',dun'を追加。"
+              },
+              "source": "https://support.mineo.jp/setup/guide/android_network.html",
+              "lastVerified": "2026-06-27"
+            },
+            {
+              "id": "mineo-s",
+              "label": { "en": "mineo (S plan / SoftBank)", "ja": "mineo（Sプラン/ソフトバンク）" },
+              "apn": "mineo-s.jp",
+              "mcc": "440",
+              "mnc": "20",
+              "username": "mineo@k-opti.com",
+              "password": "mineo",
+              "authType": "CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,ia",
+              "notes": {
+                "en": "S plan (SoftBank).",
+                "ja": "Sプラン（ソフトバンク）。"
+              },
+              "source": "https://support.mineo.jp/setup/guide/android_network.html",
+              "lastVerified": "2026-06-27"
+            }
+          ]
+        },
+        {
+          "id": "ocn-mobile-one",
+          "name": { "en": "OCN Mobile ONE", "ja": "OCN モバイル ONE" },
+          "presets": [
+            {
+              "id": "ocn-mobile-one",
+              "label": { "en": "OCN Mobile ONE (new course)", "ja": "OCN モバイル ONE（新コース）" },
+              "apn": "lte.ocn.ne.jp",
+              "mcc": "440",
+              "mnc": "10",
+              "username": "mobileid@ocn",
+              "password": "mobile",
+              "authType": "CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,mms",
+              "notes": {
+                "en": "NTT Docomo line. New-course APN; the legacy course uses lte-d.ocn.ne.jp.",
+                "ja": "ドコモ回線。新コースのAPN。旧コースはlte-d.ocn.ne.jpです。"
+              },
+              "source": "https://tech.ocn.ad.jp/ocn/support/pid2900000g9p",
+              "lastVerified": "2026-06-27"
+            }
+          ]
+        },
+        {
+          "id": "rakuten-mobile",
+          "name": { "en": "Rakuten Mobile", "ja": "楽天モバイル" },
+          "presets": [
+            {
+              "id": "rakuten-mobile",
+              "label": { "en": "Rakuten Mobile (Saikyo Plan)", "ja": "楽天モバイル（Rakuten最強プラン）" },
+              "apn": "rakuten.jp",
+              "mcc": "440",
+              "mnc": "11",
+              "username": "",
+              "password": "",
+              "authType": "PAP_OR_CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,mms",
+              "notes": {
+                "en": "Rakuten's own network. Username/password are left blank. Rakuten-ready phones need no setup.",
+                "ja": "楽天回線。ユーザー名・パスワードは空欄。楽天対応端末は設定不要です。"
+              },
+              "source": "https://mobile.rakuten.co.jp/support/otherandroid/",
+              "lastVerified": "2026-06-27"
+            }
+          ]
+        },
+        {
+          "id": "linemo",
+          "name": { "en": "LINEMO", "ja": "LINEMO" },
+          "presets": [
+            {
+              "id": "linemo",
+              "label": { "en": "LINEMO", "ja": "LINEMO" },
+              "apn": "plus.acs.jp",
+              "mcc": "440",
+              "mnc": "20",
+              "username": "lm",
+              "password": "lm",
+              "authType": "CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,mms,supl,hipri",
+              "notes": {
+                "en": "SoftBank-based brand. Watch for typos in the APN string.",
+                "ja": "ソフトバンク系ブランド。APNの入力ミスに注意。"
+              },
+              "source": "https://www.linemo.jp/process/apn/android/",
+              "lastVerified": "2026-06-27"
+            }
+          ]
+        },
+        {
+          "id": "povo",
+          "name": { "en": "povo", "ja": "povo" },
+          "presets": [
+            {
+              "id": "povo2",
+              "label": { "en": "povo2.0", "ja": "povo2.0" },
+              "apn": "povo.jp",
+              "mcc": "440",
+              "mnc": "51",
+              "username": "",
+              "password": "",
+              "authType": "NONE",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,mms",
+              "notes": {
+                "en": "au-based brand. Only name + APN are required; leave the rest blank.",
+                "ja": "au系ブランド。名前とAPNのみ入力、その他は空欄。"
+              },
+              "source": "https://povo.jp/support/guide/sim/",
+              "lastVerified": "2026-06-27"
+            }
+          ]
+        },
+        {
+          "id": "nuro-mobile",
+          "name": { "en": "NURO Mobile", "ja": "NUROモバイル" },
+          "presets": [
+            {
+              "id": "nuro-mobile",
+              "label": { "en": "NURO Mobile", "ja": "NUROモバイル" },
+              "apn": "so-net.jp",
+              "mcc": "440",
+              "mnc": "10",
+              "username": "nuro",
+              "password": "nuro",
+              "authType": "PAP_OR_CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,mms",
+              "notes": {
+                "en": "Same APN on Docomo/au/SoftBank lines. SoftBank line MMS: use APN type 'default,ia,mms,supl,hipri'; au tethering: add ',dun'.",
+                "ja": "ドコモ/au/ソフトバンク回線で共通のAPN。ソフトバンク回線は'default,ia,mms,supl,hipri'、au回線のテザリングは',dun'を追加。"
+              },
+              "source": "https://mobile.nuro.jp/support/settings/apn/",
+              "lastVerified": "2026-06-27"
+            }
+          ]
+        },
+        {
+          "id": "biglobe-mobile",
+          "name": { "en": "BIGLOBE Mobile", "ja": "BIGLOBEモバイル" },
+          "presets": [
+            {
+              "id": "biglobe-typed",
+              "label": { "en": "BIGLOBE Mobile (Type D / Docomo)", "ja": "BIGLOBEモバイル（タイプD/ドコモ）" },
+              "apn": "biglobe.jp",
+              "mcc": "440",
+              "mnc": "10",
+              "username": "user",
+              "password": "0000",
+              "authType": "PAP_OR_CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,mms",
+              "notes": {
+                "en": "Type D (Docomo); Type A (au) uses the same values. Some devices need username user@biglobe.jp.",
+                "ja": "タイプD（ドコモ）。タイプA（au）も同じ値。一部端末はユーザー名をuser@biglobe.jpに。"
+              },
+              "source": "https://faq.support.biglobe.ne.jp/faq_detail.html?faq_id=12499",
+              "lastVerified": "2026-06-27"
+            }
+          ]
+        },
+        {
+          "id": "yu-mobile",
+          "name": { "en": "y.u mobile", "ja": "y.u mobile" },
+          "presets": [
+            {
+              "id": "yu-mobile",
+              "label": { "en": "y.u mobile", "ja": "y.u mobile" },
+              "apn": "yumobile.jp",
+              "mcc": "440",
+              "mnc": "10",
+              "username": "yumobile@yumobile.jp",
+              "password": "yumobile",
+              "authType": "PAP_OR_CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,mms",
+              "notes": {
+                "en": "NTT Docomo line. The APN is 'yumobile.jp' (not 'ymobile.jp').",
+                "ja": "ドコモ回線。APNは「yumobile.jp」（「ymobile.jp」ではありません）。"
+              },
+              "source": "https://help.yumobile.jp/startup/apn",
+              "lastVerified": "2026-06-27"
+            }
+          ]
+        },
+        {
+          "id": "aeon-mobile",
+          "name": { "en": "AEON Mobile", "ja": "イオンモバイル" },
+          "presets": [
+            {
+              "id": "aeon-type1-au",
+              "label": { "en": "AEON Mobile (Type1 / au)", "ja": "イオンモバイル（タイプ1/au）" },
+              "apn": "i-aeonmobile.com",
+              "mcc": "440",
+              "mnc": "51",
+              "username": "user",
+              "password": "0000",
+              "authType": "PAP_OR_CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,mms",
+              "notes": {
+                "en": "Type1 (au). If saving the APN fails, set username to user@i-aeonmobile.com.",
+                "ja": "タイプ1（au）。保存できない場合はユーザー名をuser@i-aeonmobile.comに。"
+              },
+              "source": "https://aeonmobile.jp/apn/",
+              "lastVerified": "2026-06-27"
+            },
+            {
+              "id": "aeon-type2-docomo",
+              "label": { "en": "AEON Mobile (Type2 / Docomo)", "ja": "イオンモバイル（タイプ2/ドコモ）" },
+              "apn": "n-aeonmobile.com",
+              "mcc": "440",
+              "mnc": "10",
+              "username": "user@n-aeonmobile.com",
+              "password": "0000",
+              "authType": "PAP_OR_CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,mms",
+              "notes": {
+                "en": "Type2 (NTT Docomo).",
+                "ja": "タイプ2（ドコモ）。"
+              },
+              "source": "https://aeonmobile.jp/apn/",
+              "lastVerified": "2026-06-27"
+            }
+          ]
+        },
+        {
+          "id": "jcom-mobile",
+          "name": { "en": "J:COM MOBILE", "ja": "J:COM MOBILE" },
+          "presets": [
+            {
+              "id": "jcom-mobile-aplan",
+              "label": { "en": "J:COM MOBILE (A Plan / au)", "ja": "J:COM MOBILE（Aプラン/au）" },
+              "apn": "jcommobile.jp",
+              "mcc": "440",
+              "mnc": "51",
+              "username": "jcom@jcommobile.jp",
+              "password": "jcom",
+              "authType": "PAP_OR_CHAP",
+              "protocol": "IPV4V6",
+              "roamingProtocol": "IPV4V6",
+              "mvnoType": "NONE",
+              "apnType": "default,supl,mms",
+              "notes": {
+                "en": "A Plan (au-based). A Docomo D Plan is also offered.",
+                "ja": "Aプラン（au系）。ドコモのDプランもあります。"
+              },
+              "source": "https://cs.myjcom.jp/knowledgeDetail?an=000689112",
+              "lastVerified": "2026-06-27"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

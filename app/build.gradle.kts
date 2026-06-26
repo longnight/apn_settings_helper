@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    // kotlin.serialization applied in M-B when presets.json parsing lands
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -40,6 +40,14 @@ android {
     buildFeatures {
         compose = true
     }
+
+    // Expose the bundled presets.json to JVM unit tests as a classpath resource,
+    // so tests validate the exact data that ships in the APK.
+    sourceSets {
+        getByName("test") {
+            resources.srcDir("src/main/assets")
+        }
+    }
 }
 
 kotlin {
@@ -59,6 +67,9 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
+    // Data: presets.json parsing
+    implementation(libs.kotlinx.serialization.json)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
