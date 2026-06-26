@@ -89,4 +89,4 @@ Modern Android blocks third-party apps from writing APN settings:
 - Min SDK, final tech-stack confirmation.
 
 ## License
-MIT
+MIT~~
