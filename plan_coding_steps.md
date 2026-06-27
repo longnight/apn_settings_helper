@@ -161,11 +161,12 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 - **Notes (M-C):** Round-trip proven by write→read-back through the store's `Flow`s (DataStore serializes to / re-reads from disk). Clock injected (`now: () -> Long = System::currentTimeMillis`) so `recordApplied` timestamps are deterministic in tests. `data.catch { IOException -> emptyPreferences() }` so a corrupt file yields empty state, not a crash. Added deps: `androidx.datastore.preferences`, `kotlinx.coroutines.android` (impl); `kotlinx.coroutines.test` (test). DataStore tests run with `runTest(UnconfinedTestDispatcher())` + `backgroundScope` as the store's host scope.
 
 ### M-D — UI: list + detail
-- [ ] `PresetListScreen` + VM: grouping, ★ FAVORITES section, heart toggle, last-applied muted line
-- [ ] `PresetDetailScreen` + VM: copyable fields, "set to X" checklist for dropdowns, open-APN-editor button, "Record this as applied"
-- [ ] Navigation list→detail/{presetId}
-- [ ] **Tests:** Compose UI (nav, copy button copies, favorite toggle); espresso-intents asserts `ACTION_APN_SETTINGS` fired
-- **Acceptance:** `just emu-test` green; manual UI check on emulator (incl. ja locale).
+- [x] `PresetListScreen` + VM: grouping, ★ FAVORITES section, heart toggle, last-applied muted line → `PresetListViewModel` combines repo + favorites + lastApplied → `PresetListUiState` (favorited rows float OUT of their carrier group into the ★ Favorites section; rest grouped region→carrier). Stateless `PresetListContent` + VM wrapper (2026-06-27)
+- [x] `PresetDetailScreen` + VM: copyable fields, "set to X" checklist for dropdowns, open-APN-editor button, "Record this as applied" → `PresetDetailViewModel` (load by id, favorite toggle, recordApplied, notFound state); copy fields = non-blank non-dropdown; checklist = 4 dropdowns via `displayName()` (e.g. "PAP or CHAP", "IPv4/IPv6"); notes + last-applied line. Verified on emulator incl. ja preset labels + ja date (2026-06-27)
+- [x] Navigation list→detail/{presetId} → existing `AppNavHost` unchanged (screens' new `viewModel`/`modifier` args are defaulted); VMs provided via `viewModelFactory{initializer{...}}` reading `APPLICATION_KEY` → `ApnApplication.graph` (manual DI, no Hilt) (2026-06-27)
+- [x] **Tests:** Compose UI (nav, copy button copies, favorite toggle); espresso-intents asserts `ACTION_APN_SETTINGS` fired → 7 instrumented (list content + click + heart toggle; detail render + clipboard copy; espresso-intents APN_SETTINGS stubbed; full-app `MainActivity` nav) + 14 new JVM (2 VMs via fakes/Turbine + `ApnDateFormat` en/ja) (2026-06-27)
+- **Acceptance:** `just emu-test` green; manual UI check on emulator (incl. ja locale). → ✅ **MET** — 34 JVM + 7 instrumented green; ktlint/detekt/lint clean; emulator screenshots verified list (favorites/groups/heart), detail (copy/checklist/notes/record), last-applied line, and ja resolution (日本/HISモバイル/2026年6月27日) (2026-06-27)
+- **Notes (M-D):** Manual DI via `AppGraph` (held by `ApnApplication`, registered in manifest) — `PresetRepository` parsed once, `SettingsStore` from `DataStoreSettingsStore.from`. Added `material-icons-core` (heart/star/back; FOSS, small — NOT the huge `-extended`), `turbine` (test), `espresso-intents` (androidTest). `ApnDateFormat` (locale-aware en `yyyy-MM-dd HH:mm` / ja `yyyy年M月d日 HH:mm`) pulled forward from M-F since the last-applied line needs it; M-F still owns `values-ja/strings.xml` (UI chrome is en-only for now). Checklist checkboxes are ephemeral (not persisted) — app can't verify the device APN. **Known minor polish (defer to M-H):** favoriting prepends the ★ Favorites section above the current scroll offset, so on a scrolled list the new section sits just above the fold (LazyColumn key-stable scroll) — consider auto-scroll-to-top on first favorite.
 
 ### M-E — Apply strategies
 - [ ] `ApplyStrategy` interface + `ManualCopyStrategy` + `ApplyStrategyResolver`
@@ -194,12 +195,12 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 ---
 
 ## How to start (fresh session)
-> **Resume point (2026-06-27): M-A + M-B + M-C are DONE, tested, and committed to `main`**
-> (`f668aab` scaffold, `abda11b` preset data, M-C persistence — local commits, not pushed).
-> **Resume at the first unchecked box → M-D (UI: list + detail, ViewModels, navigation).**
+> **Resume point (2026-06-27): M-A + M-B + M-C + M-D are DONE, tested, and committed to `main`**
+> (`f668aab` scaffold, `abda11b` preset data, M-C persistence, M-D UI — local commits, push to `origin/main` is blocked by the push guard; ask the user to push or run `git push origin main`).
+> **Resume at the first unchecked box → M-E (apply strategies + libsu root).**
 > Read `AGENTS.md` (product) + this file first. App layout already exists under
-> `app/src/main/kotlin/io/github/ln/apnsettingshelper/` (`domain.model`, `data.preset`, `data.store`, `ui.*`, `MainActivity`).
-> M-D wires `PresetRepository` (M-B) + `SettingsStore` (M-C) into `PresetListViewModel` / `PresetDetailViewModel`.
+> `app/src/main/kotlin/io/github/ln/apnsettingshelper/` (`domain.model`, `data.preset`, `data.store`, `ui.list`, `ui.detail`, `ui.common`, `ui.nav`, `ui.theme`, `AppGraph`, `ApnApplication`, `MainActivity`).
+> M-E adds `domain.apply.ApplyStrategy` (seam) + `ManualCopyStrategy` + `ApplyStrategyResolver` + `RootStrategy` (libsu); wire "Apply now" into the detail screen when root is present (auto-records lastApplied). libsu needs the jitpack repo (commented out in `settings.gradle.kts`).
 
 1. **Enter the devShell.**
    - Interactive terminal: `cd` into the repo (direnv auto-loads) or run `nix develop`.

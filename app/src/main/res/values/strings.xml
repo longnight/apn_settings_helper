@@ -1,4 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">APN Settings Helper</string>
+
+    <!-- List -->
+    <string name="favorites_section">Favorites</string>
+    <string name="last_applied">Last applied %1$s</string>
+    <string name="cd_favorite_add">Add to favorites</string>
+    <string name="cd_favorite_remove">Remove from favorites</string>
+
+    <!-- Detail: actions -->
+    <string name="back">Back</string>
+    <string name="copy">Copy</string>
+    <string name="cd_copy">Copy %1$s</string>
+    <string name="copied">Copied %1$s</string>
+    <string name="open_apn_editor">Open system APN editor</string>
+    <string name="apn_editor_unavailable">Couldn\'t open APN settings on this device. Open Settings → Network → Access Point Names manually.</string>
+    <string name="record_applied">Record this as applied</string>
+    <string name="applied_recorded">Recorded as applied</string>
+    <string name="preset_not_found">Preset not found</string>
+
+    <!-- Detail: section headers -->
+    <string name="detail_copy_section">Copy into the APN editor</string>
+    <string name="detail_checklist_section">Set these dropdowns</string>
+    <string name="set_field_to">Set %1$s to %2$s</string>
+    <string name="notes_label">Notes</string>
+
+    <!-- Detail: field labels (mirror the system APN editor) -->
+    <string name="field_apn">APN</string>
+    <string name="field_username">Username</string>
+    <string name="field_password">Password</string>
+    <string name="field_mcc">MCC</string>
+    <string name="field_mnc">MNC</string>
+    <string name="field_mvno_value">MVNO value</string>
+    <string name="field_apn_type">APN type</string>
+    <string name="field_proxy">Proxy</string>
+    <string name="field_port">Port</string>
+    <string name="field_mmsc">MMSC</string>
+    <string name="field_mms_proxy">MMS proxy</string>
+    <string name="field_mms_port">MMS port</string>
+    <string name="field_server">Server</string>
+    <string name="field_auth_type">Authentication type</string>
+    <string name="field_protocol">APN protocol</string>
+    <string name="field_roaming_protocol">APN roaming protocol</string>
+    <string name="field_mvno_type">MVNO type</string>
 </resources>
