@@ -1,0 +1,19 @@
+APN Settings Helper makes it quick and reliable to restore your phone's mobile-data APN (Access Point Name) — the setting that lets data and MMS work on your SIM.
+
+It's built for people whose phone wasn't sold for their SIM's market: MVNO / budget-SIM users, and travellers or expats putting a local prepaid SIM into an unlocked phone. In weak-signal areas a phone can silently drop its APN, and re-entering it by hand is fiddly and error-prone.
+
+Modern Android does not let ordinary apps write APN settings silently, so this app works with that limit instead of pretending otherwise:
+
+• Browse curated, verified APN presets (Japan's budget carriers first; more regions welcome).
+• Open the preset you need and copy each field with one tap, with a checklist for the dropdown values (authentication type, protocol, MVNO type).
+• Jump straight to the system APN editor to paste them in.
+• On rooted devices only, an optional one-tap "Apply" writes the APN directly — entirely opt-in.
+
+Privacy and footprint:
+• No network access, no accounts, no tracking, no ads.
+• No background service — the app does nothing until you open it.
+• The core flow needs no special permissions.
+
+Free and open source (MIT). Presets are community-extensible: adding your carrier is a small data-only change.
+
+Available in English and Japanese.

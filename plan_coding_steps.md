@@ -189,23 +189,27 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 - **Notes (M-G):** CI runs on **`macos-14` (arm64)** because `flake.nix` only exposes a devShell for `aarch64-darwin`; it installs Nix and runs `nix develop --command just ci`, so CI = the exact flake-pinned local toolchain (declarative Nix SDK ⇒ **no `sdkmanager --licenses` step**). Gradle Maven cache via `actions/cache`; Nix-store caching deferred (magic-nix-cache is sunset — add FlakeHub/Cachix later to skip the SDK re-fetch). ⚠️ **The workflow could not be executed from this environment** (no way to trigger Actions) — it's YAML-valid and runs the locally-verified command, but **confirm the first run on GitHub** (runner Nix setup / SDK fetch time). Could later be ported to faster `ubuntu` runners by extending the flake to `x86_64-linux`.
 
 ### M-H — Polish & release prep
-- [ ] App icon differentiated from the existing "APN Settings" app
-- [ ] Per-locale store listing copy (en + **ja**: 格安SIM / APN設定 keywords); F-Droid fastlane metadata structure
-- [ ] `README.md` (build/run/contribute, add-a-preset guide) + `LICENSE` (MIT)
-- [ ] Versioning (versionCode/versionName); F-Droid build recipe notes (jitpack libsu caveat)
-- **Acceptance:** installable APK + complete store/F-Droid metadata; contributors can add presets via PR.
+- [x] App icon differentiated from the existing "APN Settings" app → adaptive icon from M-A: white SIM-card-with-chip glyph on a distinctive **teal** (`#0B6E6E`) background (+ monochrome/themed variant). Distinct mark + colour vs the existing app; a designer pass is optional post-v1 (2026-06-27)
+- [x] Per-locale store listing copy (en + **ja**: 格安SIM / APN設定 keywords); F-Droid fastlane metadata structure → `fastlane/metadata/android/{en-US,ja}/` with `title` / `short_description` (≤80) / `full_description` / `changelogs/1.txt`; ja copy leads with 格安SIM・APN設定. **Screenshots not included** (binary — drop into `…/<locale>/images/phoneScreenshots/` before store submission) (2026-06-27)
+- [x] `README.md` (build/run/contribute, add-a-preset guide) + `LICENSE` (MIT) → `README.md` (overview/build/run/test/CI/release) created in M-G; `CONTRIBUTING.md` added with the full add-a-preset guide (schema, field table, validation rules, PR checklist); `LICENSE` (MIT) already present (2026-06-27)
+- [x] Versioning (versionCode/versionName); F-Droid build recipe notes (jitpack libsu caveat) → `versionCode 1` / `versionName 1.0.0`; README "Releasing / packaging" documents the **libsu JitPack → build-from-source** F-Droid caveat, the fastlane layout, and signing (2026-06-27)
+- **Acceptance:** installable APK + complete store/F-Droid metadata; contributors can add presets via PR. → ✅ **MET** — `assembleDebug` produces an installable `app-debug.apk` (v1.0.0); en+ja fastlane metadata in place (screenshots are the one remaining binary asset); `CONTRIBUTING.md` lets contributors add a preset via a data-only PR (validated by `BundledPresetsTest`). `just ci` green; APK builds.
+- **Notes (M-H):** Closed the last three `plan_review_M-E.md` **P4** items (P4.2 root record-button, P4.3 field-divergence guard test, P4.4 formatter/title caching) — punch-list fully closed. No release signing config in-repo (F-Droid signs its own builds). The teal SIM-card icon was kept rather than re-cut blind; a visual emulator check / designer pass can refine it later.
 
 ---
 
 ## How to start (fresh session)
-> **Resume point (2026-06-27): M-A–M-G DONE + M-E.1 hardening DONE, tested.**
-> (M-A–M-F pushed to `origin/main`; **M-G is committed locally but NOT yet pushed** —
-> run `git push origin main` to sync, or ask the user.)
-> **Resume at the first unchecked box → M-H (polish & release prep).**
-> ⚠️ **M-G CI (`.github/workflows/ci.yml`) has not been run on GitHub yet** — verify the first
-> Actions run after pushing (arm64 macOS runner + Nix; see M-G notes).
-> `plan_review_M-E.md` (the `/code-review max` punch-list): **P1 + P2 + P3 + P4.1 all done**; only the
-> three cosmetic **P4** items remain → fold into **M-H** polish.
+> **Resume point (2026-06-27): 🎉 M-A–M-H ALL DONE + M-E.1 hardening DONE — v1 is code-complete.**
+> (M-A–M-G pushed to `origin/main`, CI verified green on GitHub; **M-H is committed locally but NOT yet
+> pushed** — run `git push origin main` to sync, or ask the user.)
+> `plan_review_M-E.md` punch-list is **fully closed** (P1+P2+P3+P4). 56 JVM + 7 instrumented tests;
+> `just ci` green; `assembleDebug` produces a v1.0.0 APK.
+> **No coding milestones remain.** Pre-store-submission tasks left (not code):
+> 1. **Phone screenshots** → `fastlane/metadata/android/{en-US,ja}/images/phoneScreenshots/` (binary —
+>    capture on the emulator; en + ja).
+> 2. **F-Droid:** submit an `fdroiddata` recipe that builds **libsu from source** (JitPack is disallowed;
+>    see README → Releasing) — that metadata lives in fdroiddata, not this repo.
+> 3. Optional: release signing for GitHub APKs; tag `v1.0.0`.
 > Read `AGENTS.md` (product) + this file first. App layout already exists under
 > `app/src/main/kotlin/io/github/ln/apnsettingshelper/` (`domain.model`, `domain.apply`, `data.preset`, `data.store`, `data.root`, `ui.list`, `ui.detail`, `ui.common`, `ui.nav`, `ui.theme`, `AppGraph`, `ApnApplication`, `MainActivity`); i18n in `app/src/main/res/values/` (en) + `values-ja/` (ja).
 

@@ -1,0 +1,7 @@
+First release.
+
+• Verified Japan MVNO APN presets (region → carrier → preset).
+• Per-field copy buttons + "set this dropdown to X" checklist, and a button to open the system APN editor.
+• Favorites and a passive "last applied" note.
+• Optional one-tap apply on rooted devices (opt-in).
+• English and Japanese.

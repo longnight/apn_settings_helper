@@ -97,10 +97,23 @@ emulator runs on hosted runners are flaky) — run `just emu-test` locally inste
 
 ## Contributing
 
-Adding or correcting a preset is a **data-only** change to
-`app/src/main/assets/presets.json` (region → carrier → preset; include `source` +
-`lastVerified`). A full contributor guide and the add-a-preset walkthrough land with
-the v1 release (M-H).
+The most useful contribution is adding or correcting an **APN preset** — a data-only
+edit to `app/src/main/assets/presets.json`. See **[CONTRIBUTING.md](CONTRIBUTING.md)**
+for the schema, field reference, validation rules, and the PR checklist.
+
+## Releasing / packaging
+
+- **Versioning:** `versionCode` / `versionName` in `app/build.gradle.kts` (currently
+  `1` / `1.0.0`). Bump `versionCode` for any release F-Droid should pick up.
+- **Store / F-Droid metadata:** `fastlane/metadata/android/<locale>/` (en-US + ja —
+  title, short/full description, changelog). Phone screenshots go in
+  `…/<locale>/images/phoneScreenshots/` (not yet added).
+- **F-Droid + libsu:** `libsu` comes from JitPack via a *scoped* repository in
+  `settings.gradle.kts`. F-Droid disallows JitPack/binary deps, so its build recipe must
+  build libsu **from source** (e.g. via `srclibs` / a submodule). The dep is otherwise
+  FOSS (Apache-2.0) and GMS-free, so the rest builds cleanly on F-Droid.
+- **Signing:** not configured in-repo — F-Droid signs its own builds; for a GitHub APK,
+  sign out-of-band (or ship the debug APK for testing).
 
 ## License
 
