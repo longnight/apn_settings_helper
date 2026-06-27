@@ -17,8 +17,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // jitpack (libsu) — enabled when the root strategy is wired in M-E:
-        // maven("https://jitpack.io")
+        // jitpack — scoped to libsu (root strategy, M-E). F-Droid builds it from source.
+        maven("https://jitpack.io") {
+            content { includeGroup("com.github.topjohnwu.libsu") }
+        }
     }
 }
 

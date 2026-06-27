@@ -2,6 +2,11 @@
 # (run with: detekt --config config/detekt/detekt.yml --build-upon-default-config).
 # Only Compose-specific accommodations live here; everything else uses detekt defaults.
 
+complexity:
+  LongParameterList:
+    # Stateless @Composable screens idiomatically take state + several callbacks.
+    ignoreAnnotated: ['Composable']
+
 naming:
   FunctionNaming:
     # @Composable functions are PascalCase by Jetpack Compose convention.

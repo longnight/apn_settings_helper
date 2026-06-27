@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -16,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -51,11 +55,24 @@ fun PresetDetailScreen(
     viewModel: PresetDetailViewModel = viewModel(factory = PresetDetailViewModel.factory(presetId)),
 ) {
     val state by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val appliedMessage = stringResource(R.string.applied_ok)
+    LaunchedEffect(viewModel) {
+        viewModel.applyEvents.collect { event ->
+            val message =
+                when (event) {
+                    ApplyEvent.Applied -> appliedMessage
+                    is ApplyEvent.Failed -> event.message
+                }
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        }
+    }
     PresetDetailContent(
         state = state,
         onBack = onBack,
         onToggleFavorite = viewModel::toggleFavorite,
         onRecordApplied = viewModel::recordApplied,
+        onApplyNow = viewModel::applyNow,
         modifier = modifier,
     )
 }
@@ -68,6 +85,7 @@ fun PresetDetailContent(
     onBack: () -> Unit,
     onToggleFavorite: () -> Unit,
     onRecordApplied: () -> Unit,
+    onApplyNow: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -98,6 +116,9 @@ fun PresetDetailContent(
                 preset = preset,
                 notes = state.notes,
                 lastAppliedLabel = state.lastAppliedLabel,
+                canApplyRoot = state.canApplyRoot,
+                applying = state.applying,
+                onApplyNow = onApplyNow,
                 onRecordApplied = onRecordApplied,
                 contentPadding = innerPadding,
             )
@@ -141,6 +162,9 @@ private fun PresetDetailBody(
     preset: Preset,
     notes: String,
     lastAppliedLabel: String?,
+    canApplyRoot: Boolean,
+    applying: Boolean,
+    onApplyNow: () -> Unit,
     onRecordApplied: () -> Unit,
     contentPadding: PaddingValues,
 ) {
@@ -158,6 +182,10 @@ private fun PresetDetailBody(
                 bottom = contentPadding.calculateBottomPadding() + 24.dp,
             ),
     ) {
+        if (canApplyRoot) {
+            item { ApplyNowSection(applying = applying, onApplyNow = onApplyNow) }
+        }
+
         item {
             Button(
                 onClick = {
@@ -201,6 +229,37 @@ private fun PresetDetailBody(
         item {
             RecordAppliedSection(lastAppliedLabel = lastAppliedLabel, onRecordApplied = onRecordApplied)
         }
+    }
+}
+
+@Composable
+private fun ApplyNowSection(
+    applying: Boolean,
+    onApplyNow: () -> Unit,
+) {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+    ) {
+        Button(
+            onClick = onApplyNow,
+            enabled = !applying,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            if (applying) {
+                CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+                Spacer(Modifier.width(8.dp))
+            }
+            Text(stringResource(R.string.apply_now))
+        }
+        Text(
+            text = stringResource(R.string.apply_now_caption),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 4.dp),
+        )
     }
 }
 

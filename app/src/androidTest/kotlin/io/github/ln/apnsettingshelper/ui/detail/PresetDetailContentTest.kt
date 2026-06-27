@@ -28,7 +28,13 @@ class PresetDetailContentTest {
     @Test
     fun rendersCopyFieldsAndChecklist() {
         composeRule.setContent {
-            PresetDetailContent(state = testDetailState(), onBack = {}, onToggleFavorite = {}, onRecordApplied = {})
+            PresetDetailContent(
+                state = testDetailState(),
+                onBack = {},
+                onToggleFavorite = {},
+                onRecordApplied = {},
+                onApplyNow = {},
+            )
         }
 
         composeRule.onNodeWithText("APN").assertIsDisplayed()
@@ -42,7 +48,13 @@ class PresetDetailContentTest {
     @Test
     fun copyButtonPutsValueOnClipboard() {
         composeRule.setContent {
-            PresetDetailContent(state = testDetailState(), onBack = {}, onToggleFavorite = {}, onRecordApplied = {})
+            PresetDetailContent(
+                state = testDetailState(),
+                onBack = {},
+                onToggleFavorite = {},
+                onRecordApplied = {},
+                onApplyNow = {},
+            )
         }
 
         composeRule.onNodeWithContentDescription("Copy APN").performClick()

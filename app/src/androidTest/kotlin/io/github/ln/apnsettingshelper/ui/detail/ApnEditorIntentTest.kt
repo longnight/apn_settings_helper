@@ -39,7 +39,13 @@ class ApnEditorIntentTest {
     @Test
     fun openApnEditorButtonFiresApnSettingsIntent() {
         composeRule.setContent {
-            PresetDetailContent(state = testDetailState(), onBack = {}, onToggleFavorite = {}, onRecordApplied = {})
+            PresetDetailContent(
+                state = testDetailState(),
+                onBack = {},
+                onToggleFavorite = {},
+                onRecordApplied = {},
+                onApplyNow = {},
+            )
         }
 
         composeRule.onNodeWithText("Open system APN editor").performClick()

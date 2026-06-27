@@ -19,6 +19,11 @@
     <string name="applied_recorded">Recorded as applied</string>
     <string name="preset_not_found">Preset not found</string>
 
+    <!-- Detail: root apply (shown only when root is available) -->
+    <string name="apply_now">Apply now</string>
+    <string name="apply_now_caption">Root detected — writes the APN directly and selects it.</string>
+    <string name="applied_ok">APN applied</string>
+
     <!-- Detail: section headers -->
     <string name="detail_copy_section">Copy into the APN editor</string>
     <string name="detail_checklist_section">Set these dropdowns</string>

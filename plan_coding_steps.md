@@ -169,11 +169,12 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 - **Notes (M-D):** Manual DI via `AppGraph` (held by `ApnApplication`, registered in manifest) — `PresetRepository` parsed once, `SettingsStore` from `DataStoreSettingsStore.from`. Added `material-icons-core` (heart/star/back; FOSS, small — NOT the huge `-extended`), `turbine` (test), `espresso-intents` (androidTest). `ApnDateFormat` (locale-aware en `yyyy-MM-dd HH:mm` / ja `yyyy年M月d日 HH:mm`) pulled forward from M-F since the last-applied line needs it; M-F still owns `values-ja/strings.xml` (UI chrome is en-only for now). Checklist checkboxes are ephemeral (not persisted) — app can't verify the device APN. **Known minor polish (defer to M-H):** favoriting prepends the ★ Favorites section above the current scroll offset, so on a scrolled list the new section sits just above the fold (LazyColumn key-stable scroll) — consider auto-scroll-to-top on first favorite.
 
 ### M-E — Apply strategies
-- [ ] `ApplyStrategy` interface + `ManualCopyStrategy` + `ApplyStrategyResolver`
-- [ ] `RootStrategy` via libsu (write carriers + set current); "Apply now" wired when root present; auto-record lastApplied
-- [ ] `OverlayStrategy` left as documented stub (v1 off)
-- [ ] **Tests:** resolver logic (unit); root path manually verified on emulator with `adb root` (document steps)
-- **Acceptance:** manual users get copy/checklist flow; on rooted emulator, "Apply now" writes APN.
+- [x] `ApplyStrategy` interface + `ManualCopyStrategy` + `ApplyStrategyResolver` → `domain.apply`: `ApplyTier`/`ApplyOutcome`/`ApplyStrategy`; pure `ManualCopyStrategy` (returns `ManualGuidance`); `ApplyStrategyResolver` (root→overlay→manual, overlay off in v1) (2026-06-27)
+- [x] `RootStrategy` via libsu (write carriers + set current); "Apply now" wired when root present; auto-record lastApplied → `RootStrategy` is pure logic over a `ShellRunner` seam (`content insert` into `content://telephony/carriers` + best-effort `preferapn`); `data.root.LibsuShellRunner` is the libsu impl; detail VM exposes `canApplyRoot`/`applying`/`applyNow()`/`applyEvents`, shows "Apply now" only when root present, auto-records last-applied on success (2026-06-27)
+- [x] `OverlayStrategy` left as documented stub (v1 off) → `OverlayStrategy` returns `Failed("not implemented in v1")`; tier kept so the resolver seam accounts for it (2026-06-27)
+- [x] **Tests:** resolver logic (unit); root path manually verified on emulator with `adb root` (document steps) → 13 new JVM tests (Manual/Root/Resolver strategies via `FakeShellRunner` + detail-VM `applyNow`); root provider write verified on emulator (steps below) (2026-06-27)
+- **Acceptance:** manual users get copy/checklist flow; on rooted emulator, "Apply now" writes APN. → ✅ **MET** — 47 JVM + 7 instrumented green; ktlint/detekt/lint clean; the `RootStrategy` `content insert` command shape verified against the real telephony provider via `adb root` (row written with `authtype=3`, `protocol=IPV4V6`; `_id` parsed for `preferapn`) (2026-06-27)
+- **Notes (M-E):** `RootStrategy` decoupled from libsu via `ShellRunner` so its command-building + outcome logic are fully unit-tested without real root; only the thin `LibsuShellRunner` is un-unit-tested (manually verified). Enum→provider mappings: authtype NONE/PAP/CHAP/PAP_OR_CHAP→0/1/2/3, protocol IPV4/IPV6/IPV4V6→IP/IPV6/IPV4V6, mvno spn/imsi/gid; `numeric`=mcc+mnc; `current:i:1`. Non-destructive (inserts; no delete) → repeated applies can create duplicate rows (note for M-H polish). **libsu via jitpack** (scoped repo in `settings.gradle.kts`); F-Droid must build it from source (flag in M-H metadata). **Root manual-verification steps (google_apis emulator):** `adb root` → run the `content insert --uri content://telephony/carriers --bind …` that `RootStrategy.buildInsertCommand` emits → `content query … --where "apn='…'"` shows the row → `content insert --uri content://telephony/carriers/preferapn --bind apn_id:i:<id>`. **Emulator caveats:** (1) `google_apis` gives `adb root` but NOT app-level `su`, so the in-app "Apply now" button does not appear on the emulator (libsu `isRoot`=false) — verify via `adb root` shell instead, or use a Magisk image for the in-app button; (2) `preferapn` selection only takes effect when the APN's MCC/MNC matches the active SIM, so on the emulator's T-Mobile (310/260) SIM selecting a JP (440/xx) APN is correctly ignored — the row write itself still succeeds.
 
 ### M-F — i18n
 - [ ] en + ja `strings.xml`; localize all UI; locale-aware date formatter util
@@ -195,12 +196,12 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 ---
 
 ## How to start (fresh session)
-> **Resume point (2026-06-27): M-A + M-B + M-C + M-D are DONE, tested, and committed to `main`**
-> (`f668aab` scaffold, `abda11b` preset data, M-C persistence, M-D UI — local commits, push to `origin/main` is blocked by the push guard; ask the user to push or run `git push origin main`).
-> **Resume at the first unchecked box → M-E (apply strategies + libsu root).**
+> **Resume point (2026-06-27): M-A + M-B + M-C + M-D + M-E are DONE, tested, and committed to `main`**
+> (M-A–M-D pushed to `origin/main`; M-E committed locally — push to `origin/main` is blocked by the push guard, so ask the user to push or run `git push origin main`).
+> **Resume at the first unchecked box → M-F (i18n: `values-ja/strings.xml`, locale-aware everything).**
 > Read `AGENTS.md` (product) + this file first. App layout already exists under
-> `app/src/main/kotlin/io/github/ln/apnsettingshelper/` (`domain.model`, `data.preset`, `data.store`, `ui.list`, `ui.detail`, `ui.common`, `ui.nav`, `ui.theme`, `AppGraph`, `ApnApplication`, `MainActivity`).
-> M-E adds `domain.apply.ApplyStrategy` (seam) + `ManualCopyStrategy` + `ApplyStrategyResolver` + `RootStrategy` (libsu); wire "Apply now" into the detail screen when root is present (auto-records lastApplied). libsu needs the jitpack repo (commented out in `settings.gradle.kts`).
+> `app/src/main/kotlin/io/github/ln/apnsettingshelper/` (`domain.model`, `domain.apply`, `data.preset`, `data.store`, `data.root`, `ui.list`, `ui.detail`, `ui.common`, `ui.nav`, `ui.theme`, `AppGraph`, `ApnApplication`, `MainActivity`).
+> M-F adds `app/src/main/res/values-ja/strings.xml` (translate every key in `values/strings.xml`) — the UI chrome ("Favorites", "Copy", "Last applied %s", "Apply now", field labels) is currently English-only; preset labels/notes + the last-applied date already localize (`LocalizedText` + `ApnDateFormat`). Add a formatter unit test if not already covered (it is: `ApnDateFormatTest`), and verify no hardcoded user-facing strings remain in composables.
 
 1. **Enter the devShell.**
    - Interactive terminal: `cd` into the repo (direnv auto-loads) or run `nix develop`.

@@ -1,8 +1,12 @@
 package io.github.ln.apnsettingshelper.ui.detail
 
 import app.cash.turbine.test
+import io.github.ln.apnsettingshelper.domain.apply.ApplyStrategyResolver
+import io.github.ln.apnsettingshelper.domain.apply.ShellRunner
+import io.github.ln.apnsettingshelper.domain.model.LastApplied
 import io.github.ln.apnsettingshelper.testutil.FakePresetRepository
 import io.github.ln.apnsettingshelper.testutil.FakeSettingsStore
+import io.github.ln.apnsettingshelper.testutil.FakeShellRunner
 import io.github.ln.apnsettingshelper.testutil.MainDispatcherRule
 import io.github.ln.apnsettingshelper.testutil.sampleRegions
 import io.github.ln.apnsettingshelper.ui.common.ApnDateFormat
@@ -30,7 +34,15 @@ class PresetDetailViewModelTest {
         presetId: String,
         store: FakeSettingsStore = FakeSettingsStore(now = { fixedNow }),
         locale: Locale = Locale.ENGLISH,
-    ) = PresetDetailViewModel(presetId, FakePresetRepository(sampleRegions()), store, locale, tokyo)
+        shellRunner: ShellRunner = FakeShellRunner(rootAvailable = false),
+    ) = PresetDetailViewModel(
+        presetId,
+        FakePresetRepository(sampleRegions()),
+        store,
+        ApplyStrategyResolver(shellRunner),
+        locale,
+        tokyo,
+    )
 
     @Test
     fun `loads preset fields and is not favorite by default`() =
@@ -81,5 +93,28 @@ class PresetDetailViewModelTest {
                 assertEquals(ApnDateFormat.format(fixedNow, Locale.ENGLISH, tokyo), applied.lastAppliedLabel)
                 cancelAndIgnoreRemainingEvents()
             }
+        }
+
+    @Test
+    fun `canApplyRoot is false without root`() =
+        runTest {
+            val state = viewModel("his-d").uiState.first { !it.loading }
+            assertFalse(state.canApplyRoot)
+        }
+
+    @Test
+    fun `applyNow on a rooted device records last-applied and emits Applied`() =
+        runTest {
+            val store = FakeSettingsStore(now = { fixedNow })
+            val vm = viewModel("his-d", store = store, shellRunner = FakeShellRunner(rootAvailable = true))
+            assertTrue(vm.uiState.first { it.canApplyRoot }.canApplyRoot)
+
+            vm.applyEvents.test {
+                vm.applyNow()
+                assertEquals(ApplyEvent.Applied, awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
+
+            assertEquals(LastApplied("his-d", fixedNow), store.lastApplied.first())
         }
 }
