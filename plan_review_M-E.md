@@ -6,9 +6,9 @@
 > items. **Recommended: an "M-E.1 hardening" pass before release** for P1/P2; fold i18n items into M-F,
 > cosmetics into M-H. Tick as done.
 >
-> **Status (2026-06-27): M-E.1 DONE** — all **P1 (3)** + **P2 (6)** fixed and tested (52 JVM tests,
-> ktlint/detekt/android-lint clean); **P4.1** pulled forward (the WHERE now drives a destructive
-> delete). **P3 (2)** folds into M-F; remaining **P4 (3)** → M-H.
+> **Status (2026-06-27): M-E.1 + M-F i18n DONE** — all **P1 (3)** + **P2 (6)** fixed in M-E.1;
+> **P3 (2)** fixed in M-F (`values-ja` + localized APN name); **P4.1** pulled forward (the WHERE now
+> drives a destructive delete). 53 JVM tests, ktlint/detekt/android-lint clean. Remaining **P4 (3)** → M-H.
 
 ## P1 — correctness / "false success" (a user can be told data is fixed when it isn't)
 - [x] **Apply reports success even when activation failed** — `RootStrategy.apply()` returns `Applied`
@@ -64,10 +64,15 @@
       is buffered until the collector re-subscribes.
 
 ## P3 — i18n (fold into M-F)
-- [ ] **Failure toast not localized** — shows `event.message` (English/stderr) verbatim
+- [x] **Failure toast not localized** — shows `event.message` (English/stderr) verbatim
       (`PresetDetailScreen.kt:65`, `RootStrategy.kt:23,30`). → map outcomes to string resources.
-- [ ] **APN `name` column written English-only** — `preset.label.en` vs the localized name shown in-app;
+      → DONE (M-E.1 structural + M-F translations): the screen maps `ApplyEvent` → string resources
+      (`applied_ok`/`applied_not_selected`/`apply_failed`); only the OS-generated technical detail is
+      appended verbatim via `apply_failed_detail` (`%1$s`). All keys translated in `values-ja`.
+- [x] **APN `name` column written English-only** — `preset.label.en` vs the localized name shown in-app;
       a JP user sees the English name in system Settings (`RootStrategy.kt:38`). → `label.resolve(tag)`.
+      → DONE (M-F): `RootStrategy(languageTag = Locale.getDefault().language)` writes
+      `name` = `preset.label.resolve(languageTag)`. Test `writes the locale-resolved apn name`.
 
 ## P4 — minor / cosmetic (M-H)
 - [x] **SQL WHERE not escaped** — `apn`/`mcc`/`mnc` interpolated unescaped into the preferapn query;

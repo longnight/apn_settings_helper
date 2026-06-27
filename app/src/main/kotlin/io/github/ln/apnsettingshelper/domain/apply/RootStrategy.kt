@@ -4,6 +4,7 @@ import io.github.ln.apnsettingshelper.domain.model.ApnProtocol
 import io.github.ln.apnsettingshelper.domain.model.AuthType
 import io.github.ln.apnsettingshelper.domain.model.MvnoType
 import io.github.ln.apnsettingshelper.domain.model.Preset
+import java.util.Locale
 
 /**
  * Writes the preset into `content://telephony/carriers` via `su` and selects it as the
@@ -17,6 +18,7 @@ import io.github.ln.apnsettingshelper.domain.model.Preset
  */
 class RootStrategy(
     private val shellRunner: ShellRunner,
+    private val languageTag: String = Locale.getDefault().language,
 ) : ApplyStrategy {
     override val tier: ApplyTier = ApplyTier.ROOT
 
@@ -57,7 +59,7 @@ class RootStrategy(
     private fun buildInsertCommand(preset: Preset): String {
         val strings =
             buildList {
-                add("name" to preset.label.en.ifBlank { preset.id })
+                add("name" to preset.label.resolve(languageTag).ifBlank { preset.id })
                 add("numeric" to "${preset.mcc}${preset.mnc}")
                 add("mcc" to preset.mcc)
                 add("mnc" to preset.mnc)

@@ -148,4 +148,15 @@ class RootStrategyTest {
             assertTrue(insert.contains("mvno_type:s:spn"))
             assertTrue(insert.contains("mvno_match_data:s:HIS"))
         }
+
+    @Test
+    fun `writes the locale-resolved apn name`() =
+        runTest {
+            val shell = FakeShellRunner(rootAvailable = true)
+            val labelled = samplePreset(id = "his-d", labelEn = "HIS Docomo", labelJa = "HISドコモ")
+
+            RootStrategy(shell, languageTag = "ja").apply(labelled)
+
+            assertTrue(shell.commands.carrierInsert().contains("name:s:HISドコモ"))
+        }
 }

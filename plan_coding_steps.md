@@ -177,9 +177,10 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 - **Notes (M-E):** `RootStrategy` decoupled from libsu via `ShellRunner` so its command-building + outcome logic are fully unit-tested without real root; only the thin `LibsuShellRunner` is un-unit-tested (manually verified). Enum→provider mappings: authtype NONE/PAP/CHAP/PAP_OR_CHAP→0/1/2/3, protocol IPV4/IPV6/IPV4V6→IP/IPV6/IPV4V6, mvno spn/imsi/gid; `numeric`=mcc+mnc; `current:i:1`. Non-destructive (inserts; no delete) → repeated applies can create duplicate rows (note for M-H polish). **libsu via jitpack** (scoped repo in `settings.gradle.kts`); F-Droid must build it from source (flag in M-H metadata). **Root manual-verification steps (google_apis emulator):** `adb root` → run the `content insert --uri content://telephony/carriers --bind …` that `RootStrategy.buildInsertCommand` emits → `content query … --where "apn='…'"` shows the row → `content insert --uri content://telephony/carriers/preferapn --bind apn_id:i:<id>`. **Emulator caveats:** (1) `google_apis` gives `adb root` but NOT app-level `su`, so the in-app "Apply now" button does not appear on the emulator (libsu `isRoot`=false) — verify via `adb root` shell instead, or use a Magisk image for the in-app button; (2) `preferapn` selection only takes effect when the APN's MCC/MNC matches the active SIM, so on the emulator's T-Mobile (310/260) SIM selecting a JP (440/xx) APN is correctly ignored — the row write itself still succeeds.
 
 ### M-F — i18n
-- [ ] en + ja `strings.xml`; localize all UI; locale-aware date formatter util
-- [ ] **Tests:** formatter (en/ja), no hardcoded user strings
-- **Acceptance:** app fully localized; date formats match spec.
+- [x] en + ja `strings.xml`; localize all UI; locale-aware date formatter util → `values-ja/strings.xml` translates all 44 keys (incl. the M-E.1 root/apply additions); chrome is fully `stringResource`-driven; `ApnDateFormat` (en `yyyy-MM-dd HH:mm` / ja `yyyy年M月d日 HH:mm`) pre-existed from M-D (2026-06-27)
+- [x] **Tests:** formatter (en/ja), no hardcoded user strings → `ApnDateFormatTest` (3) covers en/ja; grep confirms the only non-`stringResource` UI literals are the **intentionally technical** enum option labels in `ApnFieldDisplay.displayName()` (None/PAP/CHAP/IPv4/SPN… — mirror the system APN editor spinners, documented "not localized" since M-D) (2026-06-27)
+- **Acceptance:** app fully localized; date formats match spec. → ✅ **MET** — 53 JVM tests green; ktlint/detekt/android-lint clean (no MissingTranslation / placeholder mismatch). Also folded in `plan_review_M-E.md` **P3** (failure toast → string resources; APN `name` column written via `label.resolve(languageTag)`). UI-chrome ja was verified at the resource/lint level (not re-run on the emulator this pass; ja preset+date resolution was already screenshot-verified in M-D).
+- **Notes (M-F):** `app_name` localized to **APN設定ヘルパー** (launcher + title) — the *brand* stays neutral per AGENTS, but the display label localizes (設定 wording). Acronym field labels (APN/MCC/MNC/MMSC) repeat as-is in `values-ja` rather than `translatable="false"`, so lint sees a complete translation. **Open polish (defer):** `displayName()` values stay English/acronym; only `None`→`なし` would differ from the JP system editor — revisit if we want exact spinner parity.
 
 ### M-G — Test harness + CI
 - [ ] Confirm `just test` (unit+robolectric+lint) and `just emu-test` (instrumented) cover all layers
@@ -196,15 +197,14 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 ---
 
 ## How to start (fresh session)
-> **Resume point (2026-06-27): M-A + M-B + M-C + M-D + M-E are DONE, tested, and committed to `main`**
-> (M-A–M-D pushed to `origin/main`; M-E committed locally — push to `origin/main` is blocked by the push guard, so ask the user to push or run `git push origin main`).
-> **Resume at the first unchecked box → M-F (i18n: `values-ja/strings.xml`, locale-aware everything).**
-> ⚠️ **Before release, also work `plan_review_M-E.md`** — the `/code-review max` punch-list for the root
-> apply (15 verified items; P1 "false success" + eager `su` probe are the important ones). P3 i18n items
-> fold naturally into M-F.
+> **Resume point (2026-06-27): M-A–M-F DONE + M-E.1 hardening DONE, tested, committed to `main`.**
+> (M-A–M-D pushed to `origin/main`; **M-E, M-E.1-hardening, and M-F are committed locally but NOT yet
+> pushed** — run `git push origin main` to sync, or ask the user.)
+> **Resume at the first unchecked box → M-G (test harness + CI).**
+> `plan_review_M-E.md` (the `/code-review max` punch-list): **P1 + P2 + P3 + P4.1 all done**; only the
+> three cosmetic **P4** items remain → fold into **M-H** polish.
 > Read `AGENTS.md` (product) + this file first. App layout already exists under
-> `app/src/main/kotlin/io/github/ln/apnsettingshelper/` (`domain.model`, `domain.apply`, `data.preset`, `data.store`, `data.root`, `ui.list`, `ui.detail`, `ui.common`, `ui.nav`, `ui.theme`, `AppGraph`, `ApnApplication`, `MainActivity`).
-> M-F adds `app/src/main/res/values-ja/strings.xml` (translate every key in `values/strings.xml`) — the UI chrome ("Favorites", "Copy", "Last applied %s", "Apply now", field labels) is currently English-only; preset labels/notes + the last-applied date already localize (`LocalizedText` + `ApnDateFormat`). Add a formatter unit test if not already covered (it is: `ApnDateFormatTest`), and verify no hardcoded user-facing strings remain in composables.
+> `app/src/main/kotlin/io/github/ln/apnsettingshelper/` (`domain.model`, `domain.apply`, `data.preset`, `data.store`, `data.root`, `ui.list`, `ui.detail`, `ui.common`, `ui.nav`, `ui.theme`, `AppGraph`, `ApnApplication`, `MainActivity`); i18n in `app/src/main/res/values/` (en) + `values-ja/` (ja).
 
 1. **Enter the devShell.**
    - Interactive terminal: `cd` into the repo (direnv auto-loads) or run `nix develop`.
