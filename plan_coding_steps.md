@@ -199,6 +199,9 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 > **Resume point (2026-06-27): M-A + M-B + M-C + M-D + M-E are DONE, tested, and committed to `main`**
 > (M-A–M-D pushed to `origin/main`; M-E committed locally — push to `origin/main` is blocked by the push guard, so ask the user to push or run `git push origin main`).
 > **Resume at the first unchecked box → M-F (i18n: `values-ja/strings.xml`, locale-aware everything).**
+> ⚠️ **Before release, also work `plan_review_M-E.md`** — the `/code-review max` punch-list for the root
+> apply (15 verified items; P1 "false success" + eager `su` probe are the important ones). P3 i18n items
+> fold naturally into M-F.
 > Read `AGENTS.md` (product) + this file first. App layout already exists under
 > `app/src/main/kotlin/io/github/ln/apnsettingshelper/` (`domain.model`, `domain.apply`, `data.preset`, `data.store`, `data.root`, `ui.list`, `ui.detail`, `ui.common`, `ui.nav`, `ui.theme`, `AppGraph`, `ApnApplication`, `MainActivity`).
 > M-F adds `app/src/main/res/values-ja/strings.xml` (translate every key in `values/strings.xml`) — the UI chrome ("Favorites", "Copy", "Last applied %s", "Apply now", field labels) is currently English-only; preset labels/notes + the last-applied date already localize (`LocalizedText` + `ApnDateFormat`). Add a formatter unit test if not already covered (it is: `ApnDateFormatTest`), and verify no hardcoded user-facing strings remain in composables.
