@@ -75,6 +75,11 @@ class PresetDetailViewModel(
 ) : ViewModel() {
     private val preset: Preset? = repository.findPreset(presetId)
 
+    // preset + locale are fixed for the VM's lifetime, so resolve the localized strings once
+    // rather than on every uiState emission.
+    private val title: String = preset?.label?.resolve(locale.language).orEmpty()
+    private val notes: String = preset?.notes?.resolve(locale.language).orEmpty()
+
     private var strategy: ApplyStrategy? = null
     private val rootStatus = MutableStateFlow(RootStatus())
     private val applying = MutableStateFlow(false)
@@ -179,12 +184,11 @@ class PresetDetailViewModel(
         applying: Boolean,
     ): PresetDetailUiState {
         val current = preset ?: return PresetDetailUiState(loading = false, notFound = true)
-        val tag = locale.language
         return PresetDetailUiState(
             loading = false,
             preset = current,
-            title = current.label.resolve(tag),
-            notes = current.notes.resolve(tag),
+            title = title,
+            notes = notes,
             isFavorite = current.id in favorites,
             lastAppliedLabel =
                 lastApplied

@@ -230,8 +230,17 @@ private fun PresetDetailBody(
             }
         }
 
-        item {
-            RecordAppliedSection(lastAppliedLabel = lastAppliedLabel, onRecordApplied = onRecordApplied)
+        // Root auto-records on apply, so the manual "record" button is only for non-root users
+        // (AGENTS.md: root = auto, normal = explicit button); the last-applied line still shows.
+        val showRecordButton = !canApplyRoot
+        if (showRecordButton || lastAppliedLabel != null) {
+            item {
+                RecordAppliedSection(
+                    lastAppliedLabel = lastAppliedLabel,
+                    showButton = showRecordButton,
+                    onRecordApplied = onRecordApplied,
+                )
+            }
         }
 
         item {
@@ -335,22 +344,25 @@ private fun StatusCaption(text: String) {
 @Composable
 private fun RecordAppliedSection(
     lastAppliedLabel: String?,
+    showButton: Boolean,
     onRecordApplied: () -> Unit,
 ) {
     val context = LocalContext.current
     val recordedMessage = stringResource(R.string.applied_recorded)
     Column(modifier = Modifier.padding(16.dp)) {
-        OutlinedButton(
-            onClick = {
-                onRecordApplied()
-                Toast.makeText(context, recordedMessage, Toast.LENGTH_SHORT).show()
-            },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(stringResource(R.string.record_applied))
+        if (showButton) {
+            OutlinedButton(
+                onClick = {
+                    onRecordApplied()
+                    Toast.makeText(context, recordedMessage, Toast.LENGTH_SHORT).show()
+                },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(R.string.record_applied))
+            }
         }
         lastAppliedLabel?.let { label ->
-            Spacer(Modifier.height(8.dp))
+            if (showButton) Spacer(Modifier.height(8.dp))
             Text(
                 text = stringResource(R.string.last_applied, label),
                 style = MaterialTheme.typography.bodySmall,

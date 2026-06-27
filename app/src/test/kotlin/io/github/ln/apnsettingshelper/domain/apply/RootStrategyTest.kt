@@ -159,4 +159,43 @@ class RootStrategyTest {
 
             assertTrue(shell.commands.carrierInsert().contains("name:s:HISドコモ"))
         }
+
+    // Guards against silent divergence: if a new optional Preset field is added but not wired into
+    // buildInsertCommand, this fails (it's one of the "5 places" that enumerate the fields).
+    @Test
+    fun `insert includes every populated optional field`() =
+        runTest {
+            val shell = FakeShellRunner(rootAvailable = true)
+            val full =
+                samplePreset(id = "full").copy(
+                    username = "u",
+                    password = "p",
+                    proxy = "10.0.0.1",
+                    port = "8080",
+                    mmsc = "http://mms",
+                    mmsProxy = "10.0.0.2",
+                    mmsPort = "80",
+                    server = "*",
+                    apnType = "default,mms",
+                    mvnoType = MvnoType.SPN,
+                    mvnoValue = "CARRIER",
+                )
+
+            RootStrategy(shell).apply(full)
+
+            val insert = shell.commands.carrierInsert()
+            listOf(
+                "user:s:u",
+                "password:s:p",
+                "proxy:s:10.0.0.1",
+                "port:s:8080",
+                "mmsc:s:http://mms",
+                "mmsproxy:s:10.0.0.2",
+                "mmsport:s:80",
+                "server:s:*",
+                "type:s:default,mms",
+                "mvno_type:s:spn",
+                "mvno_match_data:s:CARRIER",
+            ).forEach { bind -> assertTrue("missing $bind", insert.contains(bind)) }
+        }
 }

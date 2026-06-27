@@ -6,9 +6,10 @@
 > items. **Recommended: an "M-E.1 hardening" pass before release** for P1/P2; fold i18n items into M-F,
 > cosmetics into M-H. Tick as done.
 >
-> **Status (2026-06-27): M-E.1 + M-F i18n DONE** — all **P1 (3)** + **P2 (6)** fixed in M-E.1;
-> **P3 (2)** fixed in M-F (`values-ja` + localized APN name); **P4.1** pulled forward (the WHERE now
-> drives a destructive delete). 53 JVM tests, ktlint/detekt/android-lint clean. Remaining **P4 (3)** → M-H.
+> **Status (2026-06-27): ALL ITEMS DONE** — **P1 (3)** + **P2 (6)** in M-E.1; **P3 (2)** in M-F
+> (`values-ja` + localized APN name); **P4 (4)** in M-H (P4.1 pulled forward earlier; P4.2 root record
+> button, P4.3 field-divergence guard test, P4.4 formatter/title caching). 56 JVM tests,
+> ktlint/detekt/android-lint clean. Punch-list closed.
 
 ## P1 — correctness / "false success" (a user can be told data is fixed when it isn't)
 - [x] **Apply reports success even when activation failed** — `RootStrategy.apply()` returns `Applied`
@@ -81,14 +82,22 @@
       delete** (P2 dup-fix). `matchWhere()` builds the clause via `sqlLiteral()` (single-quoted,
       embedded quotes doubled). Remaining P4 items (RecordApplied dup control, field-knowledge
       dedup, formatter hoist) stay for M-H.
-- [ ] **`RecordApplied` button also shown to root tier** — root auto-records on apply, so root users see
+- [x] **`RecordApplied` button also shown to root tier** — root auto-records on apply, so root users see
       two last-applied controls; spec splits auto (root) vs manual (`PresetDetailScreen.kt:229`).
-- [ ] **`buildInsertCommand` duplicates per-field knowledge** — a 5th place that enumerates optional
+      → DONE (M-H): the "Record this as applied" button is hidden when `canApplyRoot` (root auto-records
+      on Apply); the passive last-applied line still shows for everyone.
+- [x] **`buildInsertCommand` duplicates per-field knowledge** — a 5th place that enumerates optional
       Preset fields (alongside `copyableFields`, `Preset`, `PresetDto`, `toDomain`); silent divergence
       risk when adding a column (`RootStrategy.kt:36`).
-- [ ] **`buildState` rebuilds a `DateTimeFormatter` every emission** — title/notes re-resolved and a new
+      → DONE (M-H): accepted the per-layer separation (a single abstraction would couple UI label
+      resources to provider column names) and added a **guard test** —
+      `insert includes every populated optional field` — so a new column missing from
+      `buildInsertCommand` fails the build.
+- [x] **`buildState` rebuilds a `DateTimeFormatter` every emission** — title/notes re-resolved and a new
       formatter allocated on each of the 4 combined flows' emits (`PresetDetailViewModel.kt:74,139-145`).
       → hoist title/notes; cache the en/ja formatters in `ApnDateFormat`.
+      → DONE (M-H): `ApnDateFormat` builds the en/ja `DateTimeFormatter`s once (only the zone is
+      re-bound per call); the VM resolves `title`/`notes` once at construction, not per emission.
 
 ## Refuted (no action — pure style)
 FakeShellRunner file placement · `strategy`/`rootAvailable` duplication · `CURRENT_TRUE` inline ·

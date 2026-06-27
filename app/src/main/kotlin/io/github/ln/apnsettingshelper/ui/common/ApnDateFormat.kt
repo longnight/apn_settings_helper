@@ -17,13 +17,17 @@ object ApnDateFormat {
     private const val EN_PATTERN = "yyyy-MM-dd HH:mm"
     private const val JA_PATTERN = "yyyy年M月d日 HH:mm"
 
+    // Parsing a pattern is the expensive part, so build each formatter once and only re-bind the
+    // (cheap, immutable) zone per call instead of re-parsing on every emission.
+    private val EN_FORMATTER = DateTimeFormatter.ofPattern(EN_PATTERN, Locale.ENGLISH)
+    private val JA_FORMATTER = DateTimeFormatter.ofPattern(JA_PATTERN, Locale.JAPANESE)
+
     fun format(
         epochMillis: Long,
         locale: Locale = Locale.getDefault(),
         zone: ZoneId = ZoneId.systemDefault(),
     ): String {
-        val pattern = if (locale.language == "ja") JA_PATTERN else EN_PATTERN
-        val formatter = DateTimeFormatter.ofPattern(pattern, locale).withZone(zone)
-        return formatter.format(Instant.ofEpochMilli(epochMillis))
+        val formatter = if (locale.language == "ja") JA_FORMATTER else EN_FORMATTER
+        return formatter.withZone(zone).format(Instant.ofEpochMilli(epochMillis))
     }
 }
