@@ -155,9 +155,10 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 - **Notes (M-B):** Stale data caught by research — the old HIS example (`vmobile.jp`/`vmobile@uqmobile`) is now `dm.jplat.net`/`his@his`; y.u mobile is `yumobile.jp` (not `ymobile.jp`); NURO is `so-net.jp`. au-line MCC/MNC set to 440/51, Docomo 440/10, SoftBank 440/20, Rakuten 440/11 (editor usually auto-fills; noted per preset). Aligned detekt `MaxLineLength` to `.editorconfig` (140). `Json { ignoreUnknownKeys = true }` so additive schema fields won't break old builds.
 
 ### M-C — Persistence (favorites + last-applied)
-- [ ] `SettingsStore` (DataStore): favorites `Set<String>`, lastApplied `{id, epochMillis}`; Flows + mutators
-- [ ] **Tests:** favorite add/remove/toggle, lastApplied overwrite (JVM/Robolectric)
-- **Acceptance:** state round-trips; `./gradlew test` green.
+- [x] `SettingsStore` (DataStore): favorites `Set<String>`, lastApplied `{id, epochMillis}`; Flows + mutators → `data.store.SettingsStore` (interface) + `DataStoreSettingsStore` (Preferences DataStore); `LastApplied` domain model; `setFavorite`/`toggleFavorite`/`recordApplied`; injectable clock; `.from(context)` factory (2026-06-27)
+- [x] **Tests:** favorite add/remove/toggle, lastApplied overwrite (JVM/Robolectric) → 9 pure-JVM tests (`kotlinx-coroutines-test` + `TemporaryFolder`, no Robolectric needed): defaults, set add/remove, idempotent set, toggle on/off, multiple independent favorites, lastApplied null/record/overwrite (fixed clock), favorites⊥lastApplied (2026-06-27)
+- **Acceptance:** state round-trips; `./gradlew test` green. → ✅ **MET** — `just test` green (22 unit tests, 0 fail; ktlint + detekt + android lint 0 errors) (2026-06-27)
+- **Notes (M-C):** Round-trip proven by write→read-back through the store's `Flow`s (DataStore serializes to / re-reads from disk). Clock injected (`now: () -> Long = System::currentTimeMillis`) so `recordApplied` timestamps are deterministic in tests. `data.catch { IOException -> emptyPreferences() }` so a corrupt file yields empty state, not a crash. Added deps: `androidx.datastore.preferences`, `kotlinx.coroutines.android` (impl); `kotlinx.coroutines.test` (test). DataStore tests run with `runTest(UnconfinedTestDispatcher())` + `backgroundScope` as the store's host scope.
 
 ### M-D — UI: list + detail
 - [ ] `PresetListScreen` + VM: grouping, ★ FAVORITES section, heart toggle, last-applied muted line
@@ -193,11 +194,12 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 ---
 
 ## How to start (fresh session)
-> **Resume point (2026-06-27): M-A + M-B are DONE, tested, and committed to `main`**
-> (`f668aab` scaffold, `abda11b` preset data — local commits, not pushed).
-> **Resume at the first unchecked box → M-C (persistence: favorites + last-applied).**
+> **Resume point (2026-06-27): M-A + M-B + M-C are DONE, tested, and committed to `main`**
+> (`f668aab` scaffold, `abda11b` preset data, M-C persistence — local commits, not pushed).
+> **Resume at the first unchecked box → M-D (UI: list + detail, ViewModels, navigation).**
 > Read `AGENTS.md` (product) + this file first. App layout already exists under
-> `app/src/main/kotlin/io/github/ln/apnsettingshelper/` (`domain.model`, `data.preset`, `ui.*`, `MainActivity`).
+> `app/src/main/kotlin/io/github/ln/apnsettingshelper/` (`domain.model`, `data.preset`, `data.store`, `ui.*`, `MainActivity`).
+> M-D wires `PresetRepository` (M-B) + `SettingsStore` (M-C) into `PresetListViewModel` / `PresetDetailViewModel`.
 
 1. **Enter the devShell.**
    - Interactive terminal: `cd` into the repo (direnv auto-loads) or run `nix develop`.
