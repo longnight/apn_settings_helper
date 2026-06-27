@@ -16,6 +16,14 @@ lint:
     -detekt --config config/detekt/detekt.yml --build-upon-default-config --input app/src
     -./gradlew lint
 
+# Strict gate used by CI (.github/workflows/ci.yml): unit tests + every linter, FATAL on any failure.
+# Unlike `lint`, nothing is prefixed with `-`, so a single violation fails the build (fail-fast).
+ci:
+    ./gradlew test
+    ktlint "app/src/**/*.kt"
+    detekt --config config/detekt/detekt.yml --build-upon-default-config --input app/src
+    ./gradlew lint
+
 # Auto-fix formatting issues ktlint can correct
 fmt:
     ktlint --format "app/src/**/*.kt"

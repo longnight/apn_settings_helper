@@ -183,9 +183,10 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 - **Notes (M-F):** `app_name` localized to **APN設定ヘルパー** (launcher + title) — the *brand* stays neutral per AGENTS, but the display label localizes (設定 wording). Acronym field labels (APN/MCC/MNC/MMSC) repeat as-is in `values-ja` rather than `translatable="false"`, so lint sees a complete translation. **Open polish (defer):** `displayName()` values stay English/acronym; only `None`→`なし` would differ from the JP system editor — revisit if we want exact spinner parity.
 
 ### M-G — Test harness + CI
-- [ ] Confirm `just test` (unit+robolectric+lint) and `just emu-test` (instrumented) cover all layers
-- [ ] (optional) GitHub Actions: unit+lint on PR (emulator job optional/manual)
-- **Acceptance:** one command runs the suite; documented in README.
+- [x] Confirm `just test` (unit+robolectric+lint) and `just emu-test` (instrumented) cover all layers → audited: every layer has tests (`domain.apply` Manual/Root/Overlay/Resolver — added `OverlayStrategyTest` to close the stub gap; `data.preset`, `data.store`, `ui.*` VMs + formatter; instrumented = nav/copy/heart/APN-intent). Intentional non-coverage documented (libsu `LibsuShellRunner`, thin `AssetPresetRepository`) (2026-06-27)
+- [x] (optional) GitHub Actions: unit+lint on PR (emulator job optional/manual) → `.github/workflows/ci.yml` runs `just ci` on push/PR to `main`; added a **strict `just ci`** recipe (fatal linters, unlike the lenient `just test`) as the single gate. Instrumented job intentionally omitted (arm64 AVD ⇒ flaky on hosted runners; run `just emu-test` locally) (2026-06-27)
+- **Acceptance:** one command runs the suite; documented in README. → ✅ **MET** — `just ci` is the one command (55 JVM tests + ktlint + detekt + Android lint, all green locally); `README.md` documents build/run/test/CI + the coverage map.
+- **Notes (M-G):** CI runs on **`macos-14` (arm64)** because `flake.nix` only exposes a devShell for `aarch64-darwin`; it installs Nix and runs `nix develop --command just ci`, so CI = the exact flake-pinned local toolchain (declarative Nix SDK ⇒ **no `sdkmanager --licenses` step**). Gradle Maven cache via `actions/cache`; Nix-store caching deferred (magic-nix-cache is sunset — add FlakeHub/Cachix later to skip the SDK re-fetch). ⚠️ **The workflow could not be executed from this environment** (no way to trigger Actions) — it's YAML-valid and runs the locally-verified command, but **confirm the first run on GitHub** (runner Nix setup / SDK fetch time). Could later be ported to faster `ubuntu` runners by extending the flake to `x86_64-linux`.
 
 ### M-H — Polish & release prep
 - [ ] App icon differentiated from the existing "APN Settings" app
@@ -197,10 +198,12 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 ---
 
 ## How to start (fresh session)
-> **Resume point (2026-06-27): M-A–M-F DONE + M-E.1 hardening DONE, tested, committed to `main`.**
-> (M-A–M-D pushed to `origin/main`; **M-E, M-E.1-hardening, and M-F are committed locally but NOT yet
-> pushed** — run `git push origin main` to sync, or ask the user.)
-> **Resume at the first unchecked box → M-G (test harness + CI).**
+> **Resume point (2026-06-27): M-A–M-G DONE + M-E.1 hardening DONE, tested.**
+> (M-A–M-F pushed to `origin/main`; **M-G is committed locally but NOT yet pushed** —
+> run `git push origin main` to sync, or ask the user.)
+> **Resume at the first unchecked box → M-H (polish & release prep).**
+> ⚠️ **M-G CI (`.github/workflows/ci.yml`) has not been run on GitHub yet** — verify the first
+> Actions run after pushing (arm64 macOS runner + Nix; see M-G notes).
 > `plan_review_M-E.md` (the `/code-review max` punch-list): **P1 + P2 + P3 + P4.1 all done**; only the
 > three cosmetic **P4** items remain → fold into **M-H** polish.
 > Read `AGENTS.md` (product) + this file first. App layout already exists under
