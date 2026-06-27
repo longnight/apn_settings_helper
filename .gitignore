@@ -12,6 +12,11 @@ captures/
 *.aab
 *.keystore
 
+# Release signing — NEVER commit; keep local and backed up
+/keystore/
+keystore.properties
+*.jks
+
 # IDE
 .idea/
 *.iml

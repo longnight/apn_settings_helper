@@ -106,14 +106,25 @@ for the schema, field reference, validation rules, and the PR checklist.
 - **Versioning:** `versionCode` / `versionName` in `app/build.gradle.kts` (currently
   `1` / `1.0.0`). Bump `versionCode` for any release F-Droid should pick up.
 - **Store / F-Droid metadata:** `fastlane/metadata/android/<locale>/` (en-US + ja —
-  title, short/full description, changelog). Phone screenshots go in
-  `…/<locale>/images/phoneScreenshots/` (not yet added).
+  title, short/full description, changelog, and 1080×2400 phone screenshots under
+  `…/<locale>/images/phoneScreenshots/`).
 - **F-Droid + libsu:** `libsu` comes from JitPack via a *scoped* repository in
   `settings.gradle.kts`. F-Droid disallows JitPack/binary deps, so its build recipe must
   build libsu **from source** (e.g. via `srclibs` / a submodule). The dep is otherwise
   FOSS (Apache-2.0) and GMS-free, so the rest builds cleanly on F-Droid.
-- **Signing:** not configured in-repo — F-Droid signs its own builds; for a GitHub APK,
-  sign out-of-band (or ship the debug APK for testing).
+- **Signing (GitHub APK):** release builds are signed **only if** a gitignored
+  `keystore.properties` exists at the repo root:
+  ```properties
+  storeFile=keystore/release.jks
+  storePassword=…
+  keyAlias=…
+  keyPassword=…
+  ```
+  Then `./gradlew :app:assembleRelease` → `app/build/outputs/apk/release/app-release.apk`
+  (check with `apksigner verify -v <apk>`). With no `keystore.properties` the release is
+  unsigned, so **F-Droid and CI are unaffected** (F-Droid signs with its own key).
+  ⚠️ The keystore and `keystore.properties` are gitignored — **keep them safe and backed
+  up**; losing the key means you can't ship updates under the same signing identity.
 
 ## License
 
