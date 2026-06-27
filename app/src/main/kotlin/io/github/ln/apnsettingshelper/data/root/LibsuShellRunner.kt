@@ -19,7 +19,11 @@ class LibsuShellRunner : ShellRunner {
 
     override suspend fun run(command: String): ShellResult =
         withContext(Dispatchers.IO) {
-            val result = Shell.cmd(command).exec()
-            ShellResult(success = result.isSuccess, out = result.out, err = result.err)
+            // Collect stdout and stderr into separate lists; libsu doesn't split them otherwise,
+            // so a root failure's real reason would be lost (it stays empty by default).
+            val out = ArrayList<String>()
+            val err = ArrayList<String>()
+            val result = Shell.cmd(command).to(out, err).exec()
+            ShellResult(success = result.isSuccess, out = out, err = err)
         }
 }

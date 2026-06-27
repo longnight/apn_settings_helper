@@ -13,8 +13,16 @@ sealed interface ApplyOutcome {
     /** No programmatic write happened; the UI should drive the copy/checklist/open-editor flow. */
     data object ManualGuidance : ApplyOutcome
 
-    /** The preset was written programmatically (root). */
+    /** The preset was written programmatically **and** selected as the active APN (root). */
     data class Applied(
+        val presetId: String,
+    ) : ApplyOutcome
+
+    /**
+     * The preset row was written, but it could not be set as the active/preferred APN (e.g. the
+     * inserted row's id could not be read back). The user must select it manually in the editor.
+     */
+    data class WrittenNotSelected(
         val presetId: String,
     ) : ApplyOutcome
 

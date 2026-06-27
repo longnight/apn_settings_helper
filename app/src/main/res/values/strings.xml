@@ -19,10 +19,16 @@
     <string name="applied_recorded">Recorded as applied</string>
     <string name="preset_not_found">Preset not found</string>
 
-    <!-- Detail: root apply (shown only when root is available) -->
+    <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
+    <string name="root_apply_toggle">One-tap apply (root)</string>
+    <string name="root_checking">Checking for root access…</string>
+    <string name="root_unavailable">No root access detected on this device.</string>
     <string name="apply_now">Apply now</string>
     <string name="apply_now_caption">Root detected — writes the APN directly and selects it.</string>
     <string name="applied_ok">APN applied</string>
+    <string name="applied_not_selected">APN saved, but couldn\'t select it. Open the APN editor and choose it.</string>
+    <string name="apply_failed">Couldn\'t apply the APN</string>
+    <string name="apply_failed_detail">Couldn\'t apply the APN: %1$s</string>
 
     <!-- Detail: section headers -->
     <string name="detail_copy_section">Copy into the APN editor</string>

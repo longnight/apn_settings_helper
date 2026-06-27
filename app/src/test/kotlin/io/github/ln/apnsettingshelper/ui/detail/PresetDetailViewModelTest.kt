@@ -2,6 +2,7 @@ package io.github.ln.apnsettingshelper.ui.detail
 
 import app.cash.turbine.test
 import io.github.ln.apnsettingshelper.domain.apply.ApplyStrategyResolver
+import io.github.ln.apnsettingshelper.domain.apply.ShellResult
 import io.github.ln.apnsettingshelper.domain.apply.ShellRunner
 import io.github.ln.apnsettingshelper.domain.model.LastApplied
 import io.github.ln.apnsettingshelper.testutil.FakePresetRepository
@@ -96,9 +97,22 @@ class PresetDetailViewModelTest {
         }
 
     @Test
-    fun `canApplyRoot is false without root`() =
+    fun `canApplyRoot is false until root apply is enabled`() =
         runTest {
             val state = viewModel("his-d").uiState.first { !it.loading }
+            // No eager probe on open: root stays off until the user opts in.
+            assertFalse(state.rootRequested)
+            assertFalse(state.canApplyRoot)
+        }
+
+    @Test
+    fun `enabling root apply with no root reports unavailable`() =
+        runTest {
+            val vm = viewModel("his-d", shellRunner = FakeShellRunner(rootAvailable = false))
+
+            vm.setRootApplyEnabled(true)
+
+            val state = vm.uiState.first { it.rootRequested && !it.rootChecking }
             assertFalse(state.canApplyRoot)
         }
 
@@ -107,6 +121,7 @@ class PresetDetailViewModelTest {
         runTest {
             val store = FakeSettingsStore(now = { fixedNow })
             val vm = viewModel("his-d", store = store, shellRunner = FakeShellRunner(rootAvailable = true))
+            vm.setRootApplyEnabled(true)
             assertTrue(vm.uiState.first { it.canApplyRoot }.canApplyRoot)
 
             vm.applyEvents.test {
@@ -115,6 +130,32 @@ class PresetDetailViewModelTest {
                 cancelAndIgnoreRemainingEvents()
             }
 
+            assertEquals(LastApplied("his-d", fixedNow), store.lastApplied.first())
+        }
+
+    @Test
+    fun `applyNow records last-applied but emits WrittenNotSelected when activation fails`() =
+        runTest {
+            val store = FakeSettingsStore(now = { fixedNow })
+            val shell =
+                FakeShellRunner(rootAvailable = true) { command ->
+                    when {
+                        command.startsWith("content query") -> ShellResult(success = true, out = listOf("_id=7"))
+                        command.contains("/preferapn") -> ShellResult(success = false)
+                        else -> ShellResult(success = true)
+                    }
+                }
+            val vm = viewModel("his-d", store = store, shellRunner = shell)
+            vm.setRootApplyEnabled(true)
+            assertTrue(vm.uiState.first { it.canApplyRoot }.canApplyRoot)
+
+            vm.applyEvents.test {
+                vm.applyNow()
+                assertEquals(ApplyEvent.WrittenNotSelected, awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
+
+            // The row WAS written, so it's still recorded as last-applied.
             assertEquals(LastApplied("his-d", fixedNow), store.lastApplied.first())
         }
 }

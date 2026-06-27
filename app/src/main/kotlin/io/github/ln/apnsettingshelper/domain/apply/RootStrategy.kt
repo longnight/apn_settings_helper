@@ -10,26 +10,48 @@ import io.github.ln.apnsettingshelper.domain.model.Preset
  * preferred APN. Pure logic over [ShellRunner] (the libsu wiring is in `LibsuShellRunner`),
  * so the command-building and outcome handling are unit-testable without real root.
  *
- * Non-destructive: it inserts a new row (it does not delete existing APNs). Repeated applies
- * of the same preset can therefore create duplicate rows — acceptable for v1.
+ * Re-apply safe: it first deletes any prior copy of the same preset (matched by apn+mcc+mnc)
+ * so repeated applies after a silent APN loss don't pile up duplicate rows. The insert is then
+ * verified by reading the row back — `content insert` can exit 0 without actually writing — and
+ * only a confirmed-written-and-selected row reports [ApplyOutcome.Applied].
  */
 class RootStrategy(
     private val shellRunner: ShellRunner,
 ) : ApplyStrategy {
     override val tier: ApplyTier = ApplyTier.ROOT
 
+    // Sequential validation reads clearest as guard clauses (root → write → verify → select).
+    @Suppress("ReturnCount")
     override suspend fun apply(preset: Preset): ApplyOutcome {
         if (!shellRunner.isRootAvailable()) {
             return ApplyOutcome.Failed("Root access is not available")
         }
+        // Drop any prior copy of this exact preset so re-applies don't accumulate rows (best-effort).
+        shellRunner.run(buildDeleteCommand(preset))
+
         val insert = shellRunner.run(buildInsertCommand(preset))
-        return if (insert.success) {
-            selectPreferredApn(preset)
+        if (!insert.success) {
+            return ApplyOutcome.Failed(insert.err.joinToString("\n").ifBlank { "Failed to write the APN" })
+        }
+
+        // Exit 0 doesn't guarantee a row was written (some OS versions print a SecurityException /
+        // unknown-column to stderr yet still exit 0). Verify by reading the row back; its id is
+        // also what we need to mark it the preferred APN.
+        val rowId =
+            queryInsertedRowId(preset)
+                ?: return ApplyOutcome.Failed(
+                    insert.err.joinToString("\n").ifBlank { "The APN could not be verified after writing" },
+                )
+
+        return if (selectPreferredApn(rowId)) {
             ApplyOutcome.Applied(preset.id)
         } else {
-            ApplyOutcome.Failed(insert.err.joinToString("\n").ifBlank { "Failed to write the APN" })
+            ApplyOutcome.WrittenNotSelected(preset.id)
         }
     }
+
+    /** Delete any existing row for this exact preset (apn+mcc+mnc) before re-inserting. */
+    private fun buildDeleteCommand(preset: Preset): String = "content delete --uri $CARRIERS_URI --where ${quote(matchWhere(preset))}"
 
     /** Insert one row with the preset's fields. Optional (blank) fields are omitted. */
     private fun buildInsertCommand(preset: Preset): String {
@@ -65,17 +87,23 @@ class RootStrategy(
         return "content insert --uri $CARRIERS_URI $stringBinds $intBinds"
     }
 
-    /** Best-effort: look up the inserted row's id and mark it the preferred APN. */
-    private suspend fun selectPreferredApn(preset: Preset) {
-        val where = "apn='${preset.apn}' AND mcc='${preset.mcc}' AND mnc='${preset.mnc}'"
+    /** Read back the row we just wrote and return its `_id`, or null if it isn't there. */
+    private suspend fun queryInsertedRowId(preset: Preset): String? {
         val query =
             "content query --uri $CARRIERS_URI --projection _id " +
-                "--where ${quote(where)} --sort ${quote("_id DESC")}"
+                "--where ${quote(matchWhere(preset))} --sort ${quote("_id DESC")}"
         val result = shellRunner.run(query)
-        if (!result.success) return
-        val id = result.out.firstNotNullOfOrNull { ID_REGEX.find(it)?.groupValues?.get(1) } ?: return
-        shellRunner.run("content insert --uri $PREFERAPN_URI --bind ${quote("apn_id:i:$id")}")
+        if (!result.success) return null
+        return result.out.firstNotNullOfOrNull { ID_REGEX.find(it)?.groupValues?.get(1) }
     }
+
+    /** Mark [rowId] the preferred APN. Returns whether the provider accepted it. */
+    private suspend fun selectPreferredApn(rowId: String): Boolean =
+        shellRunner.run("content insert --uri $PREFERAPN_URI --bind ${quote("apn_id:i:$rowId")}").success
+
+    /** SQL WHERE matching this exact preset (apn+mcc+mnc), with string literals escaped. */
+    private fun matchWhere(preset: Preset): String =
+        "apn=${sqlLiteral(preset.apn)} AND mcc=${sqlLiteral(preset.mcc)} AND mnc=${sqlLiteral(preset.mnc)}"
 
     private companion object {
         const val CARRIERS_URI = "content://telephony/carriers"
@@ -114,5 +142,8 @@ class RootStrategy(
 
         /** POSIX single-quote a token so spaces/parentheses in values survive the shell. */
         fun quote(token: String): String = "'" + token.replace("'", "'\\''") + "'"
+
+        /** A SQL string literal (single-quoted, embedded quotes doubled) for WHERE clauses. */
+        fun sqlLiteral(value: String): String = "'" + value.replace("'", "''") + "'"
     }
 }

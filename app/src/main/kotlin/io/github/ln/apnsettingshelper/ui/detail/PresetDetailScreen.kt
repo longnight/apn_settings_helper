@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -43,7 +45,6 @@ import io.github.ln.apnsettingshelper.R
 import io.github.ln.apnsettingshelper.domain.model.Preset
 import io.github.ln.apnsettingshelper.ui.common.ChecklistItem
 import io.github.ln.apnsettingshelper.ui.common.CopyableField
-import io.github.ln.apnsettingshelper.ui.common.displayName
 import io.github.ln.apnsettingshelper.ui.common.openApnEditor
 
 /** VM-wired preset detail. */
@@ -57,12 +58,27 @@ fun PresetDetailScreen(
     val state by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     val appliedMessage = stringResource(R.string.applied_ok)
+    val notSelectedMessage = stringResource(R.string.applied_not_selected)
+    val failedMessage = stringResource(R.string.apply_failed)
     LaunchedEffect(viewModel) {
         viewModel.applyEvents.collect { event ->
             val message =
                 when (event) {
-                    ApplyEvent.Applied -> appliedMessage
-                    is ApplyEvent.Failed -> event.message
+                    ApplyEvent.Applied -> {
+                        appliedMessage
+                    }
+
+                    ApplyEvent.WrittenNotSelected -> {
+                        notSelectedMessage
+                    }
+
+                    is ApplyEvent.Failed -> {
+                        if (event.detail.isNullOrBlank()) {
+                            failedMessage
+                        } else {
+                            context.getString(R.string.apply_failed_detail, event.detail)
+                        }
+                    }
                 }
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         }
@@ -73,6 +89,7 @@ fun PresetDetailScreen(
         onToggleFavorite = viewModel::toggleFavorite,
         onRecordApplied = viewModel::recordApplied,
         onApplyNow = viewModel::applyNow,
+        onSetRootEnabled = viewModel::setRootApplyEnabled,
         modifier = modifier,
     )
 }
@@ -86,6 +103,7 @@ fun PresetDetailContent(
     onToggleFavorite: () -> Unit,
     onRecordApplied: () -> Unit,
     onApplyNow: () -> Unit,
+    onSetRootEnabled: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -116,9 +134,12 @@ fun PresetDetailContent(
                 preset = preset,
                 notes = state.notes,
                 lastAppliedLabel = state.lastAppliedLabel,
+                rootRequested = state.rootRequested,
+                rootChecking = state.rootChecking,
                 canApplyRoot = state.canApplyRoot,
                 applying = state.applying,
                 onApplyNow = onApplyNow,
+                onSetRootEnabled = onSetRootEnabled,
                 onRecordApplied = onRecordApplied,
                 contentPadding = innerPadding,
             )
@@ -162,14 +183,15 @@ private fun PresetDetailBody(
     preset: Preset,
     notes: String,
     lastAppliedLabel: String?,
+    rootRequested: Boolean,
+    rootChecking: Boolean,
     canApplyRoot: Boolean,
     applying: Boolean,
     onApplyNow: () -> Unit,
+    onSetRootEnabled: (Boolean) -> Unit,
     onRecordApplied: () -> Unit,
     contentPadding: PaddingValues,
 ) {
-    val context = LocalContext.current
-    val editorUnavailable = stringResource(R.string.apn_editor_unavailable)
     val checked = remember { mutableStateMapOf<String, Boolean>() }
     val copyFields = remember(preset) { copyableFields(preset) }
     val checklist = remember(preset) { checklistFields(preset) }
@@ -182,25 +204,7 @@ private fun PresetDetailBody(
                 bottom = contentPadding.calculateBottomPadding() + 24.dp,
             ),
     ) {
-        if (canApplyRoot) {
-            item { ApplyNowSection(applying = applying, onApplyNow = onApplyNow) }
-        }
-
-        item {
-            Button(
-                onClick = {
-                    if (!openApnEditor(context)) {
-                        Toast.makeText(context, editorUnavailable, Toast.LENGTH_LONG).show()
-                    }
-                },
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-            ) {
-                Text(stringResource(R.string.open_apn_editor))
-            }
-        }
+        item { OpenApnEditorButton() }
 
         item { SubHeader(stringResource(R.string.detail_copy_section)) }
         items(copyFields) { field ->
@@ -229,12 +233,51 @@ private fun PresetDetailBody(
         item {
             RecordAppliedSection(lastAppliedLabel = lastAppliedLabel, onRecordApplied = onRecordApplied)
         }
+
+        item {
+            RootApplySection(
+                rootRequested = rootRequested,
+                rootChecking = rootChecking,
+                canApplyRoot = canApplyRoot,
+                applying = applying,
+                onSetRootEnabled = onSetRootEnabled,
+                onApplyNow = onApplyNow,
+            )
+        }
     }
 }
 
 @Composable
-private fun ApplyNowSection(
+private fun OpenApnEditorButton() {
+    val context = LocalContext.current
+    val editorUnavailable = stringResource(R.string.apn_editor_unavailable)
+    Button(
+        onClick = {
+            if (!openApnEditor(context)) {
+                Toast.makeText(context, editorUnavailable, Toast.LENGTH_LONG).show()
+            }
+        },
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+    ) {
+        Text(stringResource(R.string.open_apn_editor))
+    }
+}
+
+/**
+ * Opt-in root section. The toggle is the explicit opt-in: only flipping it on asks the VM to
+ * probe for `su` (which may show the superuser-grant dialog). Once root is confirmed the
+ * one-tap "Apply now" button appears; otherwise a short status line explains why it didn't.
+ */
+@Composable
+private fun RootApplySection(
+    rootRequested: Boolean,
+    rootChecking: Boolean,
+    canApplyRoot: Boolean,
     applying: Boolean,
+    onSetRootEnabled: (Boolean) -> Unit,
     onApplyNow: () -> Unit,
 ) {
     Column(
@@ -243,24 +286,50 @@ private fun ApplyNowSection(
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp),
     ) {
-        Button(
-            onClick = onApplyNow,
-            enabled = !applying,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            if (applying) {
-                CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
-                Spacer(Modifier.width(8.dp))
-            }
-            Text(stringResource(R.string.apply_now))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = stringResource(R.string.root_apply_toggle), modifier = Modifier.weight(1f))
+            Switch(checked = rootRequested, onCheckedChange = onSetRootEnabled)
         }
-        Text(
-            text = stringResource(R.string.apply_now_caption),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 4.dp),
-        )
+        if (rootRequested) {
+            when {
+                rootChecking -> {
+                    StatusCaption(stringResource(R.string.root_checking))
+                }
+
+                canApplyRoot -> {
+                    Button(
+                        onClick = onApplyNow,
+                        enabled = !applying,
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
+                    ) {
+                        if (applying) {
+                            CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+                            Spacer(Modifier.width(8.dp))
+                        }
+                        Text(stringResource(R.string.apply_now))
+                    }
+                    StatusCaption(stringResource(R.string.apply_now_caption))
+                }
+
+                else -> {
+                    StatusCaption(stringResource(R.string.root_unavailable))
+                }
+            }
+        }
     }
+}
+
+@Composable
+private fun StatusCaption(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(top = 4.dp),
+    )
 }
 
 @Composable
@@ -300,41 +369,3 @@ private fun SubHeader(text: String) {
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 4.dp),
     )
 }
-
-private data class CopyFieldUi(
-    val labelRes: Int,
-    val value: String,
-)
-
-private data class ChecklistFieldUi(
-    val key: String,
-    val labelRes: Int,
-    val value: String,
-)
-
-/** Non-blank, non-dropdown fields, in system-APN-editor order. APN/MCC/MNC are always present. */
-private fun copyableFields(preset: Preset): List<CopyFieldUi> =
-    buildList {
-        add(CopyFieldUi(R.string.field_apn, preset.apn))
-        if (preset.username.isNotBlank()) add(CopyFieldUi(R.string.field_username, preset.username))
-        if (preset.password.isNotBlank()) add(CopyFieldUi(R.string.field_password, preset.password))
-        add(CopyFieldUi(R.string.field_mcc, preset.mcc))
-        add(CopyFieldUi(R.string.field_mnc, preset.mnc))
-        if (preset.mvnoValue.isNotBlank()) add(CopyFieldUi(R.string.field_mvno_value, preset.mvnoValue))
-        if (preset.apnType.isNotBlank()) add(CopyFieldUi(R.string.field_apn_type, preset.apnType))
-        if (preset.proxy.isNotBlank()) add(CopyFieldUi(R.string.field_proxy, preset.proxy))
-        if (preset.port.isNotBlank()) add(CopyFieldUi(R.string.field_port, preset.port))
-        if (preset.mmsc.isNotBlank()) add(CopyFieldUi(R.string.field_mmsc, preset.mmsc))
-        if (preset.mmsProxy.isNotBlank()) add(CopyFieldUi(R.string.field_mms_proxy, preset.mmsProxy))
-        if (preset.mmsPort.isNotBlank()) add(CopyFieldUi(R.string.field_mms_port, preset.mmsPort))
-        if (preset.server.isNotBlank()) add(CopyFieldUi(R.string.field_server, preset.server))
-    }
-
-/** The dropdown fields, always shown as "set to X" checklist items. */
-private fun checklistFields(preset: Preset): List<ChecklistFieldUi> =
-    listOf(
-        ChecklistFieldUi("authType", R.string.field_auth_type, preset.authType.displayName()),
-        ChecklistFieldUi("protocol", R.string.field_protocol, preset.protocol.displayName()),
-        ChecklistFieldUi("roamingProtocol", R.string.field_roaming_protocol, preset.roamingProtocol.displayName()),
-        ChecklistFieldUi("mvnoType", R.string.field_mvno_type, preset.mvnoType.displayName()),
-    )

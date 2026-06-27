@@ -34,6 +34,7 @@ class PresetDetailContentTest {
                 onToggleFavorite = {},
                 onRecordApplied = {},
                 onApplyNow = {},
+                onSetRootEnabled = {},
             )
         }
 
@@ -54,6 +55,7 @@ class PresetDetailContentTest {
                 onToggleFavorite = {},
                 onRecordApplied = {},
                 onApplyNow = {},
+                onSetRootEnabled = {},
             )
         }
 

@@ -45,6 +45,7 @@ class ApnEditorIntentTest {
                 onToggleFavorite = {},
                 onRecordApplied = {},
                 onApplyNow = {},
+                onSetRootEnabled = {},
             )
         }
 
