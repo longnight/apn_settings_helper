@@ -190,7 +190,7 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 
 ### M-H — Polish & release prep
 - [x] App icon differentiated from the existing "APN Settings" app → adaptive icon from M-A: white SIM-card-with-chip glyph on a distinctive **teal** (`#0B6E6E`) background (+ monochrome/themed variant). Distinct mark + colour vs the existing app; a designer pass is optional post-v1 (2026-06-27)
-- [x] Per-locale store listing copy (en + **ja**: 格安SIM / APN設定 keywords); F-Droid fastlane metadata structure → `fastlane/metadata/android/{en-US,ja}/` with `title` / `short_description` (≤80) / `full_description` / `changelogs/1.txt`; ja copy leads with 格安SIM・APN設定. **Screenshots not included** (binary — drop into `…/<locale>/images/phoneScreenshots/` before store submission) (2026-06-27)
+- [x] Per-locale store listing copy (en + **ja**: 格安SIM / APN設定 keywords); F-Droid fastlane metadata structure → `fastlane/metadata/android/{en-US,ja}/` with `title` / `short_description` (≤80) / `full_description` / `changelogs/1.txt`; ja copy leads with 格安SIM・APN設定. **Screenshots captured** on the emulator (list + detail, en + ja) → `…/<locale>/images/phoneScreenshots/{1_list,2_detail}.png`. ⚠️ They're **320×640** (the default `apnhelper` AVD's resolution) — F-Droid-acceptable but low; regenerate on a higher-density AVD (e.g. a Pixel profile) for store-quality images (2026-06-27)
 - [x] `README.md` (build/run/contribute, add-a-preset guide) + `LICENSE` (MIT) → `README.md` (overview/build/run/test/CI/release) created in M-G; `CONTRIBUTING.md` added with the full add-a-preset guide (schema, field table, validation rules, PR checklist); `LICENSE` (MIT) already present (2026-06-27)
 - [x] Versioning (versionCode/versionName); F-Droid build recipe notes (jitpack libsu caveat) → `versionCode 1` / `versionName 1.0.0`; README "Releasing / packaging" documents the **libsu JitPack → build-from-source** F-Droid caveat, the fastlane layout, and signing (2026-06-27)
 - **Acceptance:** installable APK + complete store/F-Droid metadata; contributors can add presets via PR. → ✅ **MET** — `assembleDebug` produces an installable `app-debug.apk` (v1.0.0); en+ja fastlane metadata in place (screenshots are the one remaining binary asset); `CONTRIBUTING.md` lets contributors add a preset via a data-only PR (validated by `BundledPresetsTest`). `just ci` green; APK builds.
@@ -205,8 +205,8 @@ interface ApplyStrategy { val tier: ApplyTier; suspend fun apply(preset: Preset)
 > `plan_review_M-E.md` punch-list is **fully closed** (P1+P2+P3+P4). 56 JVM + 7 instrumented tests;
 > `just ci` green; `assembleDebug` produces a v1.0.0 APK.
 > **No coding milestones remain.** Pre-store-submission tasks left (not code):
-> 1. **Phone screenshots** → `fastlane/metadata/android/{en-US,ja}/images/phoneScreenshots/` (binary —
->    capture on the emulator; en + ja).
+> 1. **Phone screenshots** — captured (en + ja, list + detail) in `…/images/phoneScreenshots/`, but at
+>    **320×640** (default AVD). Regenerate on a higher-density AVD (Pixel profile) for store-quality.
 > 2. **F-Droid:** submit an `fdroiddata` recipe that builds **libsu from source** (JitPack is disallowed;
 >    see README → Releasing) — that metadata lives in fdroiddata, not this repo.
 > 3. Optional: release signing for GitHub APKs; tag `v1.0.0`.
