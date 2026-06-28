@@ -32,7 +32,9 @@ environment: `plan_implement_steps.md`. Root-apply internals: `plan_review_M-E.m
 ## Data contract — `assets/presets.json`
 - `{ schemaVersion: 1, regions: [{ code, name{en,ja}, carriers: [{ id, name{en,ja}, presets: [{…}] }] }] }`.
 - Required per preset: `id` (globally unique), `label{en,ja}`, `apn`, `mcc`, `mnc`. Other fields
-  default to `""`/enum default. Full field table + rules: `CONTRIBUTING.md`.
+  default to `""`/enum default — incl. optional `line{en,ja}` (the plan/line designation, e.g.
+  `Type D / Docomo`, shown on the detail screen; `label` itself is carrier + network). Full field
+  table + rules: `CONTRIBUTING.md`.
 - **Validation on load** (`PresetSerialization`): `schemaVersion == 1`; unique preset/carrier/region
   ids; `apn` non-blank; `mcc` 3 digits, `mnc` 2–3 digits; enums in range (else parse fails).
   `Json { ignoreUnknownKeys = true }` so additive fields don't break old builds.

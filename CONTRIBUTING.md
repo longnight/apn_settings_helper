@@ -35,7 +35,8 @@ All presets live in **`app/src/main/assets/presets.json`**, grouped
           "presets": [
             {
               "id": "example-mobile-docomo",         // globally unique
-              "label": { "en": "Example (Docomo line)", "ja": "エグザンプル（ドコモ回線）" },
+              "label": { "en": "Example (Docomo)", "ja": "エグザンプル（ドコモ）" },
+              "line": { "en": "Type D / Docomo", "ja": "タイプD/ドコモ" },  // optional: plan/line shown on the detail screen
               "apn": "example.ne.jp",
               "mcc": "440",
               "mnc": "10",
@@ -67,7 +68,8 @@ new country.
 | Field | Required | Notes |
 |---|---|---|
 | `id` | ✅ | Globally unique across all presets (kebab-case, e.g. `carrier-line`). |
-| `label` | ✅ | `{ "en": …, "ja": … }` shown in the app. |
+| `label` | ✅ | `{ "en": …, "ja": … }` — **carrier + network only** (e.g. `IIJmio (Docomo)`). The list shows the carrier as the title and the network as the subtitle. |
+| `line` | — | `{ "en": …, "ja": … }` — the plan/line designation (e.g. `Type D / Docomo`) shown above *Open system APN editor* on the detail screen. Omit when there's no Type/plan. |
 | `apn` | ✅ | Must be non-blank. |
 | `mcc` | ✅ | Exactly **3 digits**. |
 | `mnc` | ✅ | **2–3 digits**. |
@@ -93,7 +95,7 @@ regions/carriers.
 ### PR checklist
 
 - [ ] Verified the values against the carrier's **official** APN page and set `source` + `lastVerified`.
-- [ ] Provided both `en` and `ja` for `label` (and `notes` if used).
+- [ ] Provided both `en` and `ja` for `label` (and `line`/`notes` if used); kept `label` to **carrier + network**, with any Type/plan in `line`.
 - [ ] `just ci` passes locally.
 
 ## Code & translations
