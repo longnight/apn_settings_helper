@@ -255,3 +255,15 @@ source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh \
   survives** (IME stays up, copied value lands, paste inserts it) — the flash does not dismiss it. `just ci`
   green. Committed the whole work stream to branch **`feat/float-over-editor-overlay`** (off `main`; not pushed).
   **Next: optional non-MIUI verification when a device is available; possible PR/merge of the branch.**
+- **2026-06-28 (cont. 6)** — **Second-MIUI-version attempt on a Redmi K30 5G (Android 11 / MIUI 12.5, SIM-less,
+  not rooted) — partial.** ✅ The debug build (with the overlay) **installs and launches cleanly** on Android 11
+  / MIUI 12.5 (API 30) — a useful back-compat data point (overlay activity + manifest + `SYSTEM_ALERT_WINDOW`
+  + invisible theme are fine on the older OS / earlier MIUI). ❌ Could **not** re-validate the clipboard hybrid
+  there, two blockers: (1) **MIUI 12.5 denies `adb shell input`** (`SecurityException: INJECT_EVENTS`) unless
+  "USB debugging (Security settings)" is on — and that toggle is SIM-gated on MIUI, so no auto-driving;
+  (2) **no SIM** → the system APN editor won't open, so our app stays foreground and the background-write/flash
+  path the hybrid exists for can't be reproduced without a contrived multi-app setup. Checked for root to work
+  around (1) and to test the root Apply tier — **device is stock, not rooted** (no `su`/Magisk anywhere,
+  `ro.build.tags=release-keys`, `verifiedbootstate=green`). Restored the Redmi to its v1.0.0 release APK.
+  **Takeaway: the hybrid stays verified on the Xiaomi (Android 13 / MIUI 14) only; a future second-version check
+  needs either a rooted device or one with a SIM + Security-settings debugging.**
