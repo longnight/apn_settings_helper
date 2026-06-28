@@ -2,7 +2,7 @@
 
 MIT, open-source Android app that restores a phone's mobile-data **APN** from curated, verified
 presets — for MVNO users and travellers putting a local prepaid SIM in an unlocked phone. Japan-first,
-region-extensible. **Status: v1.1.0 released** (`origin/main`; `v1.1.0` tagged + GitHub release — adds the opt-in float-over-editor overlay).
+region-extensible. **Status: v1.2.0 released** (`origin/main`; `v1.2.0` tagged + GitHub release — Material 3 UI overhaul: tap-to-copy overlay chips, a redesigned carrier list (search + avatars + A→Z), and an elevated detail screen).
 
 > Brand name stays neutral (no "Japan/JP"). Package id `io.github.ln.apnsettingshelper` is unique vs
 > the existing "APN Settings" app — differentiate by icon (teal SIM-card) + per-locale store listing.

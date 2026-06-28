@@ -11,7 +11,7 @@
           "presets": [
             {
               "id": "his-mobile-docomo",
-              "label": { "en": "HIS Mobile (Docomo line)", "ja": "HISモバイル（ドコモ回線）" },
+              "label": { "en": "HIS Mobile (Docomo)", "ja": "HISモバイル（ドコモ）" },
               "apn": "dm.jplat.net",
               "mcc": "440",
               "mnc": "10",
@@ -31,7 +31,7 @@
             },
             {
               "id": "his-mobile-softbank",
-              "label": { "en": "HIS Mobile (SoftBank line)", "ja": "HISモバイル（ソフトバンク回線）" },
+              "label": { "en": "HIS Mobile (SoftBank)", "ja": "HISモバイル（ソフトバンク）" },
               "apn": "sb.mvno",
               "mcc": "440",
               "mnc": "20",
@@ -57,7 +57,8 @@
           "presets": [
             {
               "id": "iijmio-typed",
-              "label": { "en": "IIJmio (Type D / Docomo)", "ja": "IIJmio（タイプD/ドコモ）" },
+              "label": { "en": "IIJmio (Docomo)", "ja": "IIJmio（ドコモ）" },
+              "line": { "en": "Type D / Docomo", "ja": "タイプD/ドコモ" },
               "apn": "iijmio.jp",
               "mcc": "440",
               "mnc": "10",
@@ -83,7 +84,8 @@
           "presets": [
             {
               "id": "mineo-d",
-              "label": { "en": "mineo (D plan / Docomo)", "ja": "mineo（Dプラン/ドコモ）" },
+              "label": { "en": "mineo (Docomo)", "ja": "mineo（ドコモ）" },
+              "line": { "en": "D plan / Docomo", "ja": "Dプラン/ドコモ" },
               "apn": "mineo-d.jp",
               "mcc": "440",
               "mnc": "10",
@@ -103,7 +105,8 @@
             },
             {
               "id": "mineo-a",
-              "label": { "en": "mineo (A plan / au)", "ja": "mineo（Aプラン/au）" },
+              "label": { "en": "mineo (au)", "ja": "mineo（au）" },
+              "line": { "en": "A plan / au", "ja": "Aプラン/au" },
               "apn": "mineo.jp",
               "mcc": "440",
               "mnc": "51",
@@ -123,7 +126,8 @@
             },
             {
               "id": "mineo-s",
-              "label": { "en": "mineo (S plan / SoftBank)", "ja": "mineo（Sプラン/ソフトバンク）" },
+              "label": { "en": "mineo (SoftBank)", "ja": "mineo（ソフトバンク）" },
+              "line": { "en": "S plan / SoftBank", "ja": "Sプラン/ソフトバンク" },
               "apn": "mineo-s.jp",
               "mcc": "440",
               "mnc": "20",
@@ -279,7 +283,8 @@
           "presets": [
             {
               "id": "biglobe-typed",
-              "label": { "en": "BIGLOBE Mobile (Type D / Docomo)", "ja": "BIGLOBEモバイル（タイプD/ドコモ）" },
+              "label": { "en": "BIGLOBE Mobile (Docomo)", "ja": "BIGLOBEモバイル（ドコモ）" },
+              "line": { "en": "Type D / Docomo", "ja": "タイプD/ドコモ" },
               "apn": "biglobe.jp",
               "mcc": "440",
               "mnc": "10",
@@ -331,7 +336,8 @@
           "presets": [
             {
               "id": "aeon-type1-au",
-              "label": { "en": "AEON Mobile (Type1 / au)", "ja": "イオンモバイル（タイプ1/au）" },
+              "label": { "en": "AEON Mobile (au)", "ja": "イオンモバイル（au）" },
+              "line": { "en": "Type1 / au", "ja": "タイプ1/au" },
               "apn": "i-aeonmobile.com",
               "mcc": "440",
               "mnc": "51",
@@ -351,7 +357,8 @@
             },
             {
               "id": "aeon-type2-docomo",
-              "label": { "en": "AEON Mobile (Type2 / Docomo)", "ja": "イオンモバイル（タイプ2/ドコモ）" },
+              "label": { "en": "AEON Mobile (Docomo)", "ja": "イオンモバイル（ドコモ）" },
+              "line": { "en": "Type2 / Docomo", "ja": "タイプ2/ドコモ" },
               "apn": "n-aeonmobile.com",
               "mcc": "440",
               "mnc": "10",
@@ -377,7 +384,8 @@
           "presets": [
             {
               "id": "jcom-mobile-aplan",
-              "label": { "en": "J:COM MOBILE (A Plan / au)", "ja": "J:COM MOBILE（Aプラン/au）" },
+              "label": { "en": "J:COM MOBILE (au)", "ja": "J:COM MOBILE（au）" },
+              "line": { "en": "A Plan / au", "ja": "Aプラン/au" },
               "apn": "jcommobile.jp",
               "mcc": "440",
               "mnc": "51",

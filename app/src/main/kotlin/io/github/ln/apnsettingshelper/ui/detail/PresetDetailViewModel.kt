@@ -41,6 +41,7 @@ data class PresetDetailUiState(
     val notFound: Boolean = false,
     val preset: Preset? = null,
     val title: String = "",
+    val line: String = "",
     val notes: String = "",
     val isFavorite: Boolean = false,
     val lastAppliedLabel: String? = null,
@@ -78,6 +79,7 @@ class PresetDetailViewModel(
     // preset + locale are fixed for the VM's lifetime, so resolve the localized strings once
     // rather than on every uiState emission.
     private val title: String = preset?.label?.resolve(locale.language).orEmpty()
+    private val line: String = preset?.line?.resolve(locale.language).orEmpty()
     private val notes: String = preset?.notes?.resolve(locale.language).orEmpty()
 
     private var strategy: ApplyStrategy? = null
@@ -188,6 +190,7 @@ class PresetDetailViewModel(
             loading = false,
             preset = current,
             title = title,
+            line = line,
             notes = notes,
             isFavorite = current.id in favorites,
             lastAppliedLabel =

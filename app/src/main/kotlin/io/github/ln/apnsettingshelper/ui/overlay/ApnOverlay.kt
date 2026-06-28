@@ -10,8 +10,6 @@ import android.provider.Settings
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
-import io.github.ln.apnsettingshelper.R
 
 /**
  * Overlay-tier controller (AGENTS.md host option #1: no service). Adds/removes the floating panel
@@ -23,11 +21,11 @@ import io.github.ln.apnsettingshelper.R
  * lenient devices. On MIUI only the first write after the app was foreground sticks (verified on-device:
  * every later Copy is dropped despite confirmed window focus — neither fresh windows, focus, nor waiting
  * helps), so we read the clip back to check; if it didn't stick we write as the genuine foreground app
- * via [ClipboardWriteActivity] (a brief, reliable flash). Feedback is the button flipping to "✓" because
- * MIUI also suppresses our toasts.
+ * via [ClipboardWriteActivity] (a brief, reliable flash). Feedback is the tapped chip flashing to a
+ * ✓ for a moment (built in [buildOverlayPanel]) because MIUI also suppresses our toasts.
  */
 object ApnOverlay {
-    /** One field line in the panel; [copyable] text fields get a Copy button, dropdown hints don't. */
+    /** One field line in the panel; [copyable] text fields become tap-to-copy chips, dropdowns don't. */
     data class Row(
         val label: String,
         val value: String,
@@ -40,7 +38,7 @@ object ApnOverlay {
         val rows: List<Row>,
         val wm: WindowManager,
         val params: WindowManager.LayoutParams,
-        val onCopy: (value: String, button: Button) -> Unit,
+        val onCopy: (value: String) -> Unit,
         val onClose: () -> Unit,
     )
 
@@ -73,7 +71,7 @@ object ApnOverlay {
                 rows = rows,
                 wm = windowManager,
                 params = lp,
-                onCopy = ::copy,
+                onCopy = { value -> copy(app, value) },
                 onClose = { hide(app) },
             )
         val view = buildOverlayPanel(app, spec)
@@ -104,22 +102,23 @@ object ApnOverlay {
                 y = dpToPx(context, TOP_DP)
             }
 
+    /**
+     * Copy [value] to the clipboard. Add a 1x1 invisible focusable window and write once it gains
+     * focus — enough on lenient devices; [writeViaProxy] then verifies and, when the OS dropped the
+     * write (MIUI after its first), falls back to the foreground writer. The main panel stays
+     * pass-through and untouched; the silent path is just a brief focus blip (no app-switch).
+     */
     private fun copy(
+        context: Context,
         value: String,
-        button: Button,
     ) {
-        flashCopied(button)
-        val context = button.context.applicationContext
+        val app = context.applicationContext
         val windowManager = wm
         if (windowManager == null) {
-            writeClip(context, value)
+            writeClip(app, value)
             return
         }
-        // Per-copy silent write: add a 1x1 invisible focusable window and write once it gains focus.
-        // Enough on lenient devices; [writeViaProxy] then verifies and, when the OS dropped the write
-        // (MIUI after its first), falls back to the foreground writer. The main panel stays pass-through
-        // and untouched; the silent path is just a brief focus blip (no app-switch).
-        val proxy = View(context)
+        val proxy = View(app)
         val lp =
             WindowManager
                 .LayoutParams(
@@ -130,10 +129,10 @@ object ApnOverlay {
                     PixelFormat.TRANSLUCENT,
                 ).apply { gravity = Gravity.TOP or Gravity.START }
         if (runCatching { windowManager.addView(proxy, lp) }.isFailure) {
-            writeClip(context, value)
+            writeClip(app, value)
             return
         }
-        writeViaProxy(windowManager, proxy, context, value, attempt = 0)
+        writeViaProxy(windowManager, proxy, app, value, attempt = 0)
     }
 
     /**
@@ -185,17 +184,9 @@ object ApnOverlay {
         cb.setPrimaryClip(ClipData.newPlainText("APN", value))
     }
 
-    private fun flashCopied(button: Button) {
-        val original = button.context.getString(R.string.copy)
-        button.text = COPIED_GLYPH
-        button.postDelayed({ button.text = original }, COPIED_FEEDBACK_MS)
-    }
-
     private const val WIDTH_DP = 300f
     private const val MARGIN_DP = 12f
     private const val TOP_DP = 80f
-    private const val COPIED_FEEDBACK_MS = 1200L
-    private const val COPIED_GLYPH = "✓"
     private const val FOCUS_POLL_MS = 25L
     private const val MAX_FOCUS_POLLS = 16
 }

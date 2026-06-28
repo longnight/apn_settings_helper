@@ -8,6 +8,8 @@ package io.github.ln.apnsettingshelper.domain.model
 data class Preset(
     val id: String,
     val label: LocalizedText,
+    /** Optional line/plan descriptor (e.g. "Type D / Docomo") for the detail screen; blank if none. */
+    val line: LocalizedText = LocalizedText("", ""),
     val apn: String,
     val username: String,
     val password: String,

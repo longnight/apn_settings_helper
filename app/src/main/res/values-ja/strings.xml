@@ -4,9 +4,14 @@
 
     <!-- List -->
     <string name="favorites_section">お気に入り</string>
+    <string name="presets_section">すべてのプリセット</string>
     <string name="last_applied">最終適用 %1$s</string>
     <string name="cd_favorite_add">お気に入りに追加</string>
     <string name="cd_favorite_remove">お気に入りから削除</string>
+    <string name="search_hint">キャリアまたはプリセットを検索</string>
+    <string name="region_all">すべての地域</string>
+    <string name="cd_select_region">地域を選択</string>
+    <string name="no_presets">検索に一致するプリセットがありません</string>
 
     <!-- Detail: actions -->
     <string name="back">戻る</string>
@@ -25,7 +30,8 @@
     <string name="overlay_close">重ねて表示を閉じる</string>
     <string name="overlay_collapse">折りたたむ</string>
     <string name="overlay_expand">展開</string>
-    <string name="overlay_hint">各値をコピーして、下の対応する入力欄を長押しして貼り付けます。タイトルをドラッグで移動できます。</string>
+    <string name="overlay_copy_section">コピーする値</string>
+    <string name="overlay_hint">チップをタップしてコピーし、対応する入力欄を長押しして貼り付けます。タイトルをドラッグで移動できます。</string>
 
     <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
     <string name="root_apply_toggle">ワンタップ適用（root）</string>

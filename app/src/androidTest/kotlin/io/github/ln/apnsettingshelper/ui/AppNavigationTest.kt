@@ -21,8 +21,8 @@ class AppNavigationTest {
 
     @Test
     fun clickingPresetRowOpensDetail() {
-        // A preset label from the bundled JP data (HIS Mobile is the first carrier).
-        composeRule.onNodeWithText("HIS Mobile (Docomo line)").performClick()
+        // 'IIJmio' has a single preset, so its carrier title uniquely identifies a tappable row.
+        composeRule.onNodeWithText("IIJmio").performClick()
 
         composeRule.onNodeWithText("Open system APN editor").assertIsDisplayed()
     }

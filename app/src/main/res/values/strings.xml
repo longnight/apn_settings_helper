@@ -4,9 +4,14 @@
 
     <!-- List -->
     <string name="favorites_section">Favorites</string>
+    <string name="presets_section">All presets</string>
     <string name="last_applied">Last applied %1$s</string>
     <string name="cd_favorite_add">Add to favorites</string>
     <string name="cd_favorite_remove">Remove from favorites</string>
+    <string name="search_hint">Search carrier or preset</string>
+    <string name="region_all">All regions</string>
+    <string name="cd_select_region">Select region</string>
+    <string name="no_presets">No presets match your search</string>
 
     <!-- Detail: actions -->
     <string name="back">Back</string>
@@ -25,7 +30,8 @@
     <string name="overlay_close">Close overlay</string>
     <string name="overlay_collapse">Collapse</string>
     <string name="overlay_expand">Expand</string>
-    <string name="overlay_hint">Copy each value, then long-press the matching field below to paste. Drag this panel by its title.</string>
+    <string name="overlay_copy_section">Copy these</string>
+    <string name="overlay_hint">Tap a chip to copy, then long-press the matching editor field and Paste. Drag this panel by its title.</string>
 
     <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
     <string name="root_apply_toggle">One-tap apply (root)</string>

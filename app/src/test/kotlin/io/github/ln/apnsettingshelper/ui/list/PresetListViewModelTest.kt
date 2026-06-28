@@ -31,34 +31,24 @@ class PresetListViewModelTest {
     ) = PresetListViewModel(FakePresetRepository(sampleRegions()), store, locale, tokyo)
 
     @Test
-    fun `groups presets by region and carrier when no favorites`() =
+    fun `sorts presets A to Z by name and exposes regions when no favorites`() =
         runTest {
             val state = viewModel().uiState.first { !it.loading }
 
             assertTrue(state.favorites.isEmpty())
-            assertEquals(1, state.regions.size)
-            assertEquals("Japan", state.regions[0].region)
-            val carriers = state.regions[0].carriers
-            assertEquals(listOf("HIS Mobile", "IIJmio"), carriers.map { it.carrier })
-            assertEquals(listOf("his-d", "his-sb"), carriers[0].rows.map { it.id })
-            assertEquals(listOf("iij-d"), carriers[1].rows.map { it.id })
+            assertEquals(listOf("Japan"), state.regions)
+            assertEquals(listOf("his-d", "his-sb", "iij-d"), state.presets.map { it.id })
+            assertEquals(listOf("HIS Mobile", "HIS Mobile", "IIJmio"), state.presets.map { it.carrier })
         }
 
     @Test
-    fun `favorited presets float into the favorites section and out of the groups`() =
+    fun `favorited presets float into the favorites section and out of the list`() =
         runTest {
             val state = viewModel(FakeSettingsStore(initialFavorites = setOf("his-d"))).uiState.first { !it.loading }
 
             assertEquals(listOf("his-d"), state.favorites.map { it.id })
             assertTrue(state.favorites[0].isFavorite)
-            // his-d no longer appears under its carrier; his-sb still does.
-            assertEquals(
-                listOf("his-sb"),
-                state.regions[0]
-                    .carriers[0]
-                    .rows
-                    .map { it.id },
-            )
+            assertEquals(listOf("his-sb", "iij-d"), state.presets.map { it.id })
         }
 
     @Test
@@ -68,35 +58,50 @@ class PresetListViewModelTest {
             val store = FakeSettingsStore(initialLastApplied = LastApplied("iij-d", millis))
 
             val state = viewModel(store).uiState.first { !it.loading }
-
             val expected = ApnDateFormat.format(millis, Locale.ENGLISH, tokyo)
-            val allRows = state.regions.flatMap { it.carriers }.flatMap { it.rows }
-            assertEquals(expected, allRows.first { it.id == "iij-d" }.lastAppliedLabel)
-            assertNull(allRows.first { it.id == "his-d" }.lastAppliedLabel)
+            val iij = state.presets.single { it.id == "iij-d" }
+            val his = state.presets.single { it.id == "his-d" }
+
+            assertEquals(expected, iij.lastAppliedLabel)
+            assertNull(his.lastAppliedLabel)
         }
 
     @Test
     fun `toggleFavorite moves a preset into favorites`() =
         runTest {
             val vm = viewModel()
-            assertTrue(
-                vm.uiState
-                    .first { !it.loading }
-                    .favorites
-                    .isEmpty(),
-            )
+            val initial = vm.uiState.first { !it.loading }
+            assertTrue(initial.favorites.isEmpty())
 
             vm.toggleFavorite("his-d")
 
             val after = vm.uiState.first { it.favorites.isNotEmpty() }
             assertEquals(listOf("his-d"), after.favorites.map { it.id })
-            assertEquals(
-                listOf("his-sb"),
-                after.regions[0]
-                    .carriers[0]
-                    .rows
-                    .map { it.id },
-            )
+            assertEquals(listOf("his-sb", "iij-d"), after.presets.map { it.id })
+        }
+
+    @Test
+    fun `setQuery filters presets by label or carrier`() =
+        runTest {
+            val vm = viewModel()
+            vm.uiState.first { !it.loading }
+
+            vm.setQuery("softbank")
+
+            val state = vm.uiState.first { it.query == "softbank" }
+            assertEquals(listOf("his-sb"), state.presets.map { it.id })
+        }
+
+    @Test
+    fun `setRegion narrows the list to the chosen region`() =
+        runTest {
+            val vm = viewModel()
+            vm.uiState.first { !it.loading }
+
+            vm.setRegion("Japan")
+
+            val state = vm.uiState.first { it.selectedRegion == "Japan" }
+            assertEquals(listOf("his-d", "his-sb", "iij-d"), state.presets.map { it.id })
         }
 
     @Test
@@ -104,14 +109,9 @@ class PresetListViewModelTest {
         runTest {
             val state = viewModel(locale = Locale.JAPANESE).uiState.first { !it.loading }
 
-            assertEquals("日本", state.regions[0].region)
-            assertEquals("HISモバイル", state.regions[0].carriers[0].carrier)
-            assertEquals(
-                "HISドコモ",
-                state.regions[0]
-                    .carriers[0]
-                    .rows[0]
-                    .label,
-            )
+            assertEquals(listOf("日本"), state.regions)
+            // Sorted A→Z by label: katakana ソ (SoftBank) precedes ド (Docomo), so SoftBank is first.
+            assertEquals(listOf("HISソフトバンク", "HISドコモ", "IIJmio"), state.presets.map { it.label })
+            assertEquals("HISモバイル", state.presets[0].carrier)
         }
 }

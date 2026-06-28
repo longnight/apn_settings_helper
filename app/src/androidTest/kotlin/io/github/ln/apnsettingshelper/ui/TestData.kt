@@ -6,10 +6,8 @@ import io.github.ln.apnsettingshelper.domain.model.LocalizedText
 import io.github.ln.apnsettingshelper.domain.model.MvnoType
 import io.github.ln.apnsettingshelper.domain.model.Preset
 import io.github.ln.apnsettingshelper.ui.detail.PresetDetailUiState
-import io.github.ln.apnsettingshelper.ui.list.CarrierSectionUi
 import io.github.ln.apnsettingshelper.ui.list.PresetListUiState
 import io.github.ln.apnsettingshelper.ui.list.PresetRowUi
-import io.github.ln.apnsettingshelper.ui.list.RegionSectionUi
 
 const val TEST_APN = "test.apn.jp"
 
@@ -46,34 +44,27 @@ fun testListState(): PresetListUiState =
             listOf(
                 PresetRowUi(
                     id = "fav-preset",
-                    label = "Fav Preset",
-                    carrier = "Carrier X",
+                    label = "IIJmio (Docomo)",
+                    carrier = "IIJmio",
+                    subtitle = "Docomo",
+                    region = "Japan",
                     isFavorite = true,
                     lastAppliedLabel = "2026-06-27 14:30",
                 ),
             ),
-        regions =
+        presets =
             listOf(
-                RegionSectionUi(
+                PresetRowUi(
+                    id = "his-sb",
+                    label = "HIS Mobile (SoftBank)",
+                    carrier = "HIS Mobile",
+                    subtitle = "SoftBank",
                     region = "Japan",
-                    carriers =
-                        listOf(
-                            CarrierSectionUi(
-                                carrier = "HIS Mobile",
-                                rows =
-                                    listOf(
-                                        PresetRowUi(
-                                            id = "his-sb",
-                                            label = "HIS SoftBank",
-                                            carrier = "HIS Mobile",
-                                            isFavorite = false,
-                                            lastAppliedLabel = null,
-                                        ),
-                                    ),
-                            ),
-                        ),
+                    isFavorite = false,
+                    lastAppliedLabel = null,
                 ),
             ),
+        regions = listOf("Japan"),
     )
 
 fun testDetailState(): PresetDetailUiState =

@@ -2,15 +2,17 @@ package io.github.ln.apnsettingshelper.ui.overlay
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.RippleDrawable
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
@@ -18,9 +20,12 @@ import io.github.ln.apnsettingshelper.R
 
 /**
  * Builds the floating panel (classic Views): a draggable header (title + collapse + close) above a
- * hint line and one row per field. Copyable rows get a Copy button wired to [ApnOverlay.PanelSpec.onCopy];
- * dropdown fields render as dimmed "label → value" hints. Pure view construction — the window
- * add/remove and the focusable-toggle clipboard write live in [ApnOverlay].
+ * hint line, a "Copy these" section of **flat M3-style tap-to-copy chips**, then a "Set these
+ * dropdowns" list. Tapping a chip copies its value (via [ApnOverlay.PanelSpec.onCopy]) and marks the
+ * chip with a **persistent** ✓; dropdown fields render as dimmed "label → value" hints. Chips wrap
+ * via [FlowLayout] — short values pack together, a long value takes its own row (no truncation).
+ * Pure view construction — the window add/remove and the focusable-toggle clipboard write live in
+ * [ApnOverlay].
  */
 internal fun buildOverlayPanel(
     context: Context,
@@ -32,8 +37,26 @@ internal fun buildOverlayPanel(
             background = panelBackground()
             setPadding(dpToPx(context, PAD_DP), dpToPx(context, HEADER_PAD_DP), dpToPx(context, PAD_DP), dpToPx(context, PAD_DP))
         }
-    val list = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
-    spec.rows.forEach { list.addView(fieldRow(context, it, spec.onCopy)) }
+
+    val content = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
+    val copyRows = spec.rows.filter { it.copyable }
+    val dropdownRows = spec.rows.filterNot { it.copyable }
+
+    if (copyRows.isNotEmpty()) {
+        content.addView(sectionLabel(context, context.getString(R.string.overlay_copy_section)))
+        val chips =
+            FlowLayout(context).apply {
+                horizontalGapPx = dpToPx(context, CHIP_GAP_DP)
+                verticalGapPx = dpToPx(context, CHIP_GAP_DP)
+            }
+        copyRows.forEach { chips.addView(copyChip(context, it, spec.onCopy)) }
+        content.addView(chips)
+    }
+    if (dropdownRows.isNotEmpty()) {
+        content.addView(sectionLabel(context, context.getString(R.string.detail_checklist_section)))
+        dropdownRows.forEach { content.addView(dropdownRow(context, it)) }
+    }
+
     val body =
         LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
@@ -42,7 +65,7 @@ internal fun buildOverlayPanel(
                 ScrollView(context).apply {
                     layoutParams =
                         LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                    addView(list)
+                    addView(content)
                 },
             )
         }
@@ -95,13 +118,23 @@ private fun headerButton(
     context: Context,
     label: String,
     desc: String,
-): Button =
-    Button(context).apply {
+): TextView =
+    TextView(context).apply {
         text = label
         contentDescription = desc
-        minWidth = 0
-        minimumWidth = 0
-        setPadding(dpToPx(context, HEADER_BTN_PAD_DP), 0, dpToPx(context, HEADER_BTN_PAD_DP), 0)
+        setTextColor(Color.WHITE)
+        textSize = HEADER_BTN_SP
+        gravity = Gravity.CENTER
+        isClickable = true
+        isFocusable = true
+        val pad = dpToPx(context, HEADER_BTN_PAD_DP)
+        setPadding(pad, pad, pad, pad)
+        val mask =
+            GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(Color.WHITE)
+            }
+        background = RippleDrawable(ColorStateList.valueOf(Color.parseColor(CHIP_RIPPLE_COLOR)), null, mask)
     }
 
 private fun hintView(context: Context): TextView =
@@ -112,33 +145,91 @@ private fun hintView(context: Context): TextView =
         setPadding(0, dpToPx(context, HINT_TOP_PAD_DP), 0, dpToPx(context, HEADER_PAD_DP))
     }
 
-private fun fieldRow(
+private fun sectionLabel(
+    context: Context,
+    text: String,
+): TextView =
+    TextView(context).apply {
+        this.text = text
+        setTextColor(Color.parseColor(SECTION_COLOR))
+        textSize = SECTION_SP
+        setTypeface(typeface, Typeface.BOLD)
+        setPadding(0, dpToPx(context, SECTION_TOP_PAD_DP), 0, dpToPx(context, SECTION_BOTTOM_PAD_DP))
+    }
+
+/**
+ * One tap-to-copy chip: a flat (no-elevation) rounded container with the field [label][ApnOverlay.Row.label]
+ * over its value and a trailing ⧉ glyph. Tapping copies the value and briefly flashes the chip to a
+ * ✓ with a stronger fill before reverting. The whole chip is the tap target (no separate button).
+ */
+private fun copyChip(
     context: Context,
     row: ApnOverlay.Row,
-    onCopy: (String, Button) -> Unit,
+    onCopy: (String) -> Unit,
 ): View {
-    val line =
+    val chip =
         LinearLayout(context).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            setPadding(0, dpToPx(context, ROW_PAD_DP), 0, dpToPx(context, ROW_PAD_DP))
+            orientation = LinearLayout.VERTICAL
+            background = chipBackground(copied = false)
+            setPadding(
+                dpToPx(context, CHIP_PAD_H_DP),
+                dpToPx(context, CHIP_PAD_V_DP),
+                dpToPx(context, CHIP_PAD_H_DP),
+                dpToPx(context, CHIP_PAD_V_DP),
+            )
+            isClickable = true
+            isFocusable = true
+            contentDescription = context.getString(R.string.cd_copy, row.label)
         }
-    val textView =
+    val label =
         TextView(context).apply {
-            text = if (row.copyable) "${row.label}: ${row.value}" else "${row.label} → ${row.value}"
-            setTextColor(if (row.copyable) Color.WHITE else Color.parseColor(HINT_COLOR))
-            textSize = ROW_SP
-            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            text = row.label
+            setTextColor(Color.parseColor(CHIP_LABEL_COLOR))
+            textSize = CHIP_LABEL_SP
         }
-    line.addView(textView)
-    if (row.copyable) {
-        val copyButton = Button(context)
-        copyButton.text = context.getString(R.string.copy)
-        copyButton.setOnClickListener { onCopy(row.value, copyButton) }
-        line.addView(copyButton)
+    val valueLine = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL }
+    val value =
+        TextView(context).apply {
+            text = row.value
+            setTextColor(Color.WHITE)
+            textSize = CHIP_VALUE_SP
+        }
+    val glyph =
+        TextView(context).apply {
+            text = COPY_GLYPH
+            setTextColor(Color.parseColor(CHIP_GLYPH_COLOR))
+            textSize = CHIP_VALUE_SP
+            setPadding(dpToPx(context, CHIP_GLYPH_GAP_DP), 0, 0, 0)
+        }
+    valueLine.addView(value)
+    valueLine.addView(glyph)
+    chip.addView(label)
+    chip.addView(valueLine)
+    chip.setOnClickListener {
+        chip.background = chipBackground(copied = true)
+        glyph.text = COPIED_GLYPH
+        glyph.setTextColor(Color.WHITE)
+        onCopy(row.value)
+        // Timed flash, then revert to the idle look so the chip doesn't read as a stuck state.
+        chip.postDelayed({
+            chip.background = chipBackground(copied = false)
+            glyph.text = COPY_GLYPH
+            glyph.setTextColor(Color.parseColor(CHIP_GLYPH_COLOR))
+        }, COPIED_REVERT_MS)
     }
-    return line
+    return chip
 }
+
+private fun dropdownRow(
+    context: Context,
+    row: ApnOverlay.Row,
+): View =
+    TextView(context).apply {
+        text = "${row.label} → ${row.value}"
+        setTextColor(Color.parseColor(HINT_COLOR))
+        textSize = ROW_SP
+        setPadding(0, dpToPx(context, ROW_PAD_DP), 0, dpToPx(context, ROW_PAD_DP))
+    }
 
 @SuppressLint("ClickableViewAccessibility")
 private fun attachDrag(
@@ -181,22 +272,51 @@ private fun panelBackground(): GradientDrawable =
         cornerRadius = CORNER_PX
     }
 
-internal fun dpToPx(
-    context: Context,
-    value: Float,
-): Int = (value * context.resources.displayMetrics.density).toInt()
+private fun chipBackground(copied: Boolean): Drawable {
+    val fill =
+        GradientDrawable().apply {
+            cornerRadius = CHIP_CORNER_PX
+            setColor(Color.parseColor(if (copied) CHIP_COPIED_COLOR else CHIP_COLOR))
+        }
+    val mask =
+        GradientDrawable().apply {
+            cornerRadius = CHIP_CORNER_PX
+            setColor(Color.WHITE)
+        }
+    return RippleDrawable(ColorStateList.valueOf(Color.parseColor(CHIP_RIPPLE_COLOR)), fill, mask)
+}
 
 private const val PAD_DP = 12f
 private const val HEADER_PAD_DP = 8f
 private const val ROW_PAD_DP = 4f
 private const val HINT_TOP_PAD_DP = 2f
 private const val HEADER_BTN_PAD_DP = 10f
+private const val SECTION_TOP_PAD_DP = 10f
+private const val SECTION_BOTTOM_PAD_DP = 4f
+private const val CHIP_GAP_DP = 6f
+private const val CHIP_PAD_H_DP = 12f
+private const val CHIP_PAD_V_DP = 8f
+private const val CHIP_GLYPH_GAP_DP = 8f
 private const val TITLE_SP = 15f
+private const val HEADER_BTN_SP = 18f
 private const val ROW_SP = 14f
 private const val HINT_SP = 12f
+private const val SECTION_SP = 11f
+private const val CHIP_LABEL_SP = 11f
+private const val CHIP_VALUE_SP = 14f
 private const val CORNER_PX = 24f
+private const val CHIP_CORNER_PX = 16f
 private const val HINT_COLOR = "#B0B0B0"
 private const val PANEL_COLOR = "#E6202124"
+private const val SECTION_COLOR = "#4FD8D2"
+private const val CHIP_COLOR = "#2B4D4A"
+private const val CHIP_COPIED_COLOR = "#0F6E6B"
+private const val CHIP_LABEL_COLOR = "#9FB6B5"
+private const val CHIP_GLYPH_COLOR = "#4FD8D2"
+private const val CHIP_RIPPLE_COLOR = "#33FFFFFF"
 private const val COLLAPSE_GLYPH = "–"
 private const val EXPAND_GLYPH = "+"
 private const val CLOSE_GLYPH = "✕"
+private const val COPY_GLYPH = "⧉"
+private const val COPIED_GLYPH = "✓"
+private const val COPIED_REVERT_MS = 1500L

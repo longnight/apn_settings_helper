@@ -20,13 +20,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -47,6 +46,7 @@ import io.github.ln.apnsettingshelper.R
 import io.github.ln.apnsettingshelper.domain.model.Preset
 import io.github.ln.apnsettingshelper.ui.common.ChecklistItem
 import io.github.ln.apnsettingshelper.ui.common.CopyableField
+import io.github.ln.apnsettingshelper.ui.common.PresetLineCaption
 import io.github.ln.apnsettingshelper.ui.common.openApnEditor
 import io.github.ln.apnsettingshelper.ui.overlay.ApnOverlay
 
@@ -136,6 +136,7 @@ fun PresetDetailContent(
             PresetDetailBody(
                 preset = preset,
                 title = state.title,
+                line = state.line,
                 notes = state.notes,
                 lastAppliedLabel = state.lastAppliedLabel,
                 rootRequested = state.rootRequested,
@@ -186,6 +187,7 @@ private fun DetailTopBar(
 private fun PresetDetailBody(
     preset: Preset,
     title: String,
+    line: String,
     notes: String,
     lastAppliedLabel: String?,
     rootRequested: Boolean,
@@ -209,6 +211,9 @@ private fun PresetDetailBody(
                 bottom = contentPadding.calculateBottomPadding() + 24.dp,
             ),
     ) {
+        if (line.isNotBlank()) {
+            item { PresetLineCaption(line) }
+        }
         item { OpenApnEditorButton() }
         item { FloatOverEditorButton(preset = preset, title = title) }
 
@@ -228,12 +233,7 @@ private fun PresetDetailBody(
 
         if (notes.isNotBlank()) {
             item { SubHeader(stringResource(R.string.notes_label)) }
-            item {
-                Text(
-                    text = notes,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-                )
-            }
+            item { Text(text = notes, modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) }
         }
 
         // Root auto-records on apply, so the manual "record" button is only for non-root users
@@ -266,7 +266,7 @@ private fun PresetDetailBody(
 private fun OpenApnEditorButton() {
     val context = LocalContext.current
     val editorUnavailable = stringResource(R.string.apn_editor_unavailable)
-    Button(
+    ElevatedButton(
         onClick = {
             if (!openApnEditor(context)) {
                 Toast.makeText(context, editorUnavailable, Toast.LENGTH_LONG).show()
@@ -315,7 +315,7 @@ private fun FloatOverEditorButton(
                 Toast.makeText(context, permissionNeeded, Toast.LENGTH_LONG).show()
             }
         }
-    OutlinedButton(
+    ElevatedButton(
         onClick = {
             if (ApnOverlay.canDraw(context)) {
                 showOverlay()
@@ -363,7 +363,7 @@ private fun RootApplySection(
                 }
 
                 canApplyRoot -> {
-                    Button(
+                    ElevatedButton(
                         onClick = onApplyNow,
                         enabled = !applying,
                         modifier =
@@ -408,7 +408,7 @@ private fun RecordAppliedSection(
     val recordedMessage = stringResource(R.string.applied_recorded)
     Column(modifier = Modifier.padding(16.dp)) {
         if (showButton) {
-            OutlinedButton(
+            ElevatedButton(
                 onClick = {
                     onRecordApplied()
                     Toast.makeText(context, recordedMessage, Toast.LENGTH_SHORT).show()

@@ -39,6 +39,7 @@ data class CarrierDto(
 data class PresetDto(
     val id: String,
     val label: LocalizedText,
+    val line: LocalizedText = LocalizedText("", ""),
     val apn: String,
     val mcc: String,
     val mnc: String,
@@ -71,6 +72,7 @@ internal fun PresetDto.toDomain(): Preset =
     Preset(
         id = id,
         label = label,
+        line = line,
         apn = apn,
         username = username,
         password = password,

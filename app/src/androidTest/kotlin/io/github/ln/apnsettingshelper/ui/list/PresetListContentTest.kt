@@ -23,8 +23,8 @@ class PresetListContentTest {
             PresetListContent(state = testListState(), onPresetClick = {}, onToggleFavorite = {})
         }
 
-        composeRule.onNodeWithText("Fav Preset").assertIsDisplayed()
-        composeRule.onNodeWithText("HIS SoftBank").assertIsDisplayed()
+        composeRule.onNodeWithText("IIJmio").assertIsDisplayed()
+        composeRule.onNodeWithText("HIS Mobile").assertIsDisplayed()
         composeRule.onNodeWithText("Last applied 2026-06-27 14:30").assertIsDisplayed()
     }
 
@@ -35,7 +35,7 @@ class PresetListContentTest {
             PresetListContent(state = testListState(), onPresetClick = { clicked = it }, onToggleFavorite = {})
         }
 
-        composeRule.onNodeWithText("HIS SoftBank").performClick()
+        composeRule.onNodeWithText("HIS Mobile").performClick()
 
         assertEquals("his-sb", clicked)
     }
