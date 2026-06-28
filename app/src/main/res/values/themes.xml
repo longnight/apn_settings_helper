@@ -3,4 +3,12 @@
     <!-- Window/splash theme only; the live UI is themed by Compose Material3.
          Framework Material parent keeps deps FOSS-only (no Material Components lib). -->
     <style name="Theme.ApnSettingsHelper" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Invisible, no-animation theme for ClipboardWriteActivity: it draws nothing, writes the
+         clipboard as the foreground app, and finishes immediately (the overlay's reliable fallback
+         when a background clipboard write is blocked). Translucent keeps the app behind visible. -->
+    <style name="Theme.ApnSettingsHelper.Invisible" parent="android:Theme.Translucent.NoTitleBar">
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
 </resources>

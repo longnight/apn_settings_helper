@@ -1,6 +1,8 @@
 package io.github.ln.apnsettingshelper.ui.detail
 
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -46,6 +48,7 @@ import io.github.ln.apnsettingshelper.domain.model.Preset
 import io.github.ln.apnsettingshelper.ui.common.ChecklistItem
 import io.github.ln.apnsettingshelper.ui.common.CopyableField
 import io.github.ln.apnsettingshelper.ui.common.openApnEditor
+import io.github.ln.apnsettingshelper.ui.overlay.ApnOverlay
 
 /** VM-wired preset detail. */
 @Composable
@@ -132,6 +135,7 @@ fun PresetDetailContent(
         } else {
             PresetDetailBody(
                 preset = preset,
+                title = state.title,
                 notes = state.notes,
                 lastAppliedLabel = state.lastAppliedLabel,
                 rootRequested = state.rootRequested,
@@ -181,6 +185,7 @@ private fun DetailTopBar(
 @Composable
 private fun PresetDetailBody(
     preset: Preset,
+    title: String,
     notes: String,
     lastAppliedLabel: String?,
     rootRequested: Boolean,
@@ -205,6 +210,7 @@ private fun PresetDetailBody(
             ),
     ) {
         item { OpenApnEditorButton() }
+        item { FloatOverEditorButton(preset = preset, title = title) }
 
         item { SubHeader(stringResource(R.string.detail_copy_section)) }
         items(copyFields) { field ->
@@ -272,6 +278,57 @@ private fun OpenApnEditorButton() {
                 .padding(16.dp),
     ) {
         Text(stringResource(R.string.open_apn_editor))
+    }
+}
+
+/**
+ * Opens the system APN editor **and** floats a panel of copy buttons over it (overlay tier), so
+ * the user pastes value-by-value without bouncing back to this app. Needs the user-granted
+ * "Display over other apps" permission; if it's missing we send the user to grant it first.
+ */
+@Composable
+private fun FloatOverEditorButton(
+    preset: Preset,
+    title: String,
+) {
+    val context = LocalContext.current
+    val permissionNeeded = stringResource(R.string.overlay_permission_needed)
+    val appName = stringResource(R.string.app_name)
+    val rows =
+        remember(preset) {
+            buildList {
+                copyableFields(preset).forEach { add(ApnOverlay.Row(context.getString(it.labelRes), it.value, copyable = true)) }
+                checklistFields(preset).forEach { add(ApnOverlay.Row(context.getString(it.labelRes), it.value, copyable = false)) }
+            }
+        }
+    val showOverlay = {
+        ApnOverlay.show(context = context, title = title.ifBlank { appName }, rows = rows)
+        openApnEditor(context)
+    }
+    // Re-check the permission when the user returns from the system grant screen, then auto-continue
+    // (no "tap again"). MIUI's overlay grant has no Activity result, so we poll canDrawOverlays.
+    val permissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (ApnOverlay.canDraw(context)) {
+                showOverlay()
+            } else {
+                Toast.makeText(context, permissionNeeded, Toast.LENGTH_LONG).show()
+            }
+        }
+    OutlinedButton(
+        onClick = {
+            if (ApnOverlay.canDraw(context)) {
+                showOverlay()
+            } else {
+                permissionLauncher.launch(ApnOverlay.permissionIntent(context))
+            }
+        },
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+    ) {
+        Text(stringResource(R.string.float_over_settings))
     }
 }
 

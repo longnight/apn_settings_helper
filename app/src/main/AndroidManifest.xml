@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Core flow needs no permissions. Overlay (SYSTEM_ALERT_WINDOW) and root
-         are added in later milestones; root needs no manifest permission. -->
+    <!-- Core flow needs no permissions. Root needs no manifest permission (uses `su` if present).
+         Overlay tier: SYSTEM_ALERT_WINDOW is a special permission the user grants at runtime via
+         "Display over other apps" (Settings.canDrawOverlays / ACTION_MANAGE_OVERLAY_PERMISSION). -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".ApnApplication"
@@ -22,5 +24,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Invisible one-shot clipboard writer (overlay's foreground-write fallback). Own empty task
+             affinity + excludeFromRecents/noHistory so it never surfaces UI or lingers in recents. -->
+        <activity
+            android:name=".ui.overlay.ClipboardWriteActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.ApnSettingsHelper.Invisible" />
     </application>
 </manifest>

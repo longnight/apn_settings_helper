@@ -19,6 +19,14 @@
     <string name="applied_recorded">適用済みとして記録しました</string>
     <string name="preset_not_found">プリセットが見つかりません</string>
 
+    <!-- Detail: overlay (float the copy buttons over the system APN editor) -->
+    <string name="float_over_settings">APN設定に重ねて表示</string>
+    <string name="overlay_permission_needed">「他のアプリの上に重ねて表示」を許可してから、もう一度タップしてください。</string>
+    <string name="overlay_close">重ねて表示を閉じる</string>
+    <string name="overlay_collapse">折りたたむ</string>
+    <string name="overlay_expand">展開</string>
+    <string name="overlay_hint">各値をコピーして、下の対応する入力欄を長押しして貼り付けます。タイトルをドラッグで移動できます。</string>
+
     <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
     <string name="root_apply_toggle">ワンタップ適用（root）</string>
     <string name="root_checking">root権限を確認中…</string>

@@ -22,7 +22,10 @@ environment: `plan_implement_steps.md`. Root-apply internals: `plan_review_M-E.m
 - `ui.list/`, `ui.detail/` — stateless `*Content` composables + `*ViewModel` + UI-state classes;
   `ui.detail.DetailFields` (copy/checklist field builders). `ui.common/` — `CopyableField`,
   `ChecklistItem`, `ApnEditor` (open-editor intent), `ApnFieldDisplay` (enum→label), `ApnDateFormat`.
-  `ui.nav/` — `AppNavHost`, `Routes`. `ui.theme/`.
+  `ui.overlay/` — `ApnOverlay` (float-over-editor controller: window add/remove + the per-copy hybrid
+  clipboard write — silent proxy write → read-back → foreground fallback), `OverlayPanel` (`buildOverlayPanel`,
+  classic-Views builder), `ClipboardWriteActivity` (invisible foreground clipboard writer); reuses the
+  `ui.detail.DetailFields` field model. `ui.nav/` — `AppNavHost`, `Routes`. `ui.theme/`.
 - `AppGraph` — manual DI (no Hilt): parses presets once, builds `SettingsStore` + `ApplyStrategyResolver`;
   held by `ApnApplication`, read by ViewModel factories via `APPLICATION_KEY`.
 
@@ -48,6 +51,11 @@ environment: `plan_implement_steps.md`. Root-apply internals: `plan_review_M-E.m
   `plan_review_M-E.md`.
 - Open editor (`ui.common.ApnEditor`): `Intent(Settings.ACTION_APN_SETTINGS)`, fallback
   `ACTION_WIRELESS_SETTINGS`, wrapped in try/catch `ActivityNotFoundException` (some OEMs block it).
+- **Float-over-editor overlay** (`ui.overlay.ApnOverlay`): a manual-assist UI helper, **not** an
+  `ApplyStrategy` — invoked directly from `ui.detail` like `openApnEditor` (opt-in `SYSTEM_ALERT_WINDOW`;
+  floats values + Copy buttons over the system editor; no auto-fill). `OverlayStrategy` stays a stub for a
+  possible future *programmatic* overlay tier. Detail + on-device findings (incl. the MIUI clipboard
+  caveat): `docs/plan_20260628_clipboard_float_overlay_improvements.md`.
 
 ## i18n
 - `res/values/strings.xml` (en) + `res/values-ja/strings.xml` (ja) — every UI string localized; keep
@@ -84,7 +92,9 @@ environment: `plan_implement_steps.md`. Root-apply internals: `plan_review_M-E.m
 
 ## Tech debt / TODO (deferred, post-v1)
 - **Self-healing watcher** — additive behind `ApplyStrategy` (the reason that seam exists).
-- **Overlay** full implementation.
+- **Overlay:** the float-over-editor manual-assist helper is **done** (`ui.overlay`); deferred = the
+  `OverlayStrategy` *programmatic* apply tier (stub) + overlay polish (non-MIUI clipboard verification;
+  surviving process death without a service).
 - **More regions/carriers** via data-only PRs (no restructuring).
 - **UI:** favoriting prepends the ★ section above the current scroll offset — consider auto-scroll-to-top
   on first favorite.

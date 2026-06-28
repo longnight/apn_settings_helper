@@ -8,10 +8,10 @@ Name)** settings fast and reliable — for MVNO users and travellers/expats putt
 local prepaid SIM in an unlocked phone. Curated, verified APN presets (Japan first,
 extensible to any region); pick one and apply it.
 
-> **Status:** v1 in development. The core flows (preset browse → detail, manual copy,
-> opt-in root apply) and English + Japanese localization are done; remaining work is
-> test/CI hardening (M-G) and release polish (M-H). See
-> [`plan_coding_steps.md`](plan_coding_steps.md) for the milestone tracker.
+> **Status:** v1 code-complete — `v1.0.0` is tagged with a GitHub release. The core flows
+> (preset browse → detail, manual copy, opt-in root apply, opt-in float-over-editor overlay)
+> and English + Japanese localization are done. See
+> [`plan_coding_steps.md`](plan_coding_steps.md) for the architecture and tech-debt tracker.
 
 ## Why this exists
 
@@ -25,6 +25,10 @@ app works *with* that constraint:
 - **Rooted devices (opt-in):** a **One-tap apply** toggle that, only when you turn it
   on, uses `su` to write the preset into the telephony provider and select it. Nothing
   runs in the background; the app is invisible until you open it.
+- **Optional floating overlay (opt-in):** grant "display over other apps" and the app can
+  **float the preset's values and copy buttons over the system APN editor**, so you fill the
+  fields in place instead of switching back to the app. It only *displays and copies* — it
+  never writes settings for you (`SYSTEM_ALERT_WINDOW`; no auto-fill).
 
 Favorites (any number) and a passive "last applied" note round out the list UI.
 Fully localized in **English** and **Japanese** (labels + date formats).
