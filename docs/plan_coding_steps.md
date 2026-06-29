@@ -98,8 +98,9 @@ environment: `plan_implement_steps.md`. Root-apply internals: `plan_review_M-E.m
   `OverlayStrategy` *programmatic* apply tier (stub) + overlay polish (non-MIUI clipboard verification;
   surviving process death without a service).
 - **More regions/carriers** via data-only PRs (no restructuring).
-- **UI:** favoriting prepends the ★ section above the current scroll offset — consider auto-scroll-to-top
-  on first favorite.
+- **UI:** favoriting keeps the card in place in *All Presets* (A→Z) **and** mirrors it under
+  ★ Favorites — tapping a heart no longer reshuffles the main list (a preset can show in both
+  sections; keys are namespaced `fav-<id>` vs `<id>`).
 - **i18n:** localize `displayName()` (`None`→`なし`, `PAP or CHAP`→`PAP または CHAP`) for exact JP
   spinner parity (only these differ from the acronyms).
 - **CI/release:** add Nix-store caching (FlakeHub/Cachix) to skip the SDK re-fetch; optionally port CI

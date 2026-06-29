@@ -5,7 +5,7 @@
     <!-- List -->
     <string name="favorites_section">Favorites</string>
     <string name="presets_section">All presets</string>
-    <string name="last_applied">Last applied %1$s</string>
+    <string name="last_applied">In use · %1$s</string>
     <string name="cd_favorite_add">Add to favorites</string>
     <string name="cd_favorite_remove">Remove from favorites</string>
     <string name="search_hint">Search carrier or preset</string>
@@ -20,8 +20,8 @@
     <string name="copied">Copied %1$s</string>
     <string name="open_apn_editor">Open system APN editor</string>
     <string name="apn_editor_unavailable">Couldn\'t open APN settings on this device. Open Settings → Network → Access Point Names manually.</string>
-    <string name="record_applied">Record this as applied</string>
-    <string name="applied_recorded">Recorded as applied</string>
+    <string name="record_applied">Mark as in use</string>
+    <string name="applied_recorded">Marked as in use</string>
     <string name="preset_not_found">Preset not found</string>
 
     <!-- Detail: overlay (float the copy buttons over the system APN editor) -->

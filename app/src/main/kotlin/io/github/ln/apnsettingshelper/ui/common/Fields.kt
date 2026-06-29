@@ -2,11 +2,13 @@ package io.github.ln.apnsettingshelper.ui.common
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -22,8 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import io.github.ln.apnsettingshelper.R
@@ -31,9 +31,9 @@ import kotlinx.coroutines.delay
 
 /**
  * One copyable APN field, shown as an M3 [ElevatedCard]: an overline [label] above the literal
- * [value], with a copy affordance that matches the float overlay — a `⧉` glyph that flips to `✓`
- * on tap (puts the value on the clipboard, confirms with a toast) and reverts after ~1.5s.
- * The inner [ListItem] is transparent so the card's elevated surface shows through.
+ * [value]. **Tapping anywhere on the card** copies the value to the clipboard (confirmed with a
+ * toast); the trailing `⧉` glyph flips to `✓` for ~1.5s as feedback, then reverts — matching the
+ * float overlay. The inner [ListItem] is transparent so the card's elevated surface shows through.
  */
 @Composable
 fun CopyableField(
@@ -56,27 +56,23 @@ fun CopyableField(
         modifier =
             modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 4.dp),
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+                .clickable(onClickLabel = copyDescription) {
+                    clipboard.setText(AnnotatedString(value))
+                    Toast.makeText(context, copiedMessage, Toast.LENGTH_SHORT).show()
+                    copied = true
+                },
     ) {
         ListItem(
             colors = ListItemDefaults.colors(containerColor = Color.Transparent),
             overlineContent = { Text(label) },
             headlineContent = { Text(value, style = MaterialTheme.typography.bodyLarge) },
             trailingContent = {
-                IconButton(
-                    onClick = {
-                        clipboard.setText(AnnotatedString(value))
-                        Toast.makeText(context, copiedMessage, Toast.LENGTH_SHORT).show()
-                        copied = true
-                    },
-                    modifier = Modifier.semantics { contentDescription = copyDescription },
-                ) {
-                    Text(
-                        text = if (copied) COPIED_GLYPH else COPY_GLYPH,
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                }
+                Text(
+                    text = if (copied) COPIED_GLYPH else COPY_GLYPH,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.titleLarge,
+                )
             },
         )
     }
@@ -109,18 +105,30 @@ fun ChecklistItem(
     }
 }
 
-/** A small caption (e.g. a preset's line/plan designation like "Type D / Docomo") shown above the detail actions. */
+/**
+ * The detail screen's top "Notes" body: the preset's line/plan designation (e.g. "Type D / Docomo")
+ * merged with any freeform [notes] into one area. The [line] reads as the prominent first line;
+ * [notes] follow in a muted tone. Either may be blank (the caller only shows this when one is set).
+ */
 @Composable
-fun PresetLineCaption(
-    text: String,
+fun PresetNotes(
+    line: String,
+    notes: String,
     modifier: Modifier = Modifier,
 ) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 4.dp),
-    )
+    Column(modifier = modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
+        if (line.isNotBlank()) {
+            Text(text = line, style = MaterialTheme.typography.bodyMedium)
+        }
+        if (notes.isNotBlank()) {
+            if (line.isNotBlank()) Spacer(Modifier.height(8.dp))
+            Text(
+                text = notes,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
 }
 
 private const val COPY_GLYPH = "⧉"

@@ -46,7 +46,7 @@ import io.github.ln.apnsettingshelper.R
 import io.github.ln.apnsettingshelper.domain.model.Preset
 import io.github.ln.apnsettingshelper.ui.common.ChecklistItem
 import io.github.ln.apnsettingshelper.ui.common.CopyableField
-import io.github.ln.apnsettingshelper.ui.common.PresetLineCaption
+import io.github.ln.apnsettingshelper.ui.common.PresetNotes
 import io.github.ln.apnsettingshelper.ui.common.openApnEditor
 import io.github.ln.apnsettingshelper.ui.overlay.ApnOverlay
 
@@ -211,11 +211,28 @@ private fun PresetDetailBody(
                 bottom = contentPadding.calculateBottomPadding() + 24.dp,
             ),
     ) {
-        if (line.isNotBlank()) {
-            item { PresetLineCaption(line) }
+        // Notes (the line/plan designation merged with any freeform notes), moved to the top.
+        if (line.isNotBlank() || notes.isNotBlank()) {
+            item { SubHeader(stringResource(R.string.notes_label)) }
+            item { PresetNotes(line = line, notes = notes) }
         }
+
         item { OpenApnEditorButton() }
         item { FloatOverEditorButton(preset = preset, title = title) }
+
+        // "Mark as current" moved up to sit directly below the float button. Root auto-records on
+        // apply, so the manual button is only for non-root users (AGENTS.md: root = auto, normal =
+        // explicit button); the last-applied line still shows.
+        val showRecordButton = !canApplyRoot
+        if (showRecordButton || lastAppliedLabel != null) {
+            item {
+                RecordAppliedSection(
+                    lastAppliedLabel = lastAppliedLabel,
+                    showButton = showRecordButton,
+                    onRecordApplied = onRecordApplied,
+                )
+            }
+        }
 
         item { SubHeader(stringResource(R.string.detail_copy_section)) }
         items(copyFields) { field ->
@@ -229,24 +246,6 @@ private fun PresetDetailBody(
                 checked = checked[field.key] == true,
                 onCheckedChange = { checked[field.key] = it },
             )
-        }
-
-        if (notes.isNotBlank()) {
-            item { SubHeader(stringResource(R.string.notes_label)) }
-            item { Text(text = notes, modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) }
-        }
-
-        // Root auto-records on apply, so the manual "record" button is only for non-root users
-        // (AGENTS.md: root = auto, normal = explicit button); the last-applied line still shows.
-        val showRecordButton = !canApplyRoot
-        if (showRecordButton || lastAppliedLabel != null) {
-            item {
-                RecordAppliedSection(
-                    lastAppliedLabel = lastAppliedLabel,
-                    showButton = showRecordButton,
-                    onRecordApplied = onRecordApplied,
-                )
-            }
         }
 
         item {

@@ -42,13 +42,15 @@ class PresetListViewModelTest {
         }
 
     @Test
-    fun `favorited presets float into the favorites section and out of the list`() =
+    fun `favorited presets appear in the favorites section and stay in the list`() =
         runTest {
             val state = viewModel(FakeSettingsStore(initialFavorites = setOf("his-d"))).uiState.first { !it.loading }
 
             assertEquals(listOf("his-d"), state.favorites.map { it.id })
             assertTrue(state.favorites[0].isFavorite)
-            assertEquals(listOf("his-sb", "iij-d"), state.presets.map { it.id })
+            // The favorited preset stays in All Presets at its A→Z position (no longer popped out).
+            assertEquals(listOf("his-d", "his-sb", "iij-d"), state.presets.map { it.id })
+            assertTrue(state.presets.single { it.id == "his-d" }.isFavorite)
         }
 
     @Test
@@ -67,7 +69,7 @@ class PresetListViewModelTest {
         }
 
     @Test
-    fun `toggleFavorite moves a preset into favorites`() =
+    fun `toggleFavorite adds a preset to favorites while keeping it in the list`() =
         runTest {
             val vm = viewModel()
             val initial = vm.uiState.first { !it.loading }
@@ -77,7 +79,8 @@ class PresetListViewModelTest {
 
             val after = vm.uiState.first { it.favorites.isNotEmpty() }
             assertEquals(listOf("his-d"), after.favorites.map { it.id })
-            assertEquals(listOf("his-sb", "iij-d"), after.presets.map { it.id })
+            // Favoriting no longer removes it from All Presets — it stays in its A→Z slot.
+            assertEquals(listOf("his-d", "his-sb", "iij-d"), after.presets.map { it.id })
         }
 
     @Test

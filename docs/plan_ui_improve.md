@@ -219,3 +219,19 @@ groups always expanded.
   (authentic M3 `MaterialButton`/`Chip`/`ChipGroup`), **not adopted**: a flat look needs no library
   and avoids `Theme.Material3` `ContextThemeWrapper` plumbing on the overlay context.
 - No change to apply tiers, the clipboard hybrid, or favorites/last-applied semantics.
+
+## Further refinements (post-v1.2.0, on-device iteration)
+Behaviour/wording polish after the v1.2.0 redesign; **data model unchanged** (favorites set + a
+single last-applied slot — still a passive, unverifiable note):
+- **Favoriting no longer pops the card out of the list.** A hearted preset stays in its A→Z spot
+  under *All Presets* **and** mirrors into ★ Favorites (was: removed from the list) — kills the
+  confusing "jump to top". (`PresetListViewModel`: dropped the `!isFavorite` filter.)
+- **Whole field card copies.** On the detail screen the entire `CopyableField` card is the tap
+  target (was: a small trailing icon button); the `⧉` glyph still flips to `✓` for ~1.5s.
+- **Detail screen reordered.** *Notes* moved to the **top** and now **merges the line/plan
+  designation** (e.g. `Type D / Docomo`) with the freeform notes into one area
+  (`ui.common.PresetNotes`, replacing `PresetLineCaption`). The manual record button moved **up to
+  just below "Float over the APN editor."**
+- **"Record this as applied" → "Mark as in use."** Emphasises a user-asserted mark over "record".
+  Footnote `Last applied <date>` → `In use · <date>` (home card + detail); toast → `Marked as in
+  use`. en + ja.

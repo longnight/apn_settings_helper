@@ -5,7 +5,7 @@
     <!-- List -->
     <string name="favorites_section">お気に入り</string>
     <string name="presets_section">すべてのプリセット</string>
-    <string name="last_applied">最終適用 %1$s</string>
+    <string name="last_applied">使用中 · %1$s</string>
     <string name="cd_favorite_add">お気に入りに追加</string>
     <string name="cd_favorite_remove">お気に入りから削除</string>
     <string name="search_hint">キャリアまたはプリセットを検索</string>
@@ -20,8 +20,8 @@
     <string name="copied">%1$s をコピーしました</string>
     <string name="open_apn_editor">システムのAPN設定を開く</string>
     <string name="apn_editor_unavailable">この端末ではAPN設定を開けませんでした。設定 → ネットワーク → アクセスポイント名（APN）から手動で開いてください。</string>
-    <string name="record_applied">適用済みとして記録</string>
-    <string name="applied_recorded">適用済みとして記録しました</string>
+    <string name="record_applied">使用中としてマーク</string>
+    <string name="applied_recorded">使用中としてマークしました</string>
     <string name="preset_not_found">プリセットが見つかりません</string>
 
     <!-- Detail: overlay (float the copy buttons over the system APN editor) -->

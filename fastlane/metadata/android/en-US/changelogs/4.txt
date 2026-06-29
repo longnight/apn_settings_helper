@@ -1,0 +1,6 @@
+UX refinements on the v1.2.0 redesign.
+
+• Favoriting now keeps the preset in the All Presets list (it also shows under Favorites) — no more confusing jump to the top.
+• Tap anywhere on a field card to copy it — the whole card is the button.
+• Detail screen reordered: Notes moved to the top and merged with the line/plan name; "Mark as in use" moved up below "Float over the APN editor".
+• "Record this as applied" is now "Mark as in use".

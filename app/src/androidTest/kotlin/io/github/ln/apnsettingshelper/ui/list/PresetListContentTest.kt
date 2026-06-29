@@ -25,7 +25,7 @@ class PresetListContentTest {
 
         composeRule.onNodeWithText("IIJmio").assertIsDisplayed()
         composeRule.onNodeWithText("HIS Mobile").assertIsDisplayed()
-        composeRule.onNodeWithText("Last applied 2026-06-27 14:30").assertIsDisplayed()
+        composeRule.onNodeWithText("In use · 2026-06-27 14:30").assertIsDisplayed()
     }
 
     @Test

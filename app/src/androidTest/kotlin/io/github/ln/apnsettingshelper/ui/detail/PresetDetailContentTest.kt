@@ -6,7 +6,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
@@ -38,6 +37,8 @@ class PresetDetailContentTest {
             )
         }
 
+        // The copy section now sits below the moved-up actions, so scroll it into view first.
+        composeRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(TEST_APN))
         composeRule.onNodeWithText("APN").assertIsDisplayed()
         composeRule.onNodeWithText(TEST_APN).assertIsDisplayed()
         // Dropdown fields are checklist instructions, not copy buttons (scroll to reach them).
@@ -47,7 +48,25 @@ class PresetDetailContentTest {
     }
 
     @Test
-    fun copyButtonPutsValueOnClipboard() {
+    fun showsNotesSectionWithLineAndNotes() {
+        composeRule.setContent {
+            PresetDetailContent(
+                state = testDetailState().copy(line = "Type D / Docomo", notes = "Test note text"),
+                onBack = {},
+                onToggleFavorite = {},
+                onRecordApplied = {},
+                onApplyNow = {},
+                onSetRootEnabled = {},
+            )
+        }
+
+        // Both the line/plan designation and the freeform notes render in the top Notes area.
+        composeRule.onNodeWithText("Type D / Docomo").assertIsDisplayed()
+        composeRule.onNodeWithText("Test note text").assertIsDisplayed()
+    }
+
+    @Test
+    fun tappingFieldPutsValueOnClipboard() {
         composeRule.setContent {
             PresetDetailContent(
                 state = testDetailState(),
@@ -59,7 +78,9 @@ class PresetDetailContentTest {
             )
         }
 
-        composeRule.onNodeWithContentDescription("Copy APN").performClick()
+        // The whole field card is the copy target now — tapping the value copies it.
+        composeRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(TEST_APN))
+        composeRule.onNodeWithText(TEST_APN).performClick()
 
         assertEquals(TEST_APN, readClipboardText())
     }

@@ -36,9 +36,10 @@ data class PresetRowUi(
 )
 
 /**
- * List UI state: a flat list of preset cards. Favorited presets are floated into [favorites]
- * (the "★ Favorites" section); [presets] is the rest, filtered by [query] and [selectedRegion].
- * [regions] are the available region names for the top-right selector.
+ * List UI state: a flat list of preset cards. Favorited presets are surfaced in [favorites]
+ * (the "★ Favorites" section) **and also stay in** [presets] at their A→Z position, so favoriting
+ * never makes a card jump out of the main list. [presets] is filtered by [query] and
+ * [selectedRegion]; [regions] are the available region names for the top-right selector.
  */
 data class PresetListUiState(
     val loading: Boolean = true,
@@ -146,7 +147,7 @@ class PresetListViewModel(
             presets =
                 allRows
                     .filter {
-                        !it.isFavorite && matches(it) && (effectiveRegion == null || it.region == effectiveRegion)
+                        matches(it) && (effectiveRegion == null || it.region == effectiveRegion)
                     }.sortedBy { it.label.lowercase(locale) },
             regions = regionNames,
             selectedRegion = effectiveRegion,

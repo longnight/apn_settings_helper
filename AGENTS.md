@@ -2,7 +2,7 @@
 
 MIT, open-source Android app that restores a phone's mobile-data **APN** from curated, verified
 presets — for MVNO users and travellers putting a local prepaid SIM in an unlocked phone. Japan-first,
-region-extensible. **Status: v1.2.0 released** (`origin/main`; `v1.2.0` tagged + GitHub release — Material 3 UI overhaul: tap-to-copy overlay chips, a redesigned carrier list (search + avatars + A→Z), and an elevated detail screen).
+region-extensible. **Status: v1.3.0 released** (`origin/main`; `v1.3.0` tagged + GitHub release — UX refinements on the v1.2.0 redesign: favoriting keeps the card in *All Presets*, tap-anywhere-to-copy field cards, a reordered detail screen with a merged Notes area, and "Mark as in use" wording).
 
 > Brand name stays neutral (no "Japan/JP"). Package id `io.github.ln.apnsettingshelper` is unique vs
 > the existing "APN Settings" app — differentiate by icon (teal SIM-card) + per-locale store listing.
@@ -39,8 +39,9 @@ Modern Android blocks third-party apps from writing APN settings:
 - **Favorites (many) and last-applied (one) are independent.** Favorites were chosen over a single
   "current" marker because the app **cannot verify the device's real APN** — last-applied is a passive
   history note (`{presetId, timestamp}`, overwritten each apply), not a "current" claim.
-- Last-applied is set automatically on a root Apply; manual users get an explicit "Record as applied"
-  button (hidden for the root tier, which auto-records).
+- Last-applied is set automatically on a root Apply; manual users get an explicit "Mark as in use"
+  button (hidden for the root tier, which auto-records). It stays a passive, unverifiable note — the
+  "in use" wording is a user-asserted mark, not a read of the device's live APN.
 - Wording: **"settings"**, not "configs", in UI/store copy. `app_name` localizes (`APN設定ヘルパー`).
 - All state is **local — no network, no accounts, no tracking.**
 

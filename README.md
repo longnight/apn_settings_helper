@@ -8,7 +8,7 @@ Name)** settings fast and reliable — for MVNO users and travellers/expats putt
 local prepaid SIM in an unlocked phone. Curated, verified APN presets (Japan first,
 extensible to any region); pick one and apply it.
 
-> **Status:** v1 code-complete — `v1.0.0` is tagged with a GitHub release. The core flows
+> **Status:** released — `v1.3.0` is tagged with a GitHub release. The core flows
 > (preset browse → detail, manual copy, opt-in root apply, opt-in float-over-editor overlay)
 > and English + Japanese localization are done. See
 > [`plan_coding_steps.md`](plan_coding_steps.md) for the architecture and tech-debt tracker.
@@ -108,7 +108,7 @@ for the schema, field reference, validation rules, and the PR checklist.
 ## Releasing / packaging
 
 - **Versioning:** `versionCode` / `versionName` in `app/build.gradle.kts` (currently
-  `1` / `1.0.0`). Bump `versionCode` for any release F-Droid should pick up.
+  `4` / `1.3.0`). Bump `versionCode` for any release F-Droid should pick up.
 - **Store / F-Droid metadata:** `fastlane/metadata/android/<locale>/` (en-US + ja —
   title, short/full description, changelog, and 1080×2400 phone screenshots under
   `…/<locale>/images/phoneScreenshots/`).
