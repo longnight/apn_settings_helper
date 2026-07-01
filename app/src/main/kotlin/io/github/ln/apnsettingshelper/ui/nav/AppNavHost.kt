@@ -10,12 +10,17 @@ import io.github.ln.apnsettingshelper.ui.detail.PresetDetailScreen
 import io.github.ln.apnsettingshelper.ui.list.PresetListScreen
 
 @Composable
-fun AppNavHost() {
+fun AppNavHost(
+    currentLanguageTag: String?,
+    onLanguageChange: (String?) -> Unit,
+) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Routes.LIST) {
         composable(Routes.LIST) {
             PresetListScreen(
                 onPresetClick = { presetId -> navController.navigate(Routes.detail(presetId)) },
+                currentLanguageTag = currentLanguageTag,
+                onLanguageChange = onLanguageChange,
             )
         }
         composable(

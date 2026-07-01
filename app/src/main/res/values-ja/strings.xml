@@ -4,7 +4,6 @@
 
     <!-- List -->
     <string name="favorites_section">お気に入り</string>
-    <string name="presets_section">すべてのプリセット</string>
     <string name="last_applied">使用中 · %1$s</string>
     <string name="cd_favorite_add">お気に入りに追加</string>
     <string name="cd_favorite_remove">お気に入りから削除</string>
@@ -12,6 +11,11 @@
     <string name="region_all">すべての地域</string>
     <string name="cd_select_region">地域を選択</string>
     <string name="no_presets">検索に一致するプリセットがありません</string>
+
+    <!-- Language picker (right-side drawer) -->
+    <string name="language_title">言語</string>
+    <string name="language_system_default">システムのデフォルト</string>
+    <string name="cd_language">言語を変更</string>
 
     <!-- Detail: actions -->
     <string name="back">戻る</string>

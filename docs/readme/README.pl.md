@@ -52,7 +52,7 @@ Preset można dodać przez [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Dla programistów i kontrybutorów
 
-`v1.3.0` jest wydane. Lista presetów, szczegóły, kopiowanie ręczne, opcjonalny root, opcjonalny overlay i lokalizacja angielska/japońska są gotowe. MIT, FOSS, bez GMS.
+`v1.4.0` jest wydane. Lista presetów, szczegóły, kopiowanie ręczne, opcjonalny root i opcjonalny overlay są gotowe, a interfejs jest przetłumaczony na **20 języków** z wbudowanym przełącznikiem języka (ikona tłumaczenia na pasku narzędzi otwiera menu języków). MIT, FOSS, bez GMS.
 
 ### Platforma i stack
 

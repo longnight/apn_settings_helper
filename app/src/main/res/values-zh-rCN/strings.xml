@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">APN 设置助手</string>
+
+    <!-- List -->
+    <string name="favorites_section">收藏</string>
+    <string name="last_applied">使用中 · %1$s</string>
+    <string name="cd_favorite_add">添加到收藏</string>
+    <string name="cd_favorite_remove">从收藏中移除</string>
+    <string name="search_hint">搜索运营商或预设</string>
+    <string name="region_all">所有地区</string>
+    <string name="cd_select_region">选择地区</string>
+    <string name="no_presets">没有符合搜索条件的预设</string>
+
+    <!-- Language picker (right-side drawer) -->
+    <string name="language_title">语言</string>
+    <string name="language_system_default">系统默认</string>
+    <string name="cd_language">更改语言</string>
+
+    <!-- Detail: actions -->
+    <string name="back">返回</string>
+    <string name="copy">复制</string>
+    <string name="cd_copy">复制 %1$s</string>
+    <string name="copied">已复制 %1$s</string>
+    <string name="open_apn_editor">打开系统 APN 编辑器</string>
+    <string name="apn_editor_unavailable">在此设备上无法打开 APN 设置。请手动打开 设置 → 网络 → 接入点名称（APN）。</string>
+    <string name="record_applied">标记为使用中</string>
+    <string name="applied_recorded">已标记为使用中</string>
+    <string name="preset_not_found">未找到预设</string>
+
+    <!-- Detail: overlay (float the copy buttons over the system APN editor) -->
+    <string name="float_over_settings">悬浮在 APN 编辑器上方</string>
+    <string name="overlay_permission_needed">请允许本应用\"在其他应用上层显示\"，然后再次点按。</string>
+    <string name="overlay_close">关闭悬浮窗</string>
+    <string name="overlay_collapse">收起</string>
+    <string name="overlay_expand">展开</string>
+    <string name="overlay_copy_section">复制以下内容</string>
+    <string name="overlay_hint">点按标签即可复制，然后长按对应的编辑器输入框并粘贴。拖动标题可移动此面板。</string>
+
+    <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
+    <string name="root_apply_toggle">一键应用（root）</string>
+    <string name="root_checking">正在检查 root 权限…</string>
+    <string name="root_unavailable">未在此设备上检测到 root 权限。</string>
+    <string name="apply_now">立即应用</string>
+    <string name="apply_now_caption">已检测到 root 权限——直接写入 APN 并将其选中。</string>
+    <string name="applied_ok">已应用 APN</string>
+    <string name="applied_not_selected">已保存 APN，但无法将其选中。请打开 APN 编辑器并选择它。</string>
+    <string name="apply_failed">无法应用 APN</string>
+    <string name="apply_failed_detail">无法应用 APN：%1$s</string>
+
+    <!-- Detail: section headers -->
+    <string name="detail_copy_section">复制到 APN 编辑器</string>
+    <string name="detail_checklist_section">设置以下下拉选项</string>
+    <string name="set_field_to">将 %1$s 设置为 %2$s</string>
+    <string name="notes_label">备注</string>
+
+    <!-- Detail: field labels (mirror the system APN editor) -->
+    <string name="field_apn">APN</string>
+    <string name="field_username">用户名</string>
+    <string name="field_password">密码</string>
+    <string name="field_mcc">MCC</string>
+    <string name="field_mnc">MNC</string>
+    <string name="field_mvno_value">MVNO 值</string>
+    <string name="field_apn_type">APN 类型</string>
+    <string name="field_proxy">代理</string>
+    <string name="field_port">端口</string>
+    <string name="field_mmsc">MMSC</string>
+    <string name="field_mms_proxy">MMS 代理</string>
+    <string name="field_mms_port">MMS 端口</string>
+    <string name="field_server">服务器</string>
+    <string name="field_auth_type">身份验证类型</string>
+    <string name="field_protocol">APN 协议</string>
+    <string name="field_roaming_protocol">APN 漫游协议</string>
+    <string name="field_mvno_type">MVNO 类型</string>
+</resources>

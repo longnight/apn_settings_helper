@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pomoćnik za APN postavke</string>
+
+    <!-- List -->
+    <string name="favorites_section">Favoriti</string>
+    <string name="last_applied">U upotrebi · %1$s</string>
+    <string name="cd_favorite_add">Dodaj u favorite</string>
+    <string name="cd_favorite_remove">Ukloni iz favorita</string>
+    <string name="search_hint">Pretraži operatera ili predložak</string>
+    <string name="region_all">Sve regije</string>
+    <string name="cd_select_region">Odaberi regiju</string>
+    <string name="no_presets">Nijedan predložak ne odgovara vašoj pretrazi</string>
+
+    <!-- Language picker (right-side drawer) -->
+    <string name="language_title">Jezik</string>
+    <string name="language_system_default">Sistemski zadano</string>
+    <string name="cd_language">Promijeni jezik</string>
+
+    <!-- Detail: actions -->
+    <string name="back">Nazad</string>
+    <string name="copy">Kopiraj</string>
+    <string name="cd_copy">Kopiraj %1$s</string>
+    <string name="copied">Kopirano: %1$s</string>
+    <string name="open_apn_editor">Otvori sistemski uređivač APN-a</string>
+    <string name="apn_editor_unavailable">Nije moguće otvoriti APN postavke na ovom uređaju. Ručno otvorite Postavke → Mreža → Nazivi pristupnih tačaka.</string>
+    <string name="record_applied">Označi kao u upotrebi</string>
+    <string name="applied_recorded">Označeno kao u upotrebi</string>
+    <string name="preset_not_found">Predložak nije pronađen</string>
+
+    <!-- Detail: overlay (float the copy buttons over the system APN editor) -->
+    <string name="float_over_settings">Plutaj preko uređivača APN-a</string>
+    <string name="overlay_permission_needed">Dozvolite \"Prikaz preko drugih aplikacija\" za ovu aplikaciju, zatim ponovo dodirnite.</string>
+    <string name="overlay_close">Zatvori plutajući prozor</string>
+    <string name="overlay_collapse">Sažmi</string>
+    <string name="overlay_expand">Proširi</string>
+    <string name="overlay_copy_section">Kopiraj ovo</string>
+    <string name="overlay_hint">Dodirnite čip da kopirate, zatim dodirnite i zadržite odgovarajuće polje u uređivaču i zalijepite. Prevucite panel za naslov da ga pomjerite.</string>
+
+    <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
+    <string name="root_apply_toggle">Primjena jednim dodirom (root)</string>
+    <string name="root_checking">Provjera root pristupa…</string>
+    <string name="root_unavailable">Na ovom uređaju nije otkriven root pristup.</string>
+    <string name="apply_now">Primijeni sada</string>
+    <string name="apply_now_caption">Root je otkriven — direktno upisuje APN i odabire ga.</string>
+    <string name="applied_ok">APN je primijenjen</string>
+    <string name="applied_not_selected">APN je sačuvan, ali ga nije moguće odabrati. Otvorite uređivač APN-a i odaberite ga.</string>
+    <string name="apply_failed">Nije moguće primijeniti APN</string>
+    <string name="apply_failed_detail">Nije moguće primijeniti APN: %1$s</string>
+
+    <!-- Detail: section headers -->
+    <string name="detail_copy_section">Kopirajte u uređivač APN-a</string>
+    <string name="detail_checklist_section">Postavite ove padajuće liste</string>
+    <string name="set_field_to">Postavite %1$s na %2$s</string>
+    <string name="notes_label">Napomene</string>
+
+    <!-- Detail: field labels (mirror the system APN editor) -->
+    <string name="field_apn">APN</string>
+    <string name="field_username">Korisničko ime</string>
+    <string name="field_password">Lozinka</string>
+    <string name="field_mcc">MCC</string>
+    <string name="field_mnc">MNC</string>
+    <string name="field_mvno_value">MVNO vrijednost</string>
+    <string name="field_apn_type">Vrsta APN-a</string>
+    <string name="field_proxy">Proksi</string>
+    <string name="field_port">Priključak</string>
+    <string name="field_mmsc">MMSC</string>
+    <string name="field_mms_proxy">MMS proksi</string>
+    <string name="field_mms_port">MMS priključak</string>
+    <string name="field_server">Server</string>
+    <string name="field_auth_type">Vrsta autentifikacije</string>
+    <string name="field_protocol">Protokol APN-a</string>
+    <string name="field_roaming_protocol">Protokol APN-a za roming</string>
+    <string name="field_mvno_type">MVNO vrsta</string>
+</resources>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Помічник налаштувань APN</string>
+
+    <!-- List -->
+    <string name="favorites_section">Обране</string>
+    <string name="last_applied">У використанні · %1$s</string>
+    <string name="cd_favorite_add">Додати до обраного</string>
+    <string name="cd_favorite_remove">Видалити з обраного</string>
+    <string name="search_hint">Пошук оператора або пресету</string>
+    <string name="region_all">Усі регіони</string>
+    <string name="cd_select_region">Вибрати регіон</string>
+    <string name="no_presets">Немає пресетів за вашим запитом</string>
+
+    <!-- Language picker (right-side drawer) -->
+    <string name="language_title">Мова</string>
+    <string name="language_system_default">Системна за замовчуванням</string>
+    <string name="cd_language">Змінити мову</string>
+
+    <!-- Detail: actions -->
+    <string name="back">Назад</string>
+    <string name="copy">Копіювати</string>
+    <string name="cd_copy">Копіювати %1$s</string>
+    <string name="copied">Скопійовано %1$s</string>
+    <string name="open_apn_editor">Відкрити системний редактор APN</string>
+    <string name="apn_editor_unavailable">Не вдалося відкрити налаштування APN на цьому пристрої. Відкрийте Налаштування → Мережа → Назви точок доступу (APN) вручну.</string>
+    <string name="record_applied">Позначити як у використанні</string>
+    <string name="applied_recorded">Позначено як у використанні</string>
+    <string name="preset_not_found">Пресет не знайдено</string>
+
+    <!-- Detail: overlay (float the copy buttons over the system APN editor) -->
+    <string name="float_over_settings">Показати поверх редактора APN</string>
+    <string name="overlay_permission_needed">Дозвольте цьому додатку \"Відображення поверх інших додатків\", потім торкніться ще раз.</string>
+    <string name="overlay_close">Закрити накладку</string>
+    <string name="overlay_collapse">Згорнути</string>
+    <string name="overlay_expand">Розгорнути</string>
+    <string name="overlay_copy_section">Скопіюйте ці значення</string>
+    <string name="overlay_hint">Торкніться значення, щоб його скопіювати, потім натисніть і утримуйте відповідне поле в редакторі та виберіть «Вставити». Перетягуйте панель за заголовок.</string>
+
+    <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
+    <string name="root_apply_toggle">Застосувати одним дотиком (root)</string>
+    <string name="root_checking">Перевірка доступу root…</string>
+    <string name="root_unavailable">На цьому пристрої не виявлено доступу root.</string>
+    <string name="apply_now">Застосувати зараз</string>
+    <string name="apply_now_caption">Виявлено root — записує APN напряму та вибирає його.</string>
+    <string name="applied_ok">APN застосовано</string>
+    <string name="applied_not_selected">APN збережено, але не вдалося його вибрати. Відкрийте редактор APN і виберіть його.</string>
+    <string name="apply_failed">Не вдалося застосувати APN</string>
+    <string name="apply_failed_detail">Не вдалося застосувати APN: %1$s</string>
+
+    <!-- Detail: section headers -->
+    <string name="detail_copy_section">Скопіюйте в редактор APN</string>
+    <string name="detail_checklist_section">Налаштуйте ці спадні списки</string>
+    <string name="set_field_to">Встановіть %1$s на %2$s</string>
+    <string name="notes_label">Примітки</string>
+
+    <!-- Detail: field labels (mirror the system APN editor) -->
+    <string name="field_apn">APN</string>
+    <string name="field_username">Ім\'я користувача</string>
+    <string name="field_password">Пароль</string>
+    <string name="field_mcc">MCC</string>
+    <string name="field_mnc">MNC</string>
+    <string name="field_mvno_value">Значення MVNO</string>
+    <string name="field_apn_type">Тип APN</string>
+    <string name="field_proxy">Проксі-сервер</string>
+    <string name="field_port">Порт</string>
+    <string name="field_mmsc">MMSC</string>
+    <string name="field_mms_proxy">Проксі-сервер MMS</string>
+    <string name="field_mms_port">Порт MMS</string>
+    <string name="field_server">Сервер</string>
+    <string name="field_auth_type">Тип автентифікації</string>
+    <string name="field_protocol">Протокол APN</string>
+    <string name="field_roaming_protocol">Протокол роумінгу APN</string>
+    <string name="field_mvno_type">Тип MVNO</string>
+</resources>

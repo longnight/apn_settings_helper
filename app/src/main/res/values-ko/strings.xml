@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">APN 설정 도우미</string>
+
+    <!-- List -->
+    <string name="favorites_section">즐겨찾기</string>
+    <string name="last_applied">사용 중 · %1$s</string>
+    <string name="cd_favorite_add">즐겨찾기에 추가</string>
+    <string name="cd_favorite_remove">즐겨찾기에서 제거</string>
+    <string name="search_hint">통신사 또는 프리셋 검색</string>
+    <string name="region_all">모든 지역</string>
+    <string name="cd_select_region">지역 선택</string>
+    <string name="no_presets">검색과 일치하는 프리셋이 없습니다</string>
+
+    <!-- Language picker (right-side drawer) -->
+    <string name="language_title">언어</string>
+    <string name="language_system_default">시스템 기본값</string>
+    <string name="cd_language">언어 변경</string>
+
+    <!-- Detail: actions -->
+    <string name="back">뒤로</string>
+    <string name="copy">복사</string>
+    <string name="cd_copy">%1$s 복사</string>
+    <string name="copied">%1$s 복사됨</string>
+    <string name="open_apn_editor">시스템 APN 편집기 열기</string>
+    <string name="apn_editor_unavailable">이 기기에서 APN 설정을 열 수 없습니다. 설정 → 네트워크 → 액세스 포인트 이름에서 수동으로 열어 주세요.</string>
+    <string name="record_applied">사용 중으로 표시</string>
+    <string name="applied_recorded">사용 중으로 표시됨</string>
+    <string name="preset_not_found">프리셋을 찾을 수 없습니다</string>
+
+    <!-- Detail: overlay (float the copy buttons over the system APN editor) -->
+    <string name="float_over_settings">APN 편집기 위에 띄우기</string>
+    <string name="overlay_permission_needed">이 앱에 \"다른 앱 위에 표시\"를 허용한 후 다시 누르세요.</string>
+    <string name="overlay_close">오버레이 닫기</string>
+    <string name="overlay_collapse">접기</string>
+    <string name="overlay_expand">펼치기</string>
+    <string name="overlay_copy_section">이 항목 복사</string>
+    <string name="overlay_hint">칩을 눌러 복사한 다음, 해당하는 편집기 입력란을 길게 눌러 붙여넣으세요. 제목을 드래그하면 이 패널을 옮길 수 있습니다.</string>
+
+    <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
+    <string name="root_apply_toggle">원탭 적용 (root)</string>
+    <string name="root_checking">root 권한 확인 중…</string>
+    <string name="root_unavailable">이 기기에서 root 권한이 감지되지 않았습니다.</string>
+    <string name="apply_now">지금 적용</string>
+    <string name="apply_now_caption">root 권한이 감지되었습니다. APN을 직접 기록하고 선택합니다.</string>
+    <string name="applied_ok">APN 적용됨</string>
+    <string name="applied_not_selected">APN을 저장했지만 선택하지 못했습니다. APN 편집기를 열어 선택하세요.</string>
+    <string name="apply_failed">APN을 적용하지 못했습니다</string>
+    <string name="apply_failed_detail">APN을 적용하지 못했습니다: %1$s</string>
+
+    <!-- Detail: section headers -->
+    <string name="detail_copy_section">APN 편집기에 복사</string>
+    <string name="detail_checklist_section">다음 드롭다운 설정</string>
+    <string name="set_field_to">%1$s을(를) %2$s(으)로 설정</string>
+    <string name="notes_label">메모</string>
+
+    <!-- Detail: field labels (mirror the system APN editor) -->
+    <string name="field_apn">APN</string>
+    <string name="field_username">사용자 이름</string>
+    <string name="field_password">비밀번호</string>
+    <string name="field_mcc">MCC</string>
+    <string name="field_mnc">MNC</string>
+    <string name="field_mvno_value">MVNO 값</string>
+    <string name="field_apn_type">APN 유형</string>
+    <string name="field_proxy">프록시</string>
+    <string name="field_port">포트</string>
+    <string name="field_mmsc">MMSC</string>
+    <string name="field_mms_proxy">MMS 프록시</string>
+    <string name="field_mms_port">MMS 포트</string>
+    <string name="field_server">서버</string>
+    <string name="field_auth_type">인증 유형</string>
+    <string name="field_protocol">APN 프로토콜</string>
+    <string name="field_roaming_protocol">APN 로밍 프로토콜</string>
+    <string name="field_mvno_type">MVNO 유형</string>
+</resources>

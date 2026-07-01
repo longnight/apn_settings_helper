@@ -52,7 +52,7 @@ APN Settings Helper គឺជា​កម្មវិធី Android ប្រភ
 
 ## សម្រាប់អ្នកអភិវឌ្ឍន៍
 
-`v1.3.0` ត្រូវបានចេញផ្សាយ។ មាន preset list, detail, manual copy, optional root, optional overlay និង EN/JA localization។ អាជ្ញាបណ្ណ MIT, FOSS, គ្មាន GMS។
+`v1.4.0` ត្រូវបានចេញផ្សាយ។ មាន preset list, detail, manual copy, optional root, optional overlay ហើយ UI ត្រូវបានបកប្រែជា **២០ ភាសា** ព្រមទាំងមានការប្ដូរភាសាក្នុងកម្មវិធី (រូបតំណាងបកប្រែនៅលើរបារឧបករណ៍ បើកម៉ឺនុយភាសា)។ អាជ្ញាបណ្ណ MIT, FOSS, គ្មាន GMS។
 
 ### Platform និង stack
 

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Trợ lý cài đặt APN</string>
+
+    <!-- List -->
+    <string name="favorites_section">Yêu thích</string>
+    <string name="last_applied">Đang dùng · %1$s</string>
+    <string name="cd_favorite_add">Thêm vào mục yêu thích</string>
+    <string name="cd_favorite_remove">Xóa khỏi mục yêu thích</string>
+    <string name="search_hint">Tìm nhà mạng hoặc cấu hình</string>
+    <string name="region_all">Tất cả khu vực</string>
+    <string name="cd_select_region">Chọn khu vực</string>
+    <string name="no_presets">Không có cấu hình nào khớp với tìm kiếm của bạn</string>
+
+    <!-- Language picker (right-side drawer) -->
+    <string name="language_title">Ngôn ngữ</string>
+    <string name="language_system_default">Mặc định của hệ thống</string>
+    <string name="cd_language">Thay đổi ngôn ngữ</string>
+
+    <!-- Detail: actions -->
+    <string name="back">Quay lại</string>
+    <string name="copy">Sao chép</string>
+    <string name="cd_copy">Sao chép %1$s</string>
+    <string name="copied">Đã sao chép %1$s</string>
+    <string name="open_apn_editor">Mở trình chỉnh sửa APN của hệ thống</string>
+    <string name="apn_editor_unavailable">Không thể mở cài đặt APN trên thiết bị này. Hãy mở Cài đặt → Mạng → Tên điểm truy cập theo cách thủ công.</string>
+    <string name="record_applied">Đánh dấu là đang dùng</string>
+    <string name="applied_recorded">Đã đánh dấu là đang dùng</string>
+    <string name="preset_not_found">Không tìm thấy cấu hình</string>
+
+    <!-- Detail: overlay (float the copy buttons over the system APN editor) -->
+    <string name="float_over_settings">Hiển thị nổi trên trình chỉnh sửa APN</string>
+    <string name="overlay_permission_needed">Hãy cấp quyền \"Hiển thị trên các ứng dụng khác\" cho ứng dụng này, rồi nhấn lại.</string>
+    <string name="overlay_close">Đóng lớp phủ</string>
+    <string name="overlay_collapse">Thu gọn</string>
+    <string name="overlay_expand">Mở rộng</string>
+    <string name="overlay_copy_section">Sao chép các giá trị này</string>
+    <string name="overlay_hint">Nhấn vào một chip để sao chép, rồi nhấn giữ ô nhập tương ứng và Dán. Kéo tiêu đề để di chuyển bảng này.</string>
+
+    <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
+    <string name="root_apply_toggle">Áp dụng một chạm (root)</string>
+    <string name="root_checking">Đang kiểm tra quyền root…</string>
+    <string name="root_unavailable">Không phát hiện quyền root trên thiết bị này.</string>
+    <string name="apply_now">Áp dụng ngay</string>
+    <string name="apply_now_caption">Đã phát hiện root — ghi trực tiếp APN rồi chọn nó.</string>
+    <string name="applied_ok">Đã áp dụng APN</string>
+    <string name="applied_not_selected">Đã lưu APN, nhưng không thể chọn nó. Hãy mở trình chỉnh sửa APN và chọn APN đó.</string>
+    <string name="apply_failed">Không thể áp dụng APN</string>
+    <string name="apply_failed_detail">Không thể áp dụng APN: %1$s</string>
+
+    <!-- Detail: section headers -->
+    <string name="detail_copy_section">Sao chép vào trình chỉnh sửa APN</string>
+    <string name="detail_checklist_section">Thiết lập các danh sách thả xuống này</string>
+    <string name="set_field_to">Đặt %1$s thành %2$s</string>
+    <string name="notes_label">Ghi chú</string>
+
+    <!-- Detail: field labels (mirror the system APN editor) -->
+    <string name="field_apn">APN</string>
+    <string name="field_username">Tên người dùng</string>
+    <string name="field_password">Mật khẩu</string>
+    <string name="field_mcc">MCC</string>
+    <string name="field_mnc">MNC</string>
+    <string name="field_mvno_value">Giá trị MVNO</string>
+    <string name="field_apn_type">Loại APN</string>
+    <string name="field_proxy">Proxy</string>
+    <string name="field_port">Cổng</string>
+    <string name="field_mmsc">MMSC</string>
+    <string name="field_mms_proxy">Proxy MMS</string>
+    <string name="field_mms_port">Cổng MMS</string>
+    <string name="field_server">Máy chủ</string>
+    <string name="field_auth_type">Loại xác thực</string>
+    <string name="field_protocol">Giao thức APN</string>
+    <string name="field_roaming_protocol">Giao thức chuyển vùng APN</string>
+    <string name="field_mvno_type">Loại MVNO</string>
+</resources>

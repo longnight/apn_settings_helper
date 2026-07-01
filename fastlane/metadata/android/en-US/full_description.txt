@@ -16,4 +16,4 @@ Privacy and footprint:
 
 Free and open source (MIT). Presets are community-extensible: adding your carrier is a small data-only change.
 
-Available in English and Japanese.
+The interface is available in 20 languages, and you can switch the app's language at any time from a built-in language menu.

@@ -61,7 +61,7 @@ Les développeurs peuvent ajouter des préréglages via [CONTRIBUTING.md](../../
 
 ## Pour les développeurs et contributeurs
 
-`v1.3.0` est publié. Liste des préréglages, détail, copie manuelle, root optionnel, overlay optionnel et localisation anglais/japonais sont en place. App MIT, orientée FOSS, sans GMS.
+`v1.4.0` est publié. Liste des préréglages, détail, copie manuelle, root optionnel et overlay optionnel sont en place, et l'interface est traduite en **20 langues**, avec un sélecteur de langue intégré (une icône de traduction dans la barre d'outils ouvre un menu de langues). App MIT, orientée FOSS, sans GMS.
 
 ### Android et technologies
 

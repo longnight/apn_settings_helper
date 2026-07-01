@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Assistente impostazioni APN</string>
+
+    <!-- List -->
+    <string name="favorites_section">Preferiti</string>
+    <string name="last_applied">In uso · %1$s</string>
+    <string name="cd_favorite_add">Aggiungi ai preferiti</string>
+    <string name="cd_favorite_remove">Rimuovi dai preferiti</string>
+    <string name="search_hint">Cerca operatore o preset</string>
+    <string name="region_all">Tutte le regioni</string>
+    <string name="cd_select_region">Seleziona regione</string>
+    <string name="no_presets">Nessun preset corrisponde alla ricerca</string>
+
+    <!-- Language picker (right-side drawer) -->
+    <string name="language_title">Lingua</string>
+    <string name="language_system_default">Predefinita del sistema</string>
+    <string name="cd_language">Cambia lingua</string>
+
+    <!-- Detail: actions -->
+    <string name="back">Indietro</string>
+    <string name="copy">Copia</string>
+    <string name="cd_copy">Copia %1$s</string>
+    <string name="copied">Copiato: %1$s</string>
+    <string name="open_apn_editor">Apri l\'editor APN di sistema</string>
+    <string name="apn_editor_unavailable">Impossibile aprire le impostazioni APN su questo dispositivo. Apri manualmente Impostazioni → Rete → Nomi punti di accesso (APN).</string>
+    <string name="record_applied">Segna come in uso</string>
+    <string name="applied_recorded">Segnato come in uso</string>
+    <string name="preset_not_found">Preset non trovato</string>
+
+    <!-- Detail: overlay (float the copy buttons over the system APN editor) -->
+    <string name="float_over_settings">Sovrapponi all\'editor APN</string>
+    <string name="overlay_permission_needed">Consenti la \"Visualizzazione sopra altre app\" per questa app, poi tocca di nuovo.</string>
+    <string name="overlay_close">Chiudi sovrapposizione</string>
+    <string name="overlay_collapse">Comprimi</string>
+    <string name="overlay_expand">Espandi</string>
+    <string name="overlay_copy_section">Valori da copiare</string>
+    <string name="overlay_hint">Tocca un chip per copiare, poi tieni premuto il campo corrispondente nell\'editor e tocca Incolla. Trascina questo pannello dal titolo.</string>
+
+    <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
+    <string name="root_apply_toggle">Applica con un tocco (root)</string>
+    <string name="root_checking">Verifica dell\'accesso root in corso…</string>
+    <string name="root_unavailable">Nessun accesso root rilevato su questo dispositivo.</string>
+    <string name="apply_now">Applica ora</string>
+    <string name="apply_now_caption">Root rilevato — scrive direttamente l\'APN e lo seleziona.</string>
+    <string name="applied_ok">APN applicato</string>
+    <string name="applied_not_selected">APN salvato, ma impossibile selezionarlo. Apri l\'editor APN e selezionalo.</string>
+    <string name="apply_failed">Impossibile applicare l\'APN</string>
+    <string name="apply_failed_detail">Impossibile applicare l\'APN: %1$s</string>
+
+    <!-- Detail: section headers -->
+    <string name="detail_copy_section">Copia nell\'editor APN</string>
+    <string name="detail_checklist_section">Imposta questi menu a discesa</string>
+    <string name="set_field_to">Imposta %1$s su %2$s</string>
+    <string name="notes_label">Note</string>
+
+    <!-- Detail: field labels (mirror the system APN editor) -->
+    <string name="field_apn">APN</string>
+    <string name="field_username">Nome utente</string>
+    <string name="field_password">Password</string>
+    <string name="field_mcc">MCC</string>
+    <string name="field_mnc">MNC</string>
+    <string name="field_mvno_value">Valore MVNO</string>
+    <string name="field_apn_type">Tipo APN</string>
+    <string name="field_proxy">Proxy</string>
+    <string name="field_port">Porta</string>
+    <string name="field_mmsc">MMSC</string>
+    <string name="field_mms_proxy">Proxy MMS</string>
+    <string name="field_mms_port">Porta MMS</string>
+    <string name="field_server">Server</string>
+    <string name="field_auth_type">Tipo di autenticazione</string>
+    <string name="field_protocol">Protocollo APN</string>
+    <string name="field_roaming_protocol">Protocollo roaming APN</string>
+    <string name="field_mvno_type">Tipo MVNO</string>
+</resources>

@@ -21,13 +21,16 @@ environment: `plan_implement_steps.md`. Root-apply internals: `plan_review_M-E.m
 - `data.root/` — `LibsuShellRunner` (the only libsu touchpoint).
 - `ui.list/`, `ui.detail/` — stateless `*Content` composables + `*ViewModel` + UI-state classes;
   `ui.detail.DetailFields` (copy/checklist field builders). `ui.common/` — `CopyableField`,
-  `ChecklistItem`, `ApnEditor` (open-editor intent), `ApnFieldDisplay` (enum→label), `ApnDateFormat`.
+  `ChecklistItem`, `ApnEditor` (open-editor intent), `ApnFieldDisplay` (enum→label), `ApnDateFormat`,
+  `AppLanguages` (the language-picker list) + `LocaleSupport` (locale → resource-overriding `Context`).
   `ui.overlay/` — `ApnOverlay` (float-over-editor controller: window add/remove + the per-copy hybrid
   clipboard write — silent proxy write → read-back → foreground fallback), `OverlayPanel` (`buildOverlayPanel`,
   classic-Views builder), `ClipboardWriteActivity` (invisible foreground clipboard writer); reuses the
   `ui.detail.DetailFields` field model. `ui.nav/` — `AppNavHost`, `Routes`. `ui.theme/`.
 - `AppGraph` — manual DI (no Hilt): parses presets once, builds `SettingsStore` + `ApplyStrategyResolver`;
   held by `ApnApplication`, read by ViewModel factories via `APPLICATION_KEY`.
+- `MainActivity` — wraps the nav host in `LocalizedApp`: collects the persisted language + provides a
+  locale-overridden `LocalContext`/`LocalConfiguration`, so a language pick re-localizes **in place** (no recreate).
 
 ## Data contract — `assets/presets.json`
 - `{ schemaVersion: 1, regions: [{ code, name{en,ja}, carriers: [{ id, name{en,ja}, presets: [{…}] }] }] }`.
@@ -60,10 +63,18 @@ environment: `plan_implement_steps.md`. Root-apply internals: `plan_review_M-E.m
   caveat): `docs/plan_20260628_clipboard_float_overlay_improvements.md`.
 
 ## i18n
-- `res/values/strings.xml` (en) + `res/values-ja/strings.xml` (ja) — every UI string localized; keep
-  both in sync (Android lint `MissingTranslation` gates `just ci`).
-- `ApnDateFormat`: en `yyyy-MM-dd HH:mm`, ja `yyyy年M月d日 HH:mm` (formatters cached; zone re-bound).
-- Preset `label`/`notes` + region/carrier names resolve via `LocalizedText.resolve(tag)`.
+- **20 UI locales** under `res/values*/`. `values/` (en) + `values-ja/` are the canonical pair — keep them
+  in sync (Android lint `MissingTranslation` gates `just ci`); the other 18 hold the same keys, translated.
+  Adding/removing a string means updating **every** locale or lint fails.
+- **In-app language picker** (`ui.list` language drawer): persists a BCP-47 tag in `SettingsStore.language`
+  (null = follow system). `MainActivity.LocalizedApp` applies it **in place** via a `LocalContext` override
+  from `LocaleSupport.localizedContext` — a `ContextThemeWrapper` + `applyOverrideConfiguration` (**not**
+  `createConfigurationContext`, which would break owner lookups like `ActivityResultRegistryOwner`).
+  `PresetListViewModel` also reacts to the tag; the float overlay re-localizes its own panel context
+  (`ApnOverlay.panelContext`).
+- `ApnDateFormat`: ja `yyyy年M月d日 HH:mm`, else `yyyy-MM-dd HH:mm` (formatters cached; zone re-bound).
+- Preset `label`/`notes` + region/carrier names resolve via `LocalizedText.resolve(tag)` — **en/ja only**
+  (`ja*`→ja, else en), so non-en/ja UI languages show preset data in English by design.
 
 ## Gotchas & fragile areas
 - **API-35 pinning:** AndroidX/Compose are held at the API-35 line (devShell ships platform/build-tools

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ตัวช่วยตั้งค่า APN</string>
+
+    <!-- List -->
+    <string name="favorites_section">รายการโปรด</string>
+    <string name="last_applied">ใช้งานอยู่ · %1$s</string>
+    <string name="cd_favorite_add">เพิ่มในรายการโปรด</string>
+    <string name="cd_favorite_remove">นำออกจากรายการโปรด</string>
+    <string name="search_hint">ค้นหาผู้ให้บริการหรือพรีเซ็ต</string>
+    <string name="region_all">ทุกภูมิภาค</string>
+    <string name="cd_select_region">เลือกภูมิภาค</string>
+    <string name="no_presets">ไม่มีพรีเซ็ตที่ตรงกับการค้นหา</string>
+
+    <!-- Language picker (right-side drawer) -->
+    <string name="language_title">ภาษา</string>
+    <string name="language_system_default">ค่าเริ่มต้นของระบบ</string>
+    <string name="cd_language">เปลี่ยนภาษา</string>
+
+    <!-- Detail: actions -->
+    <string name="back">กลับ</string>
+    <string name="copy">คัดลอก</string>
+    <string name="cd_copy">คัดลอก %1$s</string>
+    <string name="copied">คัดลอก %1$s แล้ว</string>
+    <string name="open_apn_editor">เปิดตัวแก้ไข APN ของระบบ</string>
+    <string name="apn_editor_unavailable">เปิดการตั้งค่า APN บนอุปกรณ์นี้ไม่ได้ โปรดเปิดด้วยตนเองที่ การตั้งค่า → เครือข่าย → ชื่อจุดเข้าใช้งาน (APN)</string>
+    <string name="record_applied">ทำเครื่องหมายว่าใช้งานอยู่</string>
+    <string name="applied_recorded">ทำเครื่องหมายว่าใช้งานอยู่แล้ว</string>
+    <string name="preset_not_found">ไม่พบพรีเซ็ต</string>
+
+    <!-- Detail: overlay (float the copy buttons over the system APN editor) -->
+    <string name="float_over_settings">ลอยทับตัวแก้ไข APN</string>
+    <string name="overlay_permission_needed">อนุญาต \"แสดงทับบนแอปอื่นๆ\" ให้แอปนี้ แล้วแตะอีกครั้ง</string>
+    <string name="overlay_close">ปิดการแสดงทับ</string>
+    <string name="overlay_collapse">ย่อ</string>
+    <string name="overlay_expand">ขยาย</string>
+    <string name="overlay_copy_section">คัดลอกค่าเหล่านี้</string>
+    <string name="overlay_hint">แตะชิปเพื่อคัดลอก จากนั้นแตะค้างที่ช่องที่ตรงกันในตัวแก้ไขแล้ววาง ลากแผงนี้โดยจับที่แถบชื่อ</string>
+
+    <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
+    <string name="root_apply_toggle">นำไปใช้แบบแตะเดียว (root)</string>
+    <string name="root_checking">กำลังตรวจสอบสิทธิ์ root…</string>
+    <string name="root_unavailable">ไม่พบสิทธิ์ root บนอุปกรณ์นี้</string>
+    <string name="apply_now">นำไปใช้ทันที</string>
+    <string name="apply_now_caption">พบสิทธิ์ root — เขียนค่า APN โดยตรงแล้วเลือกใช้ให้</string>
+    <string name="applied_ok">นำ APN ไปใช้แล้ว</string>
+    <string name="applied_not_selected">บันทึก APN แล้ว แต่เลือกใช้ไม่ได้ โปรดเปิดตัวแก้ไข APN แล้วเลือกด้วยตนเอง</string>
+    <string name="apply_failed">นำ APN ไปใช้ไม่ได้</string>
+    <string name="apply_failed_detail">นำ APN ไปใช้ไม่ได้: %1$s</string>
+
+    <!-- Detail: section headers -->
+    <string name="detail_copy_section">คัดลอกลงในตัวแก้ไข APN</string>
+    <string name="detail_checklist_section">ตั้งค่าเมนูแบบเลื่อนลงเหล่านี้</string>
+    <string name="set_field_to">ตั้งค่า %1$s เป็น %2$s</string>
+    <string name="notes_label">หมายเหตุ</string>
+
+    <!-- Detail: field labels (mirror the system APN editor) -->
+    <string name="field_apn">APN</string>
+    <string name="field_username">ชื่อผู้ใช้</string>
+    <string name="field_password">รหัสผ่าน</string>
+    <string name="field_mcc">MCC</string>
+    <string name="field_mnc">MNC</string>
+    <string name="field_mvno_value">ค่า MVNO</string>
+    <string name="field_apn_type">ประเภท APN</string>
+    <string name="field_proxy">พร็อกซี</string>
+    <string name="field_port">พอร์ต</string>
+    <string name="field_mmsc">MMSC</string>
+    <string name="field_mms_proxy">พร็อกซี MMS</string>
+    <string name="field_mms_port">พอร์ต MMS</string>
+    <string name="field_server">เซิร์ฟเวอร์</string>
+    <string name="field_auth_type">ประเภทการตรวจสอบสิทธิ์</string>
+    <string name="field_protocol">โปรโตคอล APN</string>
+    <string name="field_roaming_protocol">โปรโตคอลการโรมมิ่ง APN</string>
+    <string name="field_mvno_type">ประเภท MVNO</string>
+</resources>

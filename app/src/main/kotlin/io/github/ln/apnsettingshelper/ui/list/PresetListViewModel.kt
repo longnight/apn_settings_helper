@@ -53,8 +53,8 @@ data class PresetListUiState(
 
 /**
  * Loads the bundled presets once, then reactively combines them with the persisted favorites +
- * last-applied state and the in-memory search/region filters into a [PresetListUiState]. Both the
- * favorites section and the main list are sorted A→Z by display name.
+ * last-applied state, the picked UI language, and the in-memory search/region filters into a
+ * [PresetListUiState]. Both the favorites section and the main list are sorted A→Z by display name.
  */
 class PresetListViewModel(
     private val repository: PresetRepository,
@@ -75,8 +75,13 @@ class PresetListViewModel(
             settingsStore.lastApplied,
             query,
             selectedRegion,
-        ) { favorites, lastApplied, q, region ->
-            buildState(favorites, lastApplied, q, region)
+            settingsStore.language,
+        ) { favorites, lastApplied, q, region, languageTag ->
+            // Resolve dynamic text against the picked language (or the system locale when unset) so a
+            // retained VM re-localizes immediately on a switch — MainActivity.recreate() only refreshes
+            // the static stringResource()s, not this already-computed state.
+            val effectiveLocale = languageTag?.takeIf { it.isNotBlank() }?.let(Locale::forLanguageTag) ?: locale
+            buildState(favorites, lastApplied, q, region, effectiveLocale)
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
@@ -100,8 +105,9 @@ class PresetListViewModel(
         lastApplied: LastApplied?,
         query: String,
         selectedRegion: String?,
+        localeForResolve: Locale,
     ): PresetListUiState {
-        val tag = locale.language
+        val tag = localeForResolve.language
         val needle = query.trim()
 
         fun rowOf(
@@ -120,7 +126,7 @@ class PresetListViewModel(
                 lastAppliedLabel =
                     lastApplied
                         ?.takeIf { it.presetId == preset.id }
-                        ?.let { ApnDateFormat.format(it.epochMillis, locale, zone) },
+                        ?.let { ApnDateFormat.format(it.epochMillis, localeForResolve, zone) },
             )
         }
 
@@ -143,12 +149,12 @@ class PresetListViewModel(
 
         return PresetListUiState(
             loading = false,
-            favorites = allRows.filter { it.isFavorite && matches(it) }.sortedBy { it.label.lowercase(locale) },
+            favorites = allRows.filter { it.isFavorite && matches(it) }.sortedBy { it.label.lowercase(localeForResolve) },
             presets =
                 allRows
                     .filter {
                         matches(it) && (effectiveRegion == null || it.region == effectiveRegion)
-                    }.sortedBy { it.label.lowercase(locale) },
+                    }.sortedBy { it.label.lowercase(localeForResolve) },
             regions = regionNames,
             selectedRegion = effectiveRegion,
             query = query,

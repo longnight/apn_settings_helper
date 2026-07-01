@@ -22,9 +22,11 @@ class FakeSettingsStore(
 ) : SettingsStore {
     private val favoritesState = MutableStateFlow(initialFavorites)
     private val lastAppliedState = MutableStateFlow(initialLastApplied)
+    private val languageState = MutableStateFlow<String?>(null)
 
     override val favorites: Flow<Set<String>> = favoritesState
     override val lastApplied: Flow<LastApplied?> = lastAppliedState
+    override val language: Flow<String?> = languageState
 
     override suspend fun setFavorite(
         presetId: String,
@@ -41,5 +43,9 @@ class FakeSettingsStore(
 
     override suspend fun recordApplied(presetId: String) {
         lastAppliedState.value = LastApplied(presetId, now())
+    }
+
+    override suspend fun setLanguage(tag: String?) {
+        languageState.value = tag?.takeUnless { it.isBlank() }
     }
 }

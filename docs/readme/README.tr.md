@@ -52,7 +52,7 @@ Eksik/hatalı operatörler: [GitHub Issues](https://github.com/longnight/apn_set
 
 ## Geliştiriciler için
 
-`v1.3.0` yayınlandı. Ön ayar listesi, detaylar, manuel kopyalama, optional root, optional overlay ve EN/JA yerelleştirme tamam. MIT, FOSS, GMS yok.
+`v1.4.0` yayınlandı. Ön ayar listesi, detaylar, manuel kopyalama, optional root ve optional overlay tamam; arayüz **20 dile** çevrildi ve uygulama içi bir dil seçici var (araç çubuğundaki çeviri simgesi bir dil menüsü açar). MIT, FOSS, GMS yok.
 
 ### Platform ve stack
 

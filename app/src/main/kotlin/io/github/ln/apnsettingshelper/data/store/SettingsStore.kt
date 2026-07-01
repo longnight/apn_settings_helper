@@ -12,13 +12,16 @@ import androidx.datastore.preferences.preferencesDataStore
 import io.github.ln.apnsettingshelper.domain.model.LastApplied
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
 /**
- * Local, network-free persistence for the two pieces of user state (AGENTS.md):
+ * Local, network-free persistence for the user state (AGENTS.md):
  * - [favorites]: any number of favorited preset ids.
  * - [lastApplied]: a single slot overwritten on each apply, or `null` until first apply.
+ * - [language]: the user-picked UI language as a BCP-47 tag, or `null` to follow the system.
  *
  * Favorites and last-applied are independent — they may coincide or differ. Exposed as
  * [Flow]s so the UI recomposes on change; mutators are `suspend` (DataStore I/O).
@@ -26,6 +29,7 @@ import java.io.IOException
 interface SettingsStore {
     val favorites: Flow<Set<String>>
     val lastApplied: Flow<LastApplied?>
+    val language: Flow<String?>
 
     /** Add or remove [presetId] from favorites. Idempotent. */
     suspend fun setFavorite(
@@ -38,6 +42,9 @@ interface SettingsStore {
 
     /** Overwrite the last-applied slot with [presetId] stamped at the current time. */
     suspend fun recordApplied(presetId: String)
+
+    /** Persist the UI language as a BCP-47 [tag], or clear it (follow the system) when `null`. */
+    suspend fun setLanguage(tag: String?)
 }
 
 private const val DATASTORE_NAME = "settings"
@@ -68,6 +75,9 @@ class DataStoreSettingsStore(
             if (id != null && at != null) LastApplied(id, at) else null
         }
 
+    override val language: Flow<String?> =
+        data.map { it[KEY_LANGUAGE] }
+
     override suspend fun setFavorite(
         presetId: String,
         favorite: Boolean,
@@ -92,12 +102,32 @@ class DataStoreSettingsStore(
         }
     }
 
+    override suspend fun setLanguage(tag: String?) {
+        dataStore.edit { prefs ->
+            if (tag.isNullOrBlank()) prefs.remove(KEY_LANGUAGE) else prefs[KEY_LANGUAGE] = tag
+        }
+    }
+
     companion object {
         private val KEY_FAVORITES = stringSetPreferencesKey("favorites")
         private val KEY_LAST_APPLIED_ID = stringPreferencesKey("last_applied_id")
         private val KEY_LAST_APPLIED_AT = longPreferencesKey("last_applied_at")
+        private val KEY_LANGUAGE = stringPreferencesKey("language")
 
         /** Build the app-wide store from a [Context] (uses the single process DataStore). */
         fun from(context: Context): DataStoreSettingsStore = DataStoreSettingsStore(context.applicationContext.settingsDataStore)
+
+        /**
+         * Read the persisted language tag **synchronously** — needed by `attachBaseContext`, which
+         * must apply the locale before any resources are resolved and so cannot await a [Flow].
+         * A corrupt/missing store yields `null` (follow the system).
+         */
+        fun peekLanguage(context: Context): String? =
+            runBlocking {
+                runCatching {
+                    context.applicationContext.settingsDataStore.data
+                        .first()[KEY_LANGUAGE]
+                }.getOrNull()
+            }
     }
 }

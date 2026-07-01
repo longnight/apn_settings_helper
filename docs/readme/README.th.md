@@ -52,7 +52,7 @@ APN Settings Helper เป็นแอป Android โอเพนซอร์ส
 
 ## สำหรับนักพัฒนา
 
-`v1.3.0` เผยแพร่แล้ว มีรายการ preset หน้ารายละเอียด การคัดลอกแบบ manual, optional root, optional overlay และ localization EN/JA แอปใช้ MIT, เน้น FOSS และไม่มี GMS
+`v1.4.0` เผยแพร่แล้ว มีรายการ preset หน้ารายละเอียด การคัดลอกแบบ manual, optional root และ optional overlay และ UI ได้รับการแปลเป็น **20 ภาษา** พร้อมตัวสลับภาษาในแอป (ไอคอนแปลภาษาบนแถบเครื่องมือเปิดเมนูภาษา) แอปใช้ MIT, เน้น FOSS และไม่มี GMS
 
 ### แพลตฟอร์มและเทคโนโลยี
 

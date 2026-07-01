@@ -4,7 +4,6 @@
 
     <!-- List -->
     <string name="favorites_section">Favorites</string>
-    <string name="presets_section">All presets</string>
     <string name="last_applied">In use · %1$s</string>
     <string name="cd_favorite_add">Add to favorites</string>
     <string name="cd_favorite_remove">Remove from favorites</string>
@@ -12,6 +11,11 @@
     <string name="region_all">All regions</string>
     <string name="cd_select_region">Select region</string>
     <string name="no_presets">No presets match your search</string>
+
+    <!-- Language picker (right-side drawer) -->
+    <string name="language_title">Language</string>
+    <string name="language_system_default">System default</string>
+    <string name="cd_language">Change language</string>
 
     <!-- Detail: actions -->
     <string name="back">Back</string>

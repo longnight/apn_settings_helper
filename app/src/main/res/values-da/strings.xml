@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">APN-indstillingshjælper</string>
+
+    <!-- List -->
+    <string name="favorites_section">Favoritter</string>
+    <string name="last_applied">I brug · %1$s</string>
+    <string name="cd_favorite_add">Føj til favoritter</string>
+    <string name="cd_favorite_remove">Fjern fra favoritter</string>
+    <string name="search_hint">Søg efter udbyder eller forudindstilling</string>
+    <string name="region_all">Alle regioner</string>
+    <string name="cd_select_region">Vælg region</string>
+    <string name="no_presets">Ingen forudindstillinger matcher din søgning</string>
+
+    <!-- Language picker (right-side drawer) -->
+    <string name="language_title">Sprog</string>
+    <string name="language_system_default">Systemstandard</string>
+    <string name="cd_language">Skift sprog</string>
+
+    <!-- Detail: actions -->
+    <string name="back">Tilbage</string>
+    <string name="copy">Kopiér</string>
+    <string name="cd_copy">Kopiér %1$s</string>
+    <string name="copied">%1$s kopieret</string>
+    <string name="open_apn_editor">Åbn systemets APN-editor</string>
+    <string name="apn_editor_unavailable">Kunne ikke åbne APN-indstillingerne på denne enhed. Åbn Indstillinger → Netværk → Adgangspunktsnavne (APN) manuelt.</string>
+    <string name="record_applied">Markér som i brug</string>
+    <string name="applied_recorded">Markeret som i brug</string>
+    <string name="preset_not_found">Forudindstilling ikke fundet</string>
+
+    <!-- Detail: overlay (float the copy buttons over the system APN editor) -->
+    <string name="float_over_settings">Vis oven på APN-editoren</string>
+    <string name="overlay_permission_needed">Tillad \"Vis oven på andre apps\" for denne app, og tryk derefter igen.</string>
+    <string name="overlay_close">Luk overlay</string>
+    <string name="overlay_collapse">Fold sammen</string>
+    <string name="overlay_expand">Fold ud</string>
+    <string name="overlay_copy_section">Kopiér disse</string>
+    <string name="overlay_hint">Tryk på en chip for at kopiere, tryk og hold derefter på det tilsvarende felt i editoren, og vælg Sæt ind. Træk panelet i titlen for at flytte det.</string>
+
+    <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
+    <string name="root_apply_toggle">Anvend med ét tryk (root)</string>
+    <string name="root_checking">Kontrollerer root-adgang…</string>
+    <string name="root_unavailable">Ingen root-adgang fundet på denne enhed.</string>
+    <string name="apply_now">Anvend nu</string>
+    <string name="apply_now_caption">Root fundet – skriver APN-indstillingen direkte og vælger den.</string>
+    <string name="applied_ok">APN anvendt</string>
+    <string name="applied_not_selected">APN-indstillingen blev gemt, men kunne ikke vælges. Åbn APN-editoren, og vælg den.</string>
+    <string name="apply_failed">Kunne ikke anvende APN-indstillingen</string>
+    <string name="apply_failed_detail">Kunne ikke anvende APN-indstillingen: %1$s</string>
+
+    <!-- Detail: section headers -->
+    <string name="detail_copy_section">Kopiér ind i APN-editoren</string>
+    <string name="detail_checklist_section">Indstil disse rullemenuer</string>
+    <string name="set_field_to">Indstil %1$s til %2$s</string>
+    <string name="notes_label">Noter</string>
+
+    <!-- Detail: field labels (mirror the system APN editor) -->
+    <string name="field_apn">APN</string>
+    <string name="field_username">Brugernavn</string>
+    <string name="field_password">Adgangskode</string>
+    <string name="field_mcc">MCC</string>
+    <string name="field_mnc">MNC</string>
+    <string name="field_mvno_value">MVNO-værdi</string>
+    <string name="field_apn_type">APN-type</string>
+    <string name="field_proxy">Proxy</string>
+    <string name="field_port">Port</string>
+    <string name="field_mmsc">MMSC</string>
+    <string name="field_mms_proxy">MMS-proxy</string>
+    <string name="field_mms_port">MMS-port</string>
+    <string name="field_server">Server</string>
+    <string name="field_auth_type">Godkendelsestype</string>
+    <string name="field_protocol">APN-protokol</string>
+    <string name="field_roaming_protocol">APN-roamingprotokol</string>
+    <string name="field_mvno_type">MVNO-type</string>
+</resources>

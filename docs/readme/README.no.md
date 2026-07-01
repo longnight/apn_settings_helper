@@ -52,7 +52,7 @@ Forhåndsvalg kan legges til via [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## For utviklere
 
-`v1.3.0` er utgitt. Forhåndsvalgsliste, detaljer, manuell kopiering, optional root, optional overlay og EN/JA-lokalisering er implementert. MIT, FOSS, ingen GMS.
+`v1.4.0` er utgitt. Forhåndsvalgsliste, detaljer, manuell kopiering, optional root og optional overlay er implementert, og grensesnittet er oversatt til **20 språk** med en innebygd språkvelger (et oversettelsesikon i verktøylinjen åpner en språkmeny). MIT, FOSS, ingen GMS.
 
 ### Plattform og stack
 

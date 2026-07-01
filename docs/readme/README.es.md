@@ -61,7 +61,7 @@ Los desarrolladores pueden añadir presets con [CONTRIBUTING.md](../../CONTRIBUT
 
 ## Para desarrolladores y contribuidores
 
-`v1.3.0` está publicado. Lista de presets, detalle, copia manual, root opcional, overlay opcional y localización inglés/japonés están implementados. App MIT, orientada a FOSS y sin GMS.
+`v1.4.0` está publicado. La lista de presets, el detalle, la copia manual, el root opcional y el overlay opcional están implementados, y la interfaz está traducida a **20 idiomas**, con un selector de idioma integrado (un icono de traducción en la barra de herramientas abre un menú de idiomas). App MIT, orientada a FOSS y sin GMS.
 
 ### Android y tecnología
 

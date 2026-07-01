@@ -77,7 +77,7 @@ Nhà phát triển có thể thêm preset trực tiếp. Xem [CONTRIBUTING.md](.
 
 ## Dành cho nhà phát triển và người đóng góp
 
-`v1.3.0` đã được phát hành. Các luồng chính gồm danh sách preset, màn hình chi tiết, sao chép thủ công, root apply tùy chọn, overlay helper tùy chọn, và bản địa hóa tiếng Anh/Nhật. Ứng dụng dùng giấy phép MIT, hướng tới FOSS và không phụ thuộc GMS.
+`v1.4.0` đã được phát hành. Các luồng chính gồm danh sách preset, màn hình chi tiết, sao chép thủ công, root apply tùy chọn và overlay helper tùy chọn; giao diện đã được dịch sang **20 ngôn ngữ** với bộ chuyển ngôn ngữ ngay trong ứng dụng (biểu tượng dịch trên thanh công cụ mở menu ngôn ngữ). Ứng dụng dùng giấy phép MIT, hướng tới FOSS và không phụ thuộc GMS.
 
 ### Hỗ trợ Android và công nghệ
 

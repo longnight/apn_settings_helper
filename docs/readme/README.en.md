@@ -22,6 +22,7 @@ This app gives you a cleaner way to do it: pick your carrier preset, copy each A
 ### What it can do
 
 - Show verified APN presets bundled with the app.
+- Switch the app's display language from a toolbar language menu (20 languages).
 - Copy APN values with a tap.
 - Tell you which dropdown values to choose, such as authentication type and APN protocol.
 - Open the system APN settings screen when Android allows it.
@@ -89,7 +90,7 @@ Developers can add carrier presets directly. See [CONTRIBUTING.md](../../CONTRIB
 
 ### Project status
 
-`v1.3.0` is released. The preset list, detail screen, manual copy flow, optional root apply, optional floating helper, and English/Japanese localization are implemented.
+`v1.4.0` is released. The preset list, detail screen, manual copy flow, optional root apply, and optional floating helper are implemented, and the UI is localized into **20 languages** with an in-app language picker (a toolbar translate icon opens a right-side language drawer).
 
 The app is MIT licensed, FOSS-oriented, and has no GMS dependency.
 
@@ -162,7 +163,7 @@ Keep these product rules intact:
 - Do not add AccessibilityService-based auto-fill.
 - Do not eagerly probe root.
 - Do not imply "in use" means the app verified the live phone APN.
-- Keep English and Japanese UI strings in sync.
+- Keep the canonical English (`values/`) and Japanese (`values-ja/`) UI strings in sync (the other 18 locales are translations).
 
 ### Release and packaging
 

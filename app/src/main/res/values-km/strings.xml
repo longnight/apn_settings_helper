@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ជំនួយការកំណត់ APN</string>
+
+    <!-- List -->
+    <string name="favorites_section">សំណព្វ</string>
+    <string name="last_applied">កំពុងប្រើ · %1$s</string>
+    <string name="cd_favorite_add">បន្ថែមទៅសំណព្វ</string>
+    <string name="cd_favorite_remove">ដកចេញពីសំណព្វ</string>
+    <string name="search_hint">ស្វែងរកប្រតិបត្តិករ ឬការកំណត់សម្រេច</string>
+    <string name="region_all">តំបន់ទាំងអស់</string>
+    <string name="cd_select_region">ជ្រើសរើសតំបន់</string>
+    <string name="no_presets">គ្មានការកំណត់សម្រេចត្រូវនឹងការស្វែងរករបស់អ្នកទេ</string>
+
+    <!-- Language picker (right-side drawer) -->
+    <string name="language_title">ភាសា</string>
+    <string name="language_system_default">លំនាំដើមរបស់ប្រព័ន្ធ</string>
+    <string name="cd_language">ប្ដូរភាសា</string>
+
+    <!-- Detail: actions -->
+    <string name="back">ថយក្រោយ</string>
+    <string name="copy">ចម្លង</string>
+    <string name="cd_copy">ចម្លង %1$s</string>
+    <string name="copied">បានចម្លង %1$s</string>
+    <string name="open_apn_editor">បើកកម្មវិធីកែសម្រួល APN របស់ប្រព័ន្ធ</string>
+    <string name="apn_editor_unavailable">មិនអាចបើកការកំណត់ APN នៅលើឧបករណ៍នេះបានទេ។ សូមបើក ការកំណត់ → បណ្ដាញ → ឈ្មោះចំណុចចូលប្រើ (APN) ដោយដៃ។</string>
+    <string name="record_applied">សម្គាល់ថាកំពុងប្រើ</string>
+    <string name="applied_recorded">បានសម្គាល់ថាកំពុងប្រើ</string>
+    <string name="preset_not_found">រកមិនឃើញការកំណត់សម្រេច</string>
+
+    <!-- Detail: overlay (float the copy buttons over the system APN editor) -->
+    <string name="float_over_settings">អណ្ដែតពីលើកម្មវិធីកែសម្រួល APN</string>
+    <string name="overlay_permission_needed">សូមអនុញ្ញាត \"បង្ហាញនៅលើកម្មវិធីផ្សេងទៀត\" សម្រាប់កម្មវិធីនេះ រួចចុចម្ដងទៀត។</string>
+    <string name="overlay_close">បិទផ្ទាំងអណ្ដែត</string>
+    <string name="overlay_collapse">បង្រួម</string>
+    <string name="overlay_expand">ពង្រីក</string>
+    <string name="overlay_copy_section">ចម្លងតម្លៃទាំងនេះ</string>
+    <string name="overlay_hint">ចុចស្លាកមួយដើម្បីចម្លង រួចចុចឱ្យជាប់លើប្រអប់ដែលត្រូវគ្នា ហើយបិទភ្ជាប់។ អូសផ្ទាំងនេះដោយចំណងជើងរបស់វា។</string>
+
+    <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
+    <string name="root_apply_toggle">អនុវត្តដោយចុចម្ដង (root)</string>
+    <string name="root_checking">កំពុងពិនិត្យសិទ្ធិ root…</string>
+    <string name="root_unavailable">រកមិនឃើញសិទ្ធិ root នៅលើឧបករណ៍នេះទេ។</string>
+    <string name="apply_now">អនុវត្តឥឡូវនេះ</string>
+    <string name="apply_now_caption">បានរកឃើញ root — សរសេរ APN ដោយផ្ទាល់ និងជ្រើសរើសវា។</string>
+    <string name="applied_ok">បានអនុវត្ត APN</string>
+    <string name="applied_not_selected">បានរក្សាទុក APN ប៉ុន្តែមិនអាចជ្រើសរើសវាបានទេ។ សូមបើកកម្មវិធីកែសម្រួល APN ហើយជ្រើសរើសវា។</string>
+    <string name="apply_failed">មិនអាចអនុវត្ត APN បានទេ</string>
+    <string name="apply_failed_detail">មិនអាចអនុវត្ត APN បានទេ៖ %1$s</string>
+
+    <!-- Detail: section headers -->
+    <string name="detail_copy_section">ចម្លងចូលក្នុងកម្មវិធីកែសម្រួល APN</string>
+    <string name="detail_checklist_section">កំណត់ម៉ឺនុយទម្លាក់ចុះទាំងនេះ</string>
+    <string name="set_field_to">កំណត់ %1$s ទៅជា %2$s</string>
+    <string name="notes_label">កំណត់ចំណាំ</string>
+
+    <!-- Detail: field labels (mirror the system APN editor) -->
+    <string name="field_apn">APN</string>
+    <string name="field_username">ឈ្មោះអ្នកប្រើ</string>
+    <string name="field_password">ពាក្យសម្ងាត់</string>
+    <string name="field_mcc">MCC</string>
+    <string name="field_mnc">MNC</string>
+    <string name="field_mvno_value">តម្លៃ MVNO</string>
+    <string name="field_apn_type">ប្រភេទ APN</string>
+    <string name="field_proxy">ប្រូកស៊ី</string>
+    <string name="field_port">ច្រក</string>
+    <string name="field_mmsc">MMSC</string>
+    <string name="field_mms_proxy">ប្រូកស៊ី MMS</string>
+    <string name="field_mms_port">ច្រក MMS</string>
+    <string name="field_server">ម៉ាស៊ីនមេ</string>
+    <string name="field_auth_type">ប្រភេទផ្ទៀងផ្ទាត់</string>
+    <string name="field_protocol">ប្រូតូកូល APN</string>
+    <string name="field_roaming_protocol">ប្រូតូកូលរ៉ូមីង APN</string>
+    <string name="field_mvno_type">ប្រភេទ MVNO</string>
+</resources>

@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.PixelFormat
 import android.net.Uri
 import android.provider.Settings
@@ -74,9 +75,24 @@ object ApnOverlay {
                 onCopy = { value -> copy(app, value) },
                 onClose = { hide(app) },
             )
-        val view = buildOverlayPanel(app, spec)
+        val view = buildOverlayPanel(panelContext(app, context), spec)
         windowManager.addView(view, lp)
         panel = view
+    }
+
+    /**
+     * The app context re-localized to match the in-app language carried by [source] (the caller's
+     * `LocalContext`, already locale-overridden), so the panel's own strings + layout direction follow
+     * the user's pick instead of the system locale. Built from the app context (not [source]) so the
+     * long-lived overlay never holds an Activity reference.
+     */
+    private fun panelContext(
+        app: Context,
+        source: Context,
+    ): Context {
+        val config = Configuration(app.resources.configuration)
+        config.setLocale(source.resources.configuration.locales[0])
+        return app.createConfigurationContext(config)
     }
 
     fun hide(context: Context) {

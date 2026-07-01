@@ -52,7 +52,7 @@ Presete možete dodati preko [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Za developere
 
-`v1.3.0` je objavljen. Implementirani su lista preseta, detalji, ručno kopiranje, optional root, optional overlay i EN/JA lokalizacija. MIT, FOSS, bez GMS.
+`v1.4.0` je objavljen. Implementirani su lista preseta, detalji, ručno kopiranje, optional root i optional overlay, a interfejs je preveden na **20 jezika** uz ugrađeni prebacivač jezika (ikona za prevod u alatnoj traci otvara meni jezika). MIT, FOSS, bez GMS.
 
 ### Platforma i stack
 

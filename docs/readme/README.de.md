@@ -61,7 +61,7 @@ Entwickler können Presets direkt ergänzen: [CONTRIBUTING.md](../../CONTRIBUTIN
 
 ## Für Entwickler und Beitragende
 
-`v1.3.0` ist veröffentlicht. Preset-Liste, Detailansicht, manuelles Kopieren, optionales Root-Anwenden, optionaler Overlay-Helfer sowie englische/japanische Lokalisierung sind implementiert. Die App ist MIT-lizenziert, FOSS-orientiert und ohne GMS-Abhängigkeit.
+`v1.4.0` ist veröffentlicht. Preset-Liste, Detailansicht, manuelles Kopieren, optionales Root-Anwenden und optionaler Overlay-Helfer sind implementiert, und die Oberfläche ist in **20 Sprachen** übersetzt, mit einer integrierten Sprachauswahl (ein Übersetzungssymbol in der Symbolleiste öffnet ein Sprachmenü). Die App ist MIT-lizenziert, FOSS-orientiert und ohne GMS-Abhängigkeit.
 
 ### Android und Tech-Stack
 

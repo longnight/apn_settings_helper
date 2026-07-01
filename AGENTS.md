@@ -2,7 +2,7 @@
 
 MIT, open-source Android app that restores a phone's mobile-data **APN** from curated, verified
 presets — for MVNO users and travellers putting a local prepaid SIM in an unlocked phone. Japan-first,
-region-extensible. **Status: v1.3.0 released** (`origin/main`; `v1.3.0` tagged + GitHub release — UX refinements on the v1.2.0 redesign: favoriting keeps the card in *All Presets*, tap-anywhere-to-copy field cards, a reordered detail screen with a merged Notes area, and "Mark as in use" wording).
+region-extensible. **Status: v1.4.0 released** (`origin/main`; `v1.4.0` tagged + GitHub release — in-app language switching: the UI is localized into **20 languages** (was en + ja), a toolbar translate icon opens a right-side language drawer that switches the locale **in-place** (no Activity recreate), and the region filter moved to the head of the preset list, dropping the *All presets* header).
 
 > Brand name stays neutral (no "Japan/JP"). Package id `io.github.ln.apnsettingshelper` is unique vs
 > the existing "APN Settings" app — differentiate by icon (teal SIM-card) + per-locale store listing.
@@ -44,11 +44,18 @@ Modern Android blocks third-party apps from writing APN settings:
   "in use" wording is a user-asserted mark, not a read of the device's live APN.
 - Wording: **"settings"**, not "configs", in UI/store copy. `app_name` localizes (`APN設定ヘルパー`).
 - All state is **local — no network, no accounts, no tracking.**
+- **In-app language (v1.4.0):** the UI ships **20 locales**; the language drawer switches the app locale
+  **in-place** — a `LocalContext`/`Configuration` override via `LocaleSupport` (a `ContextThemeWrapper`, not
+  `createConfigurationContext`, so owner lookups like `ActivityResultRegistryOwner` still resolve), **no**
+  Activity recreate. `values/` (en) + `values-ja/` are canonical; the other 18 are translations. Preset
+  **data** (`LocalizedText`) is en/ja only, so non-en/ja UIs show preset/carrier/region names in English
+  **by design** — don't "fix" that without adding localized preset data.
 
 ## Data & permission contracts
 - **Presets:** bundled `app/src/main/assets/presets.json`, grouped `region → carrier → preset`
   (schema + add-a-preset guide: `CONTRIBUTING.md`; model details: `plan_coding_steps.md`).
-- **Persisted state (DataStore):** `favorites: Set<String>`, `lastApplied: {presetId, epochMillis}?`.
+- **Persisted state (DataStore):** `favorites: Set<String>`, `lastApplied: {presetId, epochMillis}?`,
+  `language: String?` (BCP-47 tag for the in-app UI language; null = follow the system).
 - **Permissions:** core flow none; float-over-editor overlay `SYSTEM_ALERT_WINDOW` (optional,
   user-granted); root uses `su` if present (no manifest permission).
 
@@ -67,7 +74,9 @@ Modern Android blocks third-party apps from writing APN settings:
 - **Build/run/test/release for humans:** `README.md`; contributing: `CONTRIBUTING.md`.
 - **Code:** `app/src/main/kotlin/io/github/ln/apnsettingshelper/` — `domain.model`, `domain.apply`,
   `data.preset`, `data.store`, `data.root`, `ui.{list,detail,common,overlay,nav,theme}`, `AppGraph`,
-  `ApnApplication`, `MainActivity`. i18n: `res/values/` (en) + `res/values-ja/` (ja).
+  `ApnApplication`, `MainActivity` (wraps the UI in a locale-overriding `LocalizedApp`). i18n: `res/values*/`
+  — **20 locales**; `values/` (en) + `values-ja/` are the canonical, in-sync pair, the other 18 are
+  translations. In-app language picker: `ui.common.{AppLanguages,LocaleSupport}` + `SettingsStore.language`.
 
 ## Build & verify (inside the Nix devShell)
 - `just ci` — strict gate: JVM tests + ktlint + detekt + Android lint. `just test` = same, lenient.

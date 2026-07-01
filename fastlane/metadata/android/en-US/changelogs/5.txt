@@ -1,0 +1,5 @@
+Multi-language interface + an in-app language picker.
+
+• The interface is now available in 20 languages (previously English and Japanese).
+• Tap the translate icon in the toolbar to open a language menu and switch the UI language instantly, without restarting.
+• Main-screen tidy-up: the region filter moved to the top of the preset list, replacing the "All presets" heading.

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مساعد إعدادات APN</string>
+
+    <!-- List -->
+    <string name="favorites_section">المفضّلة</string>
+    <string name="last_applied">قيد الاستخدام · %1$s</string>
+    <string name="cd_favorite_add">إضافة إلى المفضّلة</string>
+    <string name="cd_favorite_remove">إزالة من المفضّلة</string>
+    <string name="search_hint">ابحث عن مشغّل أو إعداد مسبق</string>
+    <string name="region_all">جميع المناطق</string>
+    <string name="cd_select_region">اختيار المنطقة</string>
+    <string name="no_presets">لا توجد إعدادات مسبقة تطابق بحثك</string>
+
+    <!-- Language picker (right-side drawer) -->
+    <string name="language_title">اللغة</string>
+    <string name="language_system_default">الإعداد الافتراضي للنظام</string>
+    <string name="cd_language">تغيير اللغة</string>
+
+    <!-- Detail: actions -->
+    <string name="back">رجوع</string>
+    <string name="copy">نسخ</string>
+    <string name="cd_copy">نسخ %1$s</string>
+    <string name="copied">تم نسخ %1$s</string>
+    <string name="open_apn_editor">فتح محرّر APN في النظام</string>
+    <string name="apn_editor_unavailable">تعذّر فتح إعدادات APN على هذا الجهاز. افتح الإعدادات → الشبكة → أسماء نقاط الوصول يدويًا.</string>
+    <string name="record_applied">وضع علامة قيد الاستخدام</string>
+    <string name="applied_recorded">تم وضع علامة قيد الاستخدام</string>
+    <string name="preset_not_found">الإعداد المسبق غير موجود</string>
+
+    <!-- Detail: overlay (float the copy buttons over the system APN editor) -->
+    <string name="float_over_settings">الظهور فوق محرّر APN</string>
+    <string name="overlay_permission_needed">اسمح لهذا التطبيق بـ \"الظهور فوق التطبيقات الأخرى\"، ثم انقر مرة أخرى.</string>
+    <string name="overlay_close">إغلاق النافذة العائمة</string>
+    <string name="overlay_collapse">طي</string>
+    <string name="overlay_expand">توسيع</string>
+    <string name="overlay_copy_section">انسخ هذه القيم</string>
+    <string name="overlay_hint">انقر على إحدى الرقاقات للنسخ، ثم اضغط مطوّلًا على الحقل المقابل في المحرّر والصق. اسحب هذه اللوحة من عنوانها.</string>
+
+    <!-- Detail: root apply (opt-in toggle; probe only runs when the user turns it on) -->
+    <string name="root_apply_toggle">تطبيق بنقرة واحدة (root)</string>
+    <string name="root_checking">جارٍ التحقق من صلاحية root…</string>
+    <string name="root_unavailable">لم يتم اكتشاف صلاحية root على هذا الجهاز.</string>
+    <string name="apply_now">تطبيق الآن</string>
+    <string name="apply_now_caption">تم اكتشاف صلاحية root. يكتب إعداد APN مباشرةً ويحدّده.</string>
+    <string name="applied_ok">تم تطبيق APN</string>
+    <string name="applied_not_selected">تم حفظ APN، لكن تعذّر تحديده. افتح محرّر APN واختره.</string>
+    <string name="apply_failed">تعذّر تطبيق APN</string>
+    <string name="apply_failed_detail">تعذّر تطبيق APN: %1$s</string>
+
+    <!-- Detail: section headers -->
+    <string name="detail_copy_section">انسخ إلى محرّر APN</string>
+    <string name="detail_checklist_section">اضبط هذه القوائم المنسدلة</string>
+    <string name="set_field_to">اضبط %1$s على %2$s</string>
+    <string name="notes_label">ملاحظات</string>
+
+    <!-- Detail: field labels (mirror the system APN editor) -->
+    <string name="field_apn">APN</string>
+    <string name="field_username">اسم المستخدم</string>
+    <string name="field_password">كلمة المرور</string>
+    <string name="field_mcc">MCC</string>
+    <string name="field_mnc">MNC</string>
+    <string name="field_mvno_value">قيمة MVNO</string>
+    <string name="field_apn_type">نوع APN</string>
+    <string name="field_proxy">الخادم الوكيل</string>
+    <string name="field_port">المنفذ</string>
+    <string name="field_mmsc">MMSC</string>
+    <string name="field_mms_proxy">الخادم الوكيل لـ MMS</string>
+    <string name="field_mms_port">منفذ MMS</string>
+    <string name="field_server">الخادم</string>
+    <string name="field_auth_type">نوع المصادقة</string>
+    <string name="field_protocol">بروتوكول APN</string>
+    <string name="field_roaming_protocol">بروتوكول تجوال APN</string>
+    <string name="field_mvno_type">نوع MVNO</string>
+</resources>

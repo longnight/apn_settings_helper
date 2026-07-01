@@ -54,7 +54,7 @@ Se [CONTRIBUTING.md](../../CONTRIBUTING.md) for at tilføje presets.
 
 ## For udviklere og bidragydere
 
-`v1.3.0` er udgivet. Preset-liste, detaljeskærm, manuel kopiering, valgfri root, valgfrit overlay og engelsk/japansk lokalisering er implementeret. Appen er MIT-licenseret, FOSS-orienteret og uden GMS.
+`v1.4.0` er udgivet. Preset-liste, detaljeskærm, manuel kopiering, valgfri root og valgfrit overlay er implementeret, og brugerfladen er oversat til **20 sprog** med en indbygget sprogvælger (et oversættelsesikon i værktøjslinjen åbner en sprogmenu). Appen er MIT-licenseret, FOSS-orienteret og uden GMS.
 
 ### Platform og stack
 

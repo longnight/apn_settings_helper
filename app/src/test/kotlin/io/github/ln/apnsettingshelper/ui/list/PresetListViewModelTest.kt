@@ -117,4 +117,16 @@ class PresetListViewModelTest {
             assertEquals(listOf("HISソフトバンク", "HISドコモ", "IIJmio"), state.presets.map { it.label })
             assertEquals("HISモバイル", state.presets[0].carrier)
         }
+
+    @Test
+    fun `the picked UI language overrides the system locale for dynamic text`() =
+        runTest {
+            // System locale is English, but the user picked Japanese in the in-app language drawer.
+            val store = FakeSettingsStore()
+            store.setLanguage("ja")
+
+            val state = viewModel(store, locale = Locale.ENGLISH).uiState.first { it.regions == listOf("日本") }
+
+            assertEquals(listOf("HISソフトバンク", "HISドコモ", "IIJmio"), state.presets.map { it.label })
+        }
 }
