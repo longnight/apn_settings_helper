@@ -183,6 +183,8 @@ keyPassword=...
 
 `keystore.properties` がない場合、release APK は未署名です。これは CI と F-Droid では想定どおりです。署名鍵を失うと同じ署名 ID で更新できないため、必ずバックアップしてください。
 
+**署名 ID（公開情報）.** 公開 APK はリリース鍵 `CN=APN Settings Helper, O=longnight, C=JP`（証明書 SHA-256 `f1e3c6000c82c7e7f482d63d12ebd0a9b9c9b91ddd936fca65de900129fbe5be`）で署名されています。このフィンガープリントは公開情報です（すべての APK に含まれます）。ダウンロードした APK は `apksigner verify --print-certs <apk>` で検証し、一致することを確認してください。鍵そのもの（`keystore.properties` のパスワードと `keystore/release.jks` の秘密鍵）は gitignore されており、**絶対にコミットしないでください**。保持しているのはメンテナーだけです。
+
 ### ライセンス
 
 [MIT](LICENSE).

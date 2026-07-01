@@ -90,4 +90,6 @@ Modern Android blocks third-party apps from writing APN settings:
   overlay polish (non-MIUI clipboard verification; surviving process death without a service).
 - **More regions/carriers** via community PRs (data-only; no restructuring).
 - **Release:** F-Droid `fdroiddata` recipe must build `libsu` from source (JitPack disallowed); back up
-  the gitignored signing keystore. Smaller polish/tech-debt items are listed in `plan_coding_steps.md`.
+  the gitignored signing keystore — `keystore.properties` + `keystore/release.jks` are present locally,
+  gitignored, and **must never be committed**; with them, `assembleRelease` signs with cert
+  `CN=APN Settings Helper, O=longnight` (full SHA-256 + `apksigner verify` in the README's *Release and packaging*). Smaller polish/tech-debt items are listed in `plan_coding_steps.md`.

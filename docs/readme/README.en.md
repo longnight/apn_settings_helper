@@ -185,6 +185,8 @@ keyPassword=...
 
 Without `keystore.properties`, the release APK is unsigned. That is expected for CI and F-Droid. Back up the signing key; losing it means you cannot ship updates under the same signing identity.
 
+**Signing identity (public).** Published APKs are signed with the release key `CN=APN Settings Helper, O=longnight, C=JP` — certificate SHA-256 `f1e3c6000c82c7e7f482d63d12ebd0a9b9c9b91ddd936fca65de900129fbe5be`. This fingerprint is public (it is embedded in every APK); verify any download with `apksigner verify --print-certs <apk>` and check it matches. The key material — `keystore.properties` (passwords) and `keystore/release.jks` (the private key) — is gitignored and **must never be committed**; only the maintainer holds it.
+
 ### License
 
 [MIT](../../LICENSE).
